@@ -31,14 +31,23 @@ public class AlumnoController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<alumno>> registrarAlumno([FromBody] alumno alumno)
+    public async Task<ActionResult<alumno>> registrarAlumno([FromBody] RegistrarAlumnoDTO alumnoDto)
     {
         try
         {
-            if (alumno == null)
+            if (alumnoDto == null)
             {
                 return BadRequest("El alumno no puede ser nulo.");
             }
+
+            var alumno = new alumno
+            {
+                nombreCompleto = alumnoDto.nombreCompleto,
+                nombreUsuario = alumnoDto.nombreUsuario,
+                contrasenia = alumnoDto.contrasenia,
+                correo = alumnoDto.correo,
+                idGradoEstudios = alumnoDto.idGradoEstudios
+            };
 
             await _alumnoDAO.registrarAsync(alumno);
             return CreatedAtAction(nameof(obtenerAlumnoPorId), new { id = alumno.idAlumno }, alumno);
@@ -50,14 +59,22 @@ public class AlumnoController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> actualizarAlumno(int id, [FromBody] alumno alumno)
+    public async Task<ActionResult> actualizarAlumno(int id, [FromBody] ActualizarAlumnoDTO alumnoDto)
     {
         try
         {
-            if (id != alumno.idAlumno)
+            if (id != alumnoDto.idAlumno)
             {
                 return BadRequest("El ID del alumno no coincide.");
             }
+
+            var alumno = new alumno
+            {
+                idAlumno = id,
+                nombreCompleto = alumnoDto.nombreCompleto,
+                nombreUsuario = alumnoDto.nombreUsuario,
+                idGradoEstudios = alumnoDto.idGradoEstudios
+            };
 
             await _alumnoDAO.actualizarAsync(alumno);
             return NoContent();

@@ -1,3 +1,4 @@
+namespace ServicioUsuarios.DTOs;
 public class ActualizarAlumnoDTO
 {
     public int idAlumno { get; set; }

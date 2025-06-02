@@ -28,8 +28,8 @@ public class DocenteService : IDocenteService
     public async Task<docente> registrarAsync(RegistrarDocenteDTO docenteDto)
     {
         verificarDocenteNuloRegistro(docenteDto);
-        verificarDocenteNombreRegistro(docenteDto.nombreUsuario);
-        verificarDocenteCorreo(docenteDto.correoElectronico);
+        verificarDocenteNombreRegistroAsync(docenteDto.nombreUsuario);
+        verificarDocenteCorreoAsync(docenteDto.correoElectronico);
 
         var nuevoDocente = new docente
         {
@@ -49,7 +49,7 @@ public class DocenteService : IDocenteService
     {
         verificarIgualdadId(id, docenteDto.idDocente);
         verificarDocenteNuloActualizacion(docenteDto);
-        verificarDocenteNombreActualizacion(docenteDto.nombreUsuario, id);
+        verificarDocenteNombreActualizacionAsync(docenteDto.nombreUsuario, id);
 
         var docente = await _docenteDAO.obtenerPorIdNormalAsync(id);
         docente.nombreCompleto = docenteDto.nombreCompleto;
@@ -97,18 +97,18 @@ public class DocenteService : IDocenteService
         }
     }
 
-    private void verificarDocenteNombreRegistro(string nombreUsuario)
+    private async void verificarDocenteNombreRegistroAsync(string nombreUsuario)
     {
-        var docenteExistente = _docenteDAO.obtenerPorNombreUsuarioAsync(nombreUsuario).Result;
+        var docenteExistente = await _docenteDAO.obtenerPorNombreUsuarioAsync(nombreUsuario);
         if (docenteExistente != null)
         {
             throw new RecursoYaExistenteException($"El nombre de usuario '{nombreUsuario}' ya está en uso por otro docente.");
         }
     }
 
-    private void verificarDocenteNombreActualizacion(string nombreUsuario, int id)
+    private async void verificarDocenteNombreActualizacionAsync(string nombreUsuario, int id)
     {
-        var docenteExistente = _docenteDAO.obtenerPorNombreUsuarioEIdAsync(nombreUsuario, id).Result;
+        var docenteExistente = await _docenteDAO.obtenerPorNombreUsuarioEIdAsync(nombreUsuario, id);
         if (docenteExistente != null)
         {
             throw new RecursoYaExistenteException($"El nombre de usuario '{nombreUsuario}' ya está en uso por otro docente.");
@@ -123,9 +123,9 @@ public class DocenteService : IDocenteService
         }
     }
 
-    public void verificarDocenteCorreo(string correo)
+    public async void verificarDocenteCorreoAsync(string correo)
     {
-        var docenteExistente = _docenteDAO.obtenerPorCorreoAsync(correo).Result;
+        var docenteExistente = await _docenteDAO.obtenerPorCorreoAsync(correo);
         if (docenteExistente != null)
         {
             throw new RecursoYaExistenteException($"El correo '{correo}' ya está en uso por otro docente.");

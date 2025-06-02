@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using ServicioUsuarios.Entities;
 using ServicioUsuarios.DAOs;
 using ServicioUsuarios.Services.Interfaces;
@@ -27,8 +26,8 @@ public class AlumnoService : IAlumnoService
     public async Task<alumno> registrarAsync(RegistrarAlumnoDTO alumnoDto)
     {
         verificarAlumnoNuloRegistro(alumnoDto);
-        verificarAlumnoNombreRegistro(alumnoDto.nombreUsuario);
-        verificarAlumnoCorreo(alumnoDto.correoElectronico);
+        verificarAlumnoNombreRegistroAsync(alumnoDto.nombreUsuario);
+        verificarAlumnoCorreoAsync(alumnoDto.correoElectronico);
 
         var alumnoNuevo = new alumno
         {
@@ -48,7 +47,7 @@ public class AlumnoService : IAlumnoService
     {
         verificarIgualdadId(id, alumnoDto.idAlumno);
         verificarAlumnoNuloActualizacion(alumnoDto);
-        verificarAlumnoNombreActualizacion(alumnoDto.nombreUsuario, id);
+        verificarAlumnoNombreActualizacionAsync(alumnoDto.nombreUsuario, id);
 
         var alumno = await _alumnoDAO.obtenerPorIdNormalAsync(id);
         alumno.nombreCompleto = alumnoDto.nombreCompleto;
@@ -96,18 +95,18 @@ public class AlumnoService : IAlumnoService
         }
     }
 
-    private void verificarAlumnoNombreRegistro(string nombreUsuario)
+    private async void verificarAlumnoNombreRegistroAsync(string nombreUsuario)
     {
-        var alumnoExistente = _alumnoDAO.obtenerPorNombreUsuarioAsync(nombreUsuario).Result;
+        var alumnoExistente = await _alumnoDAO.obtenerPorNombreUsuarioAsync(nombreUsuario);
         if (alumnoExistente != null)
         {
             throw new RecursoYaExistenteException($"El nombre de usuario '{nombreUsuario}' ya está en uso por otro alumno.");
         }
     }
 
-    private void verificarAlumnoNombreActualizacion(string nombreUsuario, int id)
+    private async void verificarAlumnoNombreActualizacionAsync(string nombreUsuario, int id)
     {
-        var alumnoExistente = _alumnoDAO.obtenerPorNombreUsuarioEIdAsync(nombreUsuario, id).Result;
+        var alumnoExistente = await _alumnoDAO.obtenerPorNombreUsuarioEIdAsync(nombreUsuario, id);
         if (alumnoExistente != null)
         {
             throw new RecursoYaExistenteException($"El nombre de usuario '{nombreUsuario}' ya está en uso por otro alumno.");
@@ -122,9 +121,9 @@ public class AlumnoService : IAlumnoService
         }
     }
     
-    private void verificarAlumnoCorreo(string correo)
+    private async void verificarAlumnoCorreoAsync(string correo)
     {
-        var alumnoExistente = _alumnoDAO.obtenerPorCorreoAsync(correo).Result;
+        var alumnoExistente = await _alumnoDAO.obtenerPorCorreoAsync(correo);
         if (alumnoExistente != null)
         {
             throw new RecursoYaExistenteException($"El correo '{correo}' ya está en uso por otro alumno.");

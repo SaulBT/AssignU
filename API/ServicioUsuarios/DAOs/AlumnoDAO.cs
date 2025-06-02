@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ServicioUsuarios.DTOs;
 using ServicioUsuarios.Entities;
 
 namespace ServicioUsuarios.DAOs;
@@ -29,7 +30,7 @@ public class AlumnoDAO
         }
         catch (Exception ex)
         {
-            throw new Exception("Error al actualizar el alumno: " + ex.Message);
+            throw new Exception("Error al actualizar el alumno: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 
@@ -46,7 +47,7 @@ public class AlumnoDAO
         }
         catch (Exception ex)
         {
-            throw new Exception("Error al eliminar el alumno: " + ex.Message);
+            throw new Exception("Error al eliminar el alumno: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 
@@ -68,7 +69,7 @@ public class AlumnoDAO
         }
         catch (Exception ex)
         {
-            throw new Exception("Error al obtener el alumno por ID: " + ex.Message);
+            throw new Exception("Error al obtener el alumno por ID: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 
@@ -85,7 +86,7 @@ public class AlumnoDAO
         }
         catch (Exception ex)
         {
-            throw new Exception("Error al obtener el alumno por ID: " + ex.Message);
+            throw new Exception("Error al obtener el alumno por ID: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 
@@ -98,7 +99,7 @@ public class AlumnoDAO
         }
         catch (Exception ex)
         {
-            throw new Exception("Error al obtener el alumno por nombre de usuario: " + ex.Message);
+            throw new Exception("Error al obtener el alumno por nombre de usuario: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 
@@ -111,7 +112,7 @@ public class AlumnoDAO
         }
         catch (Exception ex)
         {
-            throw new Exception("Error al obtener al usuario por nombre de usuario y diferente id: " + ex.Message);
+            throw new Exception("Error al obtener al usuario por nombre de usuario y diferente id: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 
@@ -124,7 +125,7 @@ public class AlumnoDAO
         }
         catch (Exception ex)
         {
-            throw new Exception("Error al obtener el alumno por correo: " + ex.Message);
+            throw new Exception("Error al obtener el alumno por correo: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 
@@ -137,7 +138,7 @@ public class AlumnoDAO
         }
         catch (Exception ex)
         {
-            throw new Exception("Error al registrar el alumno: " + ex.Message);
+            throw new Exception("Error al registrar el alumno: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 }

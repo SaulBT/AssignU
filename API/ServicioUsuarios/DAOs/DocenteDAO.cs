@@ -30,7 +30,7 @@ public class DocenteDAO
         }
         catch (Exception ex)
         {
-            throw new Exception("Error al actualizar el docente: " + ex.Message);
+            throw new Exception("Error al actualizar el docente: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 
@@ -47,7 +47,7 @@ public class DocenteDAO
         }
         catch (Exception ex)
         {
-            throw new Exception("Error al eliminar el docente: " + ex.Message);
+            throw new Exception("Error al eliminar el docente: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 
@@ -69,7 +69,7 @@ public class DocenteDAO
         }
         catch (Exception ex)
         {
-            throw new Exception("Error al obtener el docente por ID: " + ex.Message);
+            throw new Exception("Error al obtener el docente por ID: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 
@@ -81,7 +81,7 @@ public class DocenteDAO
         }
         catch (Exception ex)
         {
-            throw new Exception("Error al obtener el docente por ID: " + ex.Message);
+            throw new Exception("Error al obtener el docente por ID: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 
@@ -94,7 +94,7 @@ public class DocenteDAO
         }
         catch (Exception ex)
         {
-            throw new Exception("Error al obtener el docente por nombre de usuario: " + ex.Message);
+            throw new Exception("Error al obtener el docente por nombre de usuario: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 
@@ -107,7 +107,7 @@ public class DocenteDAO
         }
         catch (Exception ex)
         {
-            throw new Exception("Error al obtener el docente por nombre de usuario y ID: " + ex.Message);
+            throw new Exception("Error al obtener el docente por nombre de usuario y ID: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 
@@ -120,7 +120,7 @@ public class DocenteDAO
         }
         catch (Exception ex)
         {
-            throw new Exception("Error al obtener el docente por correo: " + ex.Message);
+            throw new Exception("Error al obtener el docente por correo: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 
@@ -133,7 +133,7 @@ public class DocenteDAO
         }
         catch (Exception ex)
         {
-            throw new Exception("Error al registrar el docente: " + ex.Message + "\nExcepción interna:" + ex.InnerException?.Message);
+            throw new Exception("Error al registrar el docente: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 }

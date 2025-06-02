@@ -1,3 +1,5 @@
+namespace ServicioUsuarios.DTOs;
+
 public class AlumnoDTO
 {
     public int idAlumno { get; set; }

@@ -3,9 +3,9 @@ using ServicioUsuarios.Entities;
 
 public class GradoProfesionalDAO : IGradoProfesionalDAO
 {
-    private readonly asingu_usuarios_bdContext _context;
+    private readonly usuarios_bd_assignuContext _context;
 
-    public GradoProfesionalDAO(asingu_usuarios_bdContext context)
+    public GradoProfesionalDAO(usuarios_bd_assignuContext context)
     {
         _context = context;
     }

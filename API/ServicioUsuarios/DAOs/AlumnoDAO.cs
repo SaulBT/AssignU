@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using ServicioUsuarios.Entities;
 
-public class AlumnoDAO : IAlumnoDAO
-{
-    private readonly asingu_usuarios_bdContext _context;
+namespace ServicioUsuarios.DAOs;
 
-    public AlumnoDAO(asingu_usuarios_bdContext context)
+public class AlumnoDAO
+{
+    private readonly usuarios_bd_assignuContext _context;
+
+    public AlumnoDAO(usuarios_bd_assignuContext context)
     {
         _context = context;
     }
@@ -48,7 +50,7 @@ public class AlumnoDAO : IAlumnoDAO
         }
     }
 
-    public async Task<AlumnoDTO?> obtenerPorIdAsync(int id)
+    public async Task<AlumnoDTO?> obtenerPorIdDtoAsync(int id)
     {
         try
         {
@@ -70,7 +72,63 @@ public class AlumnoDAO : IAlumnoDAO
         }
     }
 
-    public async Task registrarAsync(alumno alumno)
+    public async Task<alumno> obtenerPorIdNormalAsync(int id)
+    {
+        try
+        {
+            var alumno = await _context.alumnos.FindAsync(id);
+            if (alumno == null)
+            {
+                throw new Exception("Alumno no encontrado.");
+            }
+            return alumno;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Error al obtener el alumno por ID: " + ex.Message);
+        }
+    }
+
+    public async Task<alumno?> obtenerPorNombreUsuarioAsync(string nombreUsuario)
+    {
+        try
+        {
+            return await _context.alumnos
+                .FirstOrDefaultAsync(a => a.nombreUsuario == nombreUsuario);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Error al obtener el alumno por nombre de usuario: " + ex.Message);
+        }
+    }
+
+    public async Task<alumno?> obtenerPorNombreUsuarioEIdAsync(string nombreUsuario, int id)
+    {
+        try
+        {
+            return await _context.alumnos
+                .FirstOrDefaultAsync(a => a.nombreUsuario == nombreUsuario && a.idAlumno != id);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Error al obtener al usuario por nombre de usuario y diferente id: " + ex.Message);
+        }
+    }
+
+    public async Task<alumno?> obtenerPorCorreoAsync(string correo)
+    {
+        try
+        {
+            return await _context.alumnos
+                .FirstOrDefaultAsync(a => a.correo == correo);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Error al obtener el alumno por correo: " + ex.Message);
+        }
+    }
+
+    public async Task agregarAlumnoAsync(alumno alumno)
     {
         try
         {

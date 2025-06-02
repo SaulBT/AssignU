@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 
 namespace ServicioUsuarios.Entities;
 
-public partial class asingu_usuarios_bdContext : DbContext
+public partial class usuarios_bd_assignuContext : DbContext
 {
-    public asingu_usuarios_bdContext()
+    public usuarios_bd_assignuContext()
     {
     }
 
-    public asingu_usuarios_bdContext(DbContextOptions<asingu_usuarios_bdContext> options)
+    public usuarios_bd_assignuContext(DbContextOptions<usuarios_bd_assignuContext> options)
         : base(options)
     {
     }
@@ -23,25 +24,29 @@ public partial class asingu_usuarios_bdContext : DbContext
 
     public virtual DbSet<grado_profesional> grado_profesionals { get; set; }
 
-/*
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySQL("server=localhost;uid=asingu_usuarios;pwd=usuario123;database=asingu_usuarios_bd");
-*/
+        => optionsBuilder.UseMySql("server=localhost;uid=usuarios_assignu;pwd=usuario123;database=usuarios_bd_assignu", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.4.4-mysql"));
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder
+            .UseCollation("utf8mb4_0900_ai_ci")
+            .HasCharSet("utf8mb4");
+
         modelBuilder.Entity<alumno>(entity =>
         {
             entity.HasKey(e => e.idAlumno).HasName("PRIMARY");
 
             entity.ToTable("alumno");
 
+            entity.HasIndex(e => e.idGradoEstudios, "alumno-grado_idx");
+
             entity.HasIndex(e => e.contrasenia, "contrasenia_UNIQUE").IsUnique();
 
             entity.HasIndex(e => e.correo, "correo_UNIQUE").IsUnique();
 
-            entity.HasIndex(e => e.idGradoEstudios, "idGradoEstudios_idx");
-
+            entity.Property(e => e.idAlumno).ValueGeneratedNever();
             entity.Property(e => e.contrasenia).HasMaxLength(64);
             entity.Property(e => e.correo).HasMaxLength(45);
             entity.Property(e => e.nombreCompleto).HasMaxLength(135);
@@ -49,7 +54,7 @@ public partial class asingu_usuarios_bdContext : DbContext
 
             entity.HasOne(d => d.idGradoEstudiosNavigation).WithMany(p => p.alumnos)
                 .HasForeignKey(d => d.idGradoEstudios)
-                .HasConstraintName("idGradoEstudios");
+                .HasConstraintName("alumno-grado");
         });
 
         modelBuilder.Entity<docente>(entity =>
@@ -62,7 +67,7 @@ public partial class asingu_usuarios_bdContext : DbContext
 
             entity.HasIndex(e => e.correo, "correo_UNIQUE").IsUnique();
 
-            entity.HasIndex(e => e.idGradoProfesional, "idGradoProfesional_idx");
+            entity.HasIndex(e => e.idGradoProfesional, "docente-grado_idx");
 
             entity.Property(e => e.contrasenia).HasMaxLength(64);
             entity.Property(e => e.correo).HasMaxLength(45);
@@ -71,7 +76,7 @@ public partial class asingu_usuarios_bdContext : DbContext
 
             entity.HasOne(d => d.idGradoProfesionalNavigation).WithMany(p => p.docentes)
                 .HasForeignKey(d => d.idGradoProfesional)
-                .HasConstraintName("idGradoProfesional");
+                .HasConstraintName("docente-grado");
         });
 
         modelBuilder.Entity<grado_estudio>(entity =>

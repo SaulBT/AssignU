@@ -2,10 +2,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using ServicioUsuarios.Middlewares.Interfaces;
 
 namespace ServicioUsuarios.Middlewares;
 
-public class GeneradorToken
+public class GeneradorToken : IGeneradorToken
 {
     private readonly IConfiguration _configuration;
 
@@ -15,7 +16,7 @@ public class GeneradorToken
         _configuration = configuration;
     }
 
-    public string GenerarToken(string nombreUsuario, string tipo)
+    public string GenerarToken(string nombreUsuario, string tipo, int idUsuario)
     {
         var issuer = _configuration["JWTSettings:Issuer"];
         var audience = _configuration["JWTSettings:Audience"];
@@ -27,10 +28,12 @@ public class GeneradorToken
         var identidad = new ClaimsIdentity(new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Iss, issuer),
+            new Claim(JwtRegisteredClaimNames.Aud, audience),
+            new Claim("idUsuario", idUsuario.ToString()),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(ClaimTypes.DateOfBirth, DateTime.Now.ToString()),
             new Claim(ClaimTypes.Name, nombreUsuario),
-            new Claim(ClaimTypes.Role, tipo)
+            new Claim(ClaimTypes.Role, tipo),
         });
         
         var credenciales = new SigningCredentials(tokenKey, SecurityAlgorithms.HmacSha256);

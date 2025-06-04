@@ -1,16 +1,16 @@
 using ServicioUsuarios.Entities;
-using ServicioUsuarios.DAOs;
 using ServicioUsuarios.Services.Interfaces;
 using ServicioUsuarios.Exceptions;
 using ServicioUsuarios.DTOs;
+using ServicioUsuarios.DAOs.Interfaces;
 
 namespace ServicioUsuarios.Services.Implementation;
 
 public class AlumnoService : IAlumnoService
 {
-    private readonly AlumnoDAO _alumnoDAO;
+    private readonly IAlumnoDAO _alumnoDAO;
 
-    public AlumnoService(AlumnoDAO alumnoDAO)
+    public AlumnoService(IAlumnoDAO alumnoDAO)
     {
         _alumnoDAO = alumnoDAO;
     }
@@ -25,9 +25,9 @@ public class AlumnoService : IAlumnoService
 
     public async Task<alumno> registrarAsync(RegistrarAlumnoDTO alumnoDto)
     {
-        verificarAlumnoNuloRegistro(alumnoDto);
-        verificarAlumnoNombreRegistroAsync(alumnoDto.nombreUsuario);
-        verificarAlumnoCorreoAsync(alumnoDto.correoElectronico);
+        verificarParametrosAlumnoRegistro(alumnoDto);
+        await verificarAlumnoNombreRegistroAsync(alumnoDto.nombreUsuario);
+        await verificarAlumnoCorreoAsync(alumnoDto.correoElectronico);
 
         var alumnoNuevo = new alumno
         {
@@ -43,24 +43,45 @@ public class AlumnoService : IAlumnoService
         return alumnoNuevo;
     }
 
-    public async Task actualizarAsync(int id, ActualizarAlumnoDTO alumnoDto)
+    public async Task actualizarAsync(HttpContext context, ActualizarAlumnoDTO alumnoDto)
     {
-        verificarIgualdadId(id, alumnoDto.idAlumno);
-        verificarAlumnoNuloActualizacion(alumnoDto);
-        verificarAlumnoNombreActualizacionAsync(alumnoDto.nombreUsuario, id);
+        verificarAutorizacion(context);
+        var idAlumno = int.Parse(context.User.FindFirst("idUsuario")!.Value);
 
-        var alumno = await _alumnoDAO.obtenerPorIdNormalAsync(id);
+        verificarIgualdadId(idAlumno, alumnoDto.idAlumno);
+        verificarParametrosAlumnoActualizacion(alumnoDto);
+        await verificarAlumnoNombreActualizacionAsync(alumnoDto.nombreUsuario, idAlumno);
+
+        var alumno = await _alumnoDAO.obtenerPorIdNormalAsync(idAlumno);
         alumno.nombreCompleto = alumnoDto.nombreCompleto;
         alumno.nombreUsuario = alumnoDto.nombreUsuario;
         alumno.idGradoEstudios = alumnoDto.idGradoEstudios;
-        
+
         await _alumnoDAO.actualizarAsync(alumno);
     }
 
-    public async Task eliminarAsync(int id)
+    public async Task eliminarAsync(HttpContext context)
     {
-        verificarIdValida(id);
-        await _alumnoDAO.eliminarAsync(id);
+        verificarAutorizacion(context);
+        var idAlumno = int.Parse(context.User.FindFirst("idUsuario")!.Value);
+        verificarIdValida(idAlumno);
+        var alumno = await _alumnoDAO.obtenerPorIdDtoAsync(idAlumno);
+        verificarExistenciaAlumno(alumno);
+        await _alumnoDAO.eliminarAsync(idAlumno);
+    }
+
+    public async Task cambiarContraseniaAsync(CambiarContraseniaDTO cambiarContraseniaDto, HttpContext context)
+    {
+        verificarParametrosCambiarContrasenia(cambiarContraseniaDto);
+        verificarAutorizacion(context);
+
+        var idAlumno = int.Parse(context.User.FindFirst("idUsuario")!.Value);
+        verificarIdValida(idAlumno);
+        var alumno = await ObtenerAlumnoPorIdAsync(idAlumno);
+        verificarContraseniaActual(alumno, cambiarContraseniaDto.contraseniaActual);
+
+        alumno.contrasenia = cambiarContraseniaDto.contraseniaNueva;
+        await _alumnoDAO.actualizarAsync(alumno);
     }
 
     private void verificarIdValida(int id)
@@ -79,23 +100,38 @@ public class AlumnoService : IAlumnoService
         }
     }
 
-    private void verificarAlumnoNuloRegistro(RegistrarAlumnoDTO alumnoDto)
+    private void verificarParametrosAlumnoRegistro(RegistrarAlumnoDTO alumnoDto)
     {
-        if (alumnoDto == null)
+        if (string.IsNullOrEmpty(alumnoDto.nombreCompleto) ||
+            string.IsNullOrEmpty(alumnoDto.nombreUsuario) ||
+            string.IsNullOrEmpty(alumnoDto.contrasenia) ||
+            string.IsNullOrEmpty(alumnoDto.correoElectronico) ||
+            alumnoDto.idGradoEstudios <= 0)
         {
-            throw new ArgumentNullException(nameof(alumnoDto), "No se envió ningún alumno para registrar.");
+            throw new ArgumentException("Los parámetros de registro del alumno son inválidos.");
         }
     }
 
-    private void verificarAlumnoNuloActualizacion(ActualizarAlumnoDTO alumnoDto)
+    private void verificarParametrosAlumnoActualizacion(ActualizarAlumnoDTO alumnoDto)
     {
-        if (alumnoDto == null)
+        if (string.IsNullOrEmpty(alumnoDto.nombreCompleto) ||
+            string.IsNullOrEmpty(alumnoDto.nombreUsuario) ||
+            alumnoDto.idGradoEstudios <= 0)
         {
-            throw new ArgumentNullException(nameof(alumnoDto), "No se envió ningún alumno para actualizar.");
+            throw new ArgumentException("Los parámetros de actualización del alumno son inválidos.");
         }
     }
 
-    private async void verificarAlumnoNombreRegistroAsync(string nombreUsuario)
+    private void verificarParametrosCambiarContrasenia(CambiarContraseniaDTO cambiarContraseniaDto)
+    {
+        if (string.IsNullOrEmpty(cambiarContraseniaDto.contraseniaNueva) ||
+            string.IsNullOrEmpty(cambiarContraseniaDto.contraseniaActual))
+        {
+            throw new ArgumentException("Los parámetros de cambio de contraseña son inválidos.");
+        }
+    }
+
+    private async Task verificarAlumnoNombreRegistroAsync(string nombreUsuario)
     {
         var alumnoExistente = await _alumnoDAO.obtenerPorNombreUsuarioAsync(nombreUsuario);
         if (alumnoExistente != null)
@@ -104,7 +140,7 @@ public class AlumnoService : IAlumnoService
         }
     }
 
-    private async void verificarAlumnoNombreActualizacionAsync(string nombreUsuario, int id)
+    private async Task verificarAlumnoNombreActualizacionAsync(string nombreUsuario, int id)
     {
         var alumnoExistente = await _alumnoDAO.obtenerPorNombreUsuarioEIdAsync(nombreUsuario, id);
         if (alumnoExistente != null)
@@ -120,13 +156,39 @@ public class AlumnoService : IAlumnoService
             throw new DiscordanciaDeIdException("El ID del alumno en la URL no coincide con el ID del alumno en el cuerpo de la solicitud.");
         }
     }
-    
-    private async void verificarAlumnoCorreoAsync(string correo)
+
+    private async Task verificarAlumnoCorreoAsync(string correo)
     {
         var alumnoExistente = await _alumnoDAO.obtenerPorCorreoAsync(correo);
         if (alumnoExistente != null)
         {
             throw new RecursoYaExistenteException($"El correo '{correo}' ya está en uso por otro alumno.");
         }
+    }
+
+    private void verificarAutorizacion(HttpContext context)
+    {
+        if (!context.User.Identity?.IsAuthenticated ?? true)
+        {
+            throw new UnauthorizedAccessException("El usuario no está autenticado.");
+        }
+    }
+
+    private void verificarContraseniaActual(alumno alumno, string contraseniaActual)
+    {
+        if (alumno.contrasenia != contraseniaActual)
+        {
+            throw new ContraseniaDiferenteException("La contraseña actual es incorrecta.");
+        }
+    }
+
+    private async Task<alumno> ObtenerAlumnoPorIdAsync(int id)
+    {
+        var alumno = await _alumnoDAO.obtenerPorIdNormalAsync(id);
+        if (alumno == null)
+        {
+            throw new RecursoNoEncontradoException($"El alumno con ID {id} no existe.");
+        }
+        return alumno;
     }
 }

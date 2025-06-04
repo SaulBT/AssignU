@@ -8,6 +8,8 @@ using ServicioUsuarios.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ServicioUsuarios.DAOs.Interfaces;
+using ServicioUsuarios.Middlewares.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,12 +19,14 @@ builder.Services.AddDbContext<usuarios_bd_assignuContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 builder.Services.AddScoped<IAlumnoService, AlumnoService>();
-builder.Services.AddScoped<AlumnoDAO>();
+builder.Services.AddScoped<IAlumnoDAO, AlumnoDAO>();
 builder.Services.AddScoped<IDocenteService, DocenteService>();
-builder.Services.AddScoped<DocenteDAO>();
+builder.Services.AddScoped<IDocenteDAO, DocenteDAO>();
 builder.Services.AddScoped<ICatalogosService, CatalogosService>();
-builder.Services.AddScoped<GradoEstudiosDAO>();
-builder.Services.AddScoped<GradoProfesionalDAO>();
+builder.Services.AddScoped<IGradoEstudiosDAO, GradoEstudiosDAO>();
+builder.Services.AddScoped<IGradoProfesionalDAO, GradoProfesionalDAO>();
+builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IGeneradorToken, GeneradorToken>();
 
 builder.Services.AddAuthentication(options => {    
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -72,32 +76,43 @@ app.MapGet("/alumno/{id:int}", async (int id, IAlumnoService servicio) =>
 .WithName("ObtenerAlumnoPorId")
 .WithOpenApi();
 
-app.MapPut("/alumnos", async (int id, ActualizarAlumnoDTO alumnoActualizadoDTO, IAlumnoService servicio) =>
+app.MapPut("/alumnos", async (HttpContext context, ActualizarAlumnoDTO alumnoActualizadoDTO, IAlumnoService servicio) =>
 {
-    await servicio.actualizarAsync(id, alumnoActualizadoDTO);
+    await servicio.actualizarAsync(context, alumnoActualizadoDTO);
     return Results.Ok();
 })
 .WithName("ActualizarAlumno")
+.RequireAuthorization()
 .WithOpenApi();
 
-app.MapDelete("/alumnos", async (int id, IAlumnoService servicio) =>
+app.MapDelete("/alumnos", async (HttpContext context, IAlumnoService servicio) =>
 {
-     await servicio.eliminarAsync(id);
+    await servicio.eliminarAsync(context);
     return Results.Ok();
 })
 .WithName("EliminarAlumno")
+.RequireAuthorization()
+.WithOpenApi();
+
+app.MapPut("/alumnos/cambiar-contrasenia", async (CambiarContraseniaDTO cambiarContraseniaDto, IAlumnoService servicio, HttpContext context) =>
+{
+    await servicio.cambiarContraseniaAsync(cambiarContraseniaDto, context);
+    return Results.Ok();
+})
+.WithName("CambiarContraseniaAlumno")
+.RequireAuthorization()
 .WithOpenApi();
 
 //DocenteService
-app.MapPost("/docente", async (RegistrarDocenteDTO docenteNuevoDto, IDocenteService servicio) =>
+app.MapPost("/docentes", async (RegistrarDocenteDTO docenteNuevoDto, IDocenteService servicio) =>
 {
     var docente = await servicio.registrarAsync(docenteNuevoDto);
-    return Results.Created($"/docente/{docente.idDocente}", docente);
+    return Results.Created($"/docentes/{docente.idDocente}", docente);
 })
 .WithName("RegistrarDocente")
 .WithOpenApi();
 
-app.MapGet("/docente/{id:int}", async (int id, IDocenteService servicio) =>
+app.MapGet("/docentes/{id:int}", async (int id, IDocenteService servicio) =>
 {
     var docente = await servicio.obtenerPorIdAsync(id);
     return Results.Ok(docente);
@@ -105,20 +120,31 @@ app.MapGet("/docente/{id:int}", async (int id, IDocenteService servicio) =>
 .WithName("ObtenerDocentePorId")
 .WithOpenApi();
 
-app.MapPut("/docente", async (int id, ActualizarDocenteDTO docenteActualizadoDTO, IDocenteService servicio) =>
+app.MapPut("/docentes", async (HttpContext context, ActualizarDocenteDTO docenteActualizadoDTO, IDocenteService servicio) =>
 {
-    await servicio.actualizarAsync(id, docenteActualizadoDTO);
+    await servicio.actualizarAsync(context, docenteActualizadoDTO);
     return Results.Ok();
 })
 .WithName("ActualizarDocente")
+.RequireAuthorization()
 .WithOpenApi();
 
-app.MapDelete("/docente", async (int id, IDocenteService servicio) =>
+app.MapDelete("/docentes", async (HttpContext context, IDocenteService servicio) =>
 {
-    await servicio.eliminarAsync(id);
+    await servicio.eliminarAsync(context);
     return Results.Ok();
 })
 .WithName("EliminarDocente")
+.RequireAuthorization()
+.WithOpenApi();
+
+app.MapPut("/docentes/cambiar-contrasenia", async (CambiarContraseniaDTO cambiarContraseniaDto, IDocenteService servicio, HttpContext context) =>
+{
+    await servicio.cambiarContraseniaAsync(cambiarContraseniaDto, context);
+    return Results.Ok();
+})
+.WithName("CambiarContraseniaDocente")
+.RequireAuthorization()
 .WithOpenApi();
 
 //CatalogosService
@@ -152,6 +178,15 @@ app.MapGet("/catalogos/grado-profesional/{id:int}", async (int id, ICatalogosSer
     return Results.Ok(gradoProfesional);
 })
 .WithName("ObtenerGradoProfesionalPorId")
+.WithOpenApi();
+
+// LoginService
+app.MapPost("/login", async (IniciarSesionDTO usuarioDto, ILoginService servicio) =>
+{
+    var resultado = await servicio.IniciarSesion(usuarioDto);
+    return Results.Ok(resultado);
+})
+.WithName("IniciarSesion")
 .WithOpenApi();
 
 if (app.Environment.IsDevelopment())

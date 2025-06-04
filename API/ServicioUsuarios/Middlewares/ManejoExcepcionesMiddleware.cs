@@ -52,6 +52,11 @@ public class ManejoExcepcionesMiddleware
                 contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 await contexto.Response.WriteAsJsonAsync(new { error = badRequestEx.Message });
                 break;
+            case ContraseniaDiferenteException badRequestEx:
+                _logger.LogWarning(ex, "Las contraseñas no coinciden.");
+                contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                await contexto.Response.WriteAsJsonAsync(new { error = badRequestEx.Message });
+                break;
             default:
                 _logger.LogError(ex, "Ocurrió un error inesperado.");
                 contexto.Response.StatusCode = StatusCodes.Status500InternalServerError;

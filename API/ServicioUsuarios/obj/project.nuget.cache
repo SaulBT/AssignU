@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "fpWBG7Y/6zw=",
+  "dgSpecHash": "XuX7Vn+JK/c=",
   "success": true,
-  "projectFilePath": "C:\\Users\\x\\Documents\\AsignU\\API\\ServicioUsuarios\\ServicioUsuarios.csproj",
+  "projectFilePath": "c:\\Users\\x\\Documents\\AsignU\\API\\ServicioUsuarios\\ServicioUsuarios.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\x\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\x\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\9.0.5\\microsoft.aspnetcore.authentication.jwtbearer.9.0.5.nupkg.sha512",
@@ -67,7 +67,7 @@
       "code": "NU1603",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "ServicioUsuarios depende de Pomelo.EntityFrameworkCore.MySql (>= 9.0.0-preview.2), pero no se encontró Pomelo.EntityFrameworkCore.MySql 9.0.0-preview.2. Pomelo.EntityFrameworkCore.MySql 9.0.0-preview.2.efcore.9.0.0 se resolvió en su lugar.",
+      "message": "ServicioUsuarios depends on Pomelo.EntityFrameworkCore.MySql (>= 9.0.0-preview.2) but Pomelo.EntityFrameworkCore.MySql 9.0.0-preview.2 was not found. Pomelo.EntityFrameworkCore.MySql 9.0.0-preview.2.efcore.9.0.0 was resolved instead.",
       "libraryId": "Pomelo.EntityFrameworkCore.MySql",
       "targetGraphs": [
         "net9.0"

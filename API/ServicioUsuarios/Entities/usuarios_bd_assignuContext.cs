@@ -24,10 +24,12 @@ public partial class usuarios_bd_assignuContext : DbContext
 
     public virtual DbSet<grado_profesional> grado_profesionals { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;uid=usuarios_assignu;pwd=usuario123;database=usuarios_bd_assignu", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.4.4-mysql"));
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+        if (!optionsBuilder.IsConfigured){
+            optionsBuilder.UseMySql("server=localhost;uid=usuarios_assignu;pwd=usuario123;database=usuarios_bd_assignu", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.4.4-mysql"));
+        }
+    }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder

@@ -1,17 +1,16 @@
-using Microsoft.AspNetCore.Mvc;
 using ServicioUsuarios.Entities;
-using ServicioUsuarios.DAOs;
 using ServicioUsuarios.Services.Interfaces;
 using ServicioUsuarios.Exceptions;
+using ServicioUsuarios.DAOs.Interfaces;
 
 namespace ServicioUsuarios.Services.Implementation;
 
 public class CatalogosService : ICatalogosService
 {
-    private readonly GradoEstudiosDAO _gradoEstudiosDAO;
-    private readonly GradoProfesionalDAO _gradoProfesionalDAO;
+    private readonly IGradoEstudiosDAO _gradoEstudiosDAO;
+    private readonly IGradoProfesionalDAO _gradoProfesionalDAO;
 
-    public CatalogosService(GradoEstudiosDAO gradoEstudiosDAO, GradoProfesionalDAO gradoProfesionalDAO)
+    public CatalogosService(IGradoEstudiosDAO gradoEstudiosDAO, IGradoProfesionalDAO gradoProfesionalDAO)
     {
         _gradoEstudiosDAO = gradoEstudiosDAO;
         _gradoProfesionalDAO = gradoProfesionalDAO;

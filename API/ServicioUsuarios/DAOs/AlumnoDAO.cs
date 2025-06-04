@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using ServicioUsuarios.DAOs.Interfaces;
 using ServicioUsuarios.DTOs;
 using ServicioUsuarios.Entities;
 
 namespace ServicioUsuarios.DAOs;
 
-public class AlumnoDAO
+public class AlumnoDAO : IAlumnoDAO
 {
     private readonly usuarios_bd_assignuContext _context;
 
@@ -108,7 +109,7 @@ public class AlumnoDAO
         try
         {
             return await _context.alumnos
-                .FirstOrDefaultAsync(a => a.nombreUsuario == nombreUsuario && a.idAlumno != id);
+                .FirstOrDefaultAsync(a => a.idAlumno != id && a.nombreUsuario == nombreUsuario);
         }
         catch (Exception ex)
         {
@@ -139,6 +140,28 @@ public class AlumnoDAO
         catch (Exception ex)
         {
             throw new Exception("Error al registrar el alumno: " + ex.Message + " - " + ex.InnerException?.Message);
+        }
+    }
+
+    public async Task<AlumnoDTO?> obtenerPorNombreUsuarioOCorreoAsync(string nombreCompletoOCorreo)
+    {
+        try
+        {
+            return await _context.alumnos
+                .Where(a => a.nombreUsuario == nombreCompletoOCorreo || a.correo == nombreCompletoOCorreo)
+                .Select(a => new AlumnoDTO
+                {
+                    idAlumno = a.idAlumno,
+                    nombreCompleto = a.nombreCompleto,
+                    nombreUsuario = a.nombreUsuario,
+                    correo = a.correo,
+                    idGradoEstudios = (int)a.idGradoEstudios
+                })
+                .FirstOrDefaultAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Error al obtener el alumno por nombre de usuario o correo: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 }

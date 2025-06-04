@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using ServicioUsuarios.Entities;
 using ServicioUsuarios.DTOs;
+using ServicioUsuarios.DAOs.Interfaces;
 
 namespace ServicioUsuarios.DAOs;
 
-public class DocenteDAO
+public class DocenteDAO : IDocenteDAO
 {
     private readonly usuarios_bd_assignuContext _context;
 
@@ -134,6 +135,28 @@ public class DocenteDAO
         catch (Exception ex)
         {
             throw new Exception("Error al registrar el docente: " + ex.Message + " - " + ex.InnerException?.Message);
+        }
+    }
+
+    public async Task<DocenteDTO?> obtenerPorNombreUsuarioOCorreoAsync(string nombreUsuarioOCorreo)
+    {
+        try
+        {
+            return await _context.docentes
+                .Where(d => d.nombreUsuario == nombreUsuarioOCorreo || d.correo == nombreUsuarioOCorreo)
+                .Select(d => new DocenteDTO
+                {
+                    idDocente = d.idDocente,
+                    nombreCompleto = d.nombreCompleto,
+                    nombreUsuario = d.nombreUsuario,
+                    correo = d.correo,
+                    idGradoProfesional = (int)d.idGradoProfesional
+                })
+                .FirstOrDefaultAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Error al obtener el docente por nombre de usuario o correo: " + ex.Message + " - " + ex.InnerException?.Message);
         }
     }
 }

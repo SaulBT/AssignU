@@ -6,7 +6,8 @@ namespace ServicioUsuarios.Services.Interfaces;
 public interface IAlumnoService
 {
     Task<alumno> registrarAsync(RegistrarAlumnoDTO alumnoDto);
-    Task actualizarAsync(int id, ActualizarAlumnoDTO alumnoDto);
-    Task eliminarAsync(int id);
+    Task actualizarAsync(HttpContext context, ActualizarAlumnoDTO alumnoDto);
+    Task eliminarAsync(HttpContext context);
     Task<AlumnoDTO?> obtenerPorIdAsync(int id);
+    Task cambiarContraseniaAsync(CambiarContraseniaDTO cambiarContraseniaDto, HttpContext context);
 }

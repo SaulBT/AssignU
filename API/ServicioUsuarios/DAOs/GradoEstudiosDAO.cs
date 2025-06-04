@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using ServicioUsuarios.DAOs.Interfaces;
 using ServicioUsuarios.Entities;
 
 namespace ServicioUsuarios.DAOs;
 
-public class GradoEstudiosDAO
+public class GradoEstudiosDAO : IGradoEstudiosDAO
 {
     private readonly usuarios_bd_assignuContext _context;
 

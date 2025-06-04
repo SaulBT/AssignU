@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\x\\Documents\\AsignU\\API\\ServicioUsuarios\\ServicioUsuarios.csproj": {}
+    "c:\\Users\\x\\Documents\\AsignU\\API\\ServicioUsuarios\\ServicioUsuarios.csproj": {}
   },
   "projects": {
-    "C:\\Users\\x\\Documents\\AsignU\\API\\ServicioUsuarios\\ServicioUsuarios.csproj": {
+    "c:\\Users\\x\\Documents\\AsignU\\API\\ServicioUsuarios\\ServicioUsuarios.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\x\\Documents\\AsignU\\API\\ServicioUsuarios\\ServicioUsuarios.csproj",
+        "projectUniqueName": "c:\\Users\\x\\Documents\\AsignU\\API\\ServicioUsuarios\\ServicioUsuarios.csproj",
         "projectName": "ServicioUsuarios",
-        "projectPath": "C:\\Users\\x\\Documents\\AsignU\\API\\ServicioUsuarios\\ServicioUsuarios.csproj",
+        "projectPath": "c:\\Users\\x\\Documents\\AsignU\\API\\ServicioUsuarios\\ServicioUsuarios.csproj",
         "packagesPath": "C:\\Users\\x\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\x\\Documents\\AsignU\\API\\ServicioUsuarios\\obj\\",
+        "outputPath": "c:\\Users\\x\\Documents\\AsignU\\API\\ServicioUsuarios\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

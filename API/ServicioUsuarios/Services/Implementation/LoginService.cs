@@ -2,6 +2,7 @@ using ServicioUsuarios.DAOs.Interfaces;
 using ServicioUsuarios.DTOs;
 using ServicioUsuarios.Entities;
 using ServicioUsuarios.Middlewares;
+using ServicioUsuarios.Middlewares.Interfaces;
 using ServicioUsuarios.Services.Interfaces;
 
 namespace ServicioUsuarios.Services.Implementation;
@@ -11,9 +12,9 @@ public class LoginService : ILoginService
     private readonly usuarios_bd_assignuContext _context;
     private IAlumnoDAO _alumnoDAO;
     private IDocenteDAO _docenteDAO;
-    private readonly GeneradorToken _generadorToken;
+    private readonly IGeneradorToken _generadorToken;
 
-    public LoginService(usuarios_bd_assignuContext context, IAlumnoDAO alumnoDAO, IDocenteDAO docenteDAO, GeneradorToken generadorToken)
+    public LoginService(usuarios_bd_assignuContext context, IAlumnoDAO alumnoDAO, IDocenteDAO docenteDAO, IGeneradorToken generadorToken)
     {
         _context = context;
         _alumnoDAO = alumnoDAO;

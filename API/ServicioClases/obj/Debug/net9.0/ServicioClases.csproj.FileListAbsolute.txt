@@ -130,3 +130,14 @@ C:\Users\x\Documents\AsignU\API\ServicioClases\obj\Debug\net9.0\refint\ServicioC
 C:\Users\x\Documents\AsignU\API\ServicioClases\obj\Debug\net9.0\ServicioClases.pdb
 C:\Users\x\Documents\AsignU\API\ServicioClases\obj\Debug\net9.0\ServicioClases.genruntimeconfig.cache
 C:\Users\x\Documents\AsignU\API\ServicioClases\obj\Debug\net9.0\ref\ServicioClases.dll
+C:\Users\x\Documents\AsignU\API\ServicioClases\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\x\Documents\AsignU\API\ServicioClases\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\x\Documents\AsignU\API\ServicioClases\bin\Debug\net9.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\x\Documents\AsignU\API\ServicioClases\bin\Debug\net9.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\x\Documents\AsignU\API\ServicioClases\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\x\Documents\AsignU\API\ServicioClases\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\x\Documents\AsignU\API\ServicioClases\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\x\Documents\AsignU\API\ServicioClases\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\x\Documents\AsignU\API\ServicioClases\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\x\Documents\AsignU\API\ServicioClases\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\x\Documents\AsignU\API\ServicioClases\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll

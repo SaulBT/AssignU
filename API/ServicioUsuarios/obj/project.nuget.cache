@@ -67,7 +67,7 @@
       "code": "NU1603",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "ServicioUsuarios depends on Pomelo.EntityFrameworkCore.MySql (>= 9.0.0-preview.2) but Pomelo.EntityFrameworkCore.MySql 9.0.0-preview.2 was not found. Pomelo.EntityFrameworkCore.MySql 9.0.0-preview.2.efcore.9.0.0 was resolved instead.",
+      "message": "ServicioUsuarios depende de Pomelo.EntityFrameworkCore.MySql (>= 9.0.0-preview.2), pero no se encontró Pomelo.EntityFrameworkCore.MySql 9.0.0-preview.2. Pomelo.EntityFrameworkCore.MySql 9.0.0-preview.2.efcore.9.0.0 se resolvió en su lugar.",
       "libraryId": "Pomelo.EntityFrameworkCore.MySql",
       "targetGraphs": [
         "net9.0"

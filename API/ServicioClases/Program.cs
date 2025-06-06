@@ -57,35 +57,39 @@ app.MapPost("/clase", async (IClasesService servicio, CrearClaseDTO crearClaseDt
     return Results.Created($"/clase/{clase.IdClase}", clase);
 })
 .WithName("CrearClase")
+.RequireAuthorization()
 .WithOpenApi();
 
 app.MapPut("/clase", async (IClasesService servicio, ActualizarClaseDTO actualizarClaseDto, HttpContext httpContext) =>
 {
-    var clase = await servicio.editarClase(actualizarClaseDto, httpContext);
+    var clase = await servicio.editarClaseAsync(actualizarClaseDto, httpContext);
     return Results.Ok(clase);
 })
 .WithName("ActualizarClase")
+.RequireAuthorization()
 .WithOpenApi();
 
 app.MapDelete("/clase/{id:int}", async (IClasesService servicio, int idClase, HttpContext httpContext) =>
 {
-    await servicio.eliminarClase(idClase, httpContext);
-    return Results.Ok;
+    await servicio.eliminarClaseAsync(idClase, httpContext);
+    return Results.Ok();
 })
 .WithName("EliminarClase")
+.RequireAuthorization()
 .WithOpenApi();
 
 app.MapPut("/clase/fecha-visualizacion", async (IClasesService servicio, int idClase, DateTime fechaVisualizacion, HttpContext httpContext) =>
 {
-    await servicio.enviarFechaVisualizacion(idClase, fechaVisualizacion, httpContext);
-    return Results.Ok;
+    await servicio.enviarFechaVisualizacionAsync(idClase, fechaVisualizacion, httpContext);
+    return Results.Ok();
 })
 .WithName("EnviarFechaVisualizacion")
+.RequireAuthorization()
 .WithOpenApi();
 
-app.MapGet("/clase/{id:int}", async (IClasesService servicio, int idClase, HttpContext httpContext) =>
+app.MapGet("/clase/{id:int}", async (IClasesService servicio, int idClase) =>
 {
-    var clase = await servicio.obtenerClasePorId(idClase, httpContext);
+    var clase = await servicio.obtenerClasePorIdAsync(idClase);
     return Results.Ok(clase);
 })
 .WithName("ObtenerClase")
@@ -93,34 +97,47 @@ app.MapGet("/clase/{id:int}", async (IClasesService servicio, int idClase, HttpC
 
 app.MapGet("/alumno/{id:int}/clases", async (IClasesService servicio, HttpContext httpContext) =>
 {
-    var clases = await servicio.obtenerClasesDeAlumno(httpContext);
+    var clases = await servicio.obtenerClasesDeAlumnoAsync(httpContext);
     return Results.Ok(clases);
 })
 .WithName("ObtenerClasesDeAlumno")
+.RequireAuthorization()
 .WithOpenApi();
 
 app.MapGet("/docente/{id:int}/clases", async (IClasesService servicio, HttpContext httpContext) =>
 {
-    var clases = await servicio.obtenerClasesDeDocente(httpContext);
+    var clases = await servicio.obtenerClasesDeDocenteAsync(httpContext);
     return Results.Ok(clases);
 })
 .WithName("ObtenerClasesDeDocente")
+.RequireAuthorization()
 .WithOpenApi();
 
 app.MapPost("/clase/unirme", async (IClasesService servicio, string codigoClase, HttpContext httpContext) =>
 {
-    var clase = await servicio.unirseAClase(codigoClase, httpContext);
+    var clase = await servicio.unirseAClaseAsync(codigoClase, httpContext);
     return Results.Created($"/clase/{clase.IdClase}", clase);
 })
 .WithName("UnirseAClase")
+.RequireAuthorization()
 .WithOpenApi();
 
 app.MapDelete("/clase/{id:int}/salir", async (IClasesService servicio, int idClase, HttpContext httpContext) =>
 {
-    await servicio.salirDeClase(idClase, httpContext);
-    return Results.Ok;
+    await servicio.salirDeClaseAsync(idClase, httpContext);
+    return Results.Ok();
 })
 .WithName("SalirseClase")
+.RequireAuthorization()
+.WithOpenApi();
+
+app.MapGet("/clase/alumnos/{id:int}", async (IClasesService servicio, int idAlumno, int idClase, HttpContext httpContext) =>
+{
+    var registro = await servicio.obtenerRegistroAlumno(idAlumno, idClase, httpContext);
+    return Results.Ok(registro);
+})
+.WithName("ObtenerRegistroDeAlumno")
+.RequireAuthorization()
 .WithOpenApi();
 
 if (app.Environment.IsDevelopment())

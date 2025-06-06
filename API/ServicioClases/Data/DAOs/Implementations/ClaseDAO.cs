@@ -14,15 +14,10 @@ public class ClaseDAO : IClaseDAO
         _context = context;
     }
 
-    public async Task<Clase> crearClaseAsync(CrearClaseDTO crearClaseDTO, string codigoClase)
+    public async Task<Clase> crearClaseAsync(Clase clase, string codigoClase)
     {
         try
         {
-            var clase = new Clase
-            {
-                Codigo = codigoClase,
-                Nombre = crearClaseDTO.nombre
-            };
             _context.Clase.Add(clase);
             await _context.SaveChangesAsync();
         }
@@ -49,9 +44,9 @@ public class ClaseDAO : IClaseDAO
         {
             var claseExistente = await _context.Clase
                 .FirstOrDefaultAsync(c => c.IdClase == clase.IdClase);
-
             claseExistente.Nombre = clase.Nombre;
             _context.Clase.Update(claseExistente);
+            await _context.SaveChangesAsync();
         }
         catch (Exception ex)
         {
@@ -59,13 +54,12 @@ public class ClaseDAO : IClaseDAO
         }
     }
 
-    public async Task eliminarClaseAsync(int idClase)
+    public async Task eliminarClaseAsync(Clase clase)
     {
         try
         {
-            await _context.Clase
-                .Where(c => c.IdClase == idClase)
-                .ExecuteDeleteAsync();
+            _context.Clase.Remove(clase);
+            await _context.SaveChangesAsync();
         }
         catch (Exception ex)
         {

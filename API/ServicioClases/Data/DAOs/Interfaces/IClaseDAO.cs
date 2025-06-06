@@ -5,9 +5,9 @@ namespace ServicioClases.Data.DAOs.Interfaces;
 
 public interface IClaseDAO
 {
-    Task<Clase> crearClaseAsync(CrearClaseDTO crearClaseDTO, string codigoClase);
+    Task<Clase> crearClaseAsync(Clase clase, string codigoClase);
     Task actualizarClaseAsync(Clase clase);
-    Task eliminarClaseAsync(int idClase);
+    Task eliminarClaseAsync(Clase clase);
     Task<Clase> obtenerClasePorIdAsync(int idClase);
     Task<Clase?> obtenerClasePorCodigoAsync(string codigoClase);
     Task<List<Clase>> obtenerClasesDeAlumnoAsync(List<Registro> registros);

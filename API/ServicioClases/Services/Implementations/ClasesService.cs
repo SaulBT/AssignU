@@ -24,12 +24,19 @@ public class ClasesService : IClasesService
         verificarIdUsuario(idDocente);
         verificarCamposCrearClase(crearClaseDto);
         var codigoClase = await asignarCodigoClaseAsync();
-        var clase = await _claseDAO.crearClaseAsync(crearClaseDto, codigoClase);
 
-        return clase;
+        var clase = new Clase
+        {
+            Nombre = crearClaseDto.nombre,
+            Codigo = codigoClase,
+            IdDocente = idDocente
+        };
+        var claseCreada = await _claseDAO.crearClaseAsync(clase, codigoClase);
+
+        return claseCreada;
     }
 
-    public async Task<Clase> editarClase(ActualizarClaseDTO actualizarClaseDto, HttpContext httpContext)
+    public async Task<Clase> editarClaseAsync(ActualizarClaseDTO actualizarClaseDto, HttpContext httpContext)
     {
         verificarAutorizacion(httpContext);
         var idDocente = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
@@ -37,54 +44,53 @@ public class ClasesService : IClasesService
         verificarIdClase(actualizarClaseDto.idClase);
         verificarCamposActualizarClase(actualizarClaseDto);
 
-        var claseExistente = await buscarClasePorId(actualizarClaseDto.idClase);
+        var claseExistente = await buscarClasePorIdAsync(actualizarClaseDto.idClase);
         claseExistente.Nombre = actualizarClaseDto.nombre;
         await _claseDAO.actualizarClaseAsync(claseExistente);
 
         return claseExistente;
     }
 
-    public async Task eliminarClase(int idClase, HttpContext httpContext)
+    public async Task eliminarClaseAsync(int idClase, HttpContext httpContext)
     {
         verificarAutorizacion(httpContext);
         var idDocente = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
         verificarIdUsuario(idDocente);
         verificarIdClase(idClase);
 
-        var tieneRegistros = await verificarRegistrosClase(idClase);
+        var tieneRegistros = await verificarRegistrosClaseAsync(idClase);
         if (!tieneRegistros)
         {
-            await _claseDAO.eliminarClaseAsync(idClase);
+            var clase = await buscarClasePorIdAsync(idClase);
+            await _claseDAO.eliminarClaseAsync(clase);
         }
         else
         {
-            await borrarDocenteDeClase(idClase);
+            await borrarDocenteDeClaseAsync(idClase);
         }
     }
 
-    public async Task enviarFechaVisualizacion(int idClase, DateTime fechaVisualizacion, HttpContext httpContext)
+    public async Task enviarFechaVisualizacionAsync(int idClase, DateTime fechaVisualizacion, HttpContext httpContext)
     {
         verificarAutorizacion(httpContext);
         var idAlumno = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
         verificarIdUsuario(idAlumno);
+        verificarIdClase(idClase);
 
         var registro = await _registroDAO.obtenerRegistroPorIdAlumnoYClaseAsync(idAlumno, idClase);
         registro.UltimoInicio = fechaVisualizacion;
         await _registroDAO.actualizarRegistroAsync(registro);
     }
 
-    public async Task<Clase?> obtenerClasePorId(int idClase, HttpContext httpContext)
+    public async Task<Clase?> obtenerClasePorIdAsync(int idClase)
     {
-        verificarAutorizacion(httpContext);
-        var idUsuario = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
-        verificarIdUsuario(idUsuario);
         verificarIdClase(idClase);
 
-        var clase = await buscarClasePorId(idClase);
+        var clase = await buscarClasePorIdAsync(idClase);
         return clase;
     }
 
-    public async Task<List<Clase>?> obtenerClasesDeAlumno(HttpContext httpContext)
+    public async Task<List<Clase>?> obtenerClasesDeAlumnoAsync(HttpContext httpContext)
     {
         verificarAutorizacion(httpContext);
         var idAlumno = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
@@ -96,7 +102,7 @@ public class ClasesService : IClasesService
         return clases;
     }
 
-    public Task<List<Clase>?> obtenerClasesDeDocente(HttpContext httpContext)
+    public Task<List<Clase>?> obtenerClasesDeDocenteAsync(HttpContext httpContext)
     {
         verificarAutorizacion(httpContext);
         var idDocente = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
@@ -107,13 +113,13 @@ public class ClasesService : IClasesService
         return clases;
     }
 
-    public async Task<Clase> unirseAClase(string codigoClase, HttpContext httpContext)
+    public async Task<Clase> unirseAClaseAsync(string codigoClase, HttpContext httpContext)
     {
         verificarAutorizacion(httpContext);
         var idAlumno = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
         verificarIdUsuario(idAlumno);
         verificarCodigoClase(codigoClase);
-        var claseExistente = await buscarClaseConCodigo(codigoClase);
+        var claseExistente = await buscarClaseConCodigoAsync(codigoClase);
         verificarClaseConDocente((int)(claseExistente?.IdDocente));
 
         var registro = new Registro
@@ -126,20 +132,48 @@ public class ClasesService : IClasesService
         return claseExistente;
     }
 
-    public async Task salirDeClase(int idClase, HttpContext httpContext)
+    public async Task salirDeClaseAsync(int idClase, HttpContext httpContext)
     {
+        
         verificarAutorizacion(httpContext);
         var idAlumno = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
         verificarIdUsuario(idAlumno);
         verificarIdClase(idClase);
-        var registro = await buscarRegistroPorIdAlumnoYClase(idAlumno, idClase);
+        Console.WriteLine("Bucsa el registro.");
+        var registro = await buscarRegistroPorIdAlumnoYClaseAsync(idAlumno, idClase);
 
-        _registroDAO.eliminarRegistroAsync(registro.IdRegistro);
-        var tieneRegistros = await verificarRegistrosClase(idClase);
-        if (!tieneRegistros)
+        Console.WriteLine("Lo encuentra. Id: " + registro.IdRegistro);
+        Console.WriteLine("Lo elimina.");
+        await _registroDAO.eliminarRegistroAsync(registro);
+        Console.WriteLine("Verifica si la clase tiene otro registro.");
+        var tieneRegistros = await verificarRegistrosClaseAsync(idClase);
+        Console.WriteLine("¿Tiene registros? " + tieneRegistros);
+        Console.WriteLine("Busca la clase.");
+        var clase = await buscarClasePorIdAsync(idClase);
+        Console.WriteLine("La encuentra. Id: " + clase.IdClase);
+        Console.WriteLine("Verifica si el docente es 0.");
+        
+        var estaTerminada = verificarClaseTerminada(clase.IdDocente);
+        Console.WriteLine("¿El docente es 0? " + estaTerminada);
+        
+        if (!tieneRegistros && estaTerminada)
         {
-            await _claseDAO.eliminarClaseAsync(idClase);
+            Console.WriteLine("Borra la clase.");
+            await _claseDAO.eliminarClaseAsync(clase);
         }
+        
+    }
+
+    public async Task<Registro> obtenerRegistroAlumno(int idAlumno, int idClase, HttpContext httpContext)
+    {
+        verificarAutorizacion(httpContext);
+        var idUsuario = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
+        verificarIdUsuario(idUsuario);
+        verificarIdAlumno(idAlumno);
+        verificarIdClase(idClase);
+
+        var registro = await _registroDAO.obtenerRegistroPorIdAlumnoYClaseAsync(idAlumno, idClase);
+        return registro;
     }
 
     private void verificarAutorizacion(HttpContext httpContext)
@@ -163,6 +197,14 @@ public class ClasesService : IClasesService
         if (idClase <= 0)
         {
             throw new ArgumentException("La id de la clase no es válida");
+        }
+    }
+
+    private void verificarIdAlumno(int idAlumno)
+    {
+        if (idAlumno <= 0)
+        {
+            throw new ArgumentException("La id del alumno no es válida");
         }
     }
 
@@ -198,6 +240,15 @@ public class ClasesService : IClasesService
         }
     }
 
+    private bool verificarClaseTerminada(int idDocente)
+    {
+        if (idDocente == 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
     private async Task<string> asignarCodigoClaseAsync()
     {
         var claseExistente = new Clase();
@@ -210,21 +261,20 @@ public class ClasesService : IClasesService
                 .Select(_ => caracteres[random.Next(caracteres.Length)])
                 .ToArray());
 
-            claseExistente = await buscarClaseConCodigo(codigo);
+            claseExistente = await buscarClaseConCodigoVerificacionAsync(codigo);
         } while (claseExistente != null);
 
         return codigo;
     }
 
-    private async Task<Clase?> buscarClaseConCodigo(string codigoClase)
+    private async Task<Clase?> buscarClaseConCodigoVerificacionAsync(string codigoClase)
     {
-        var clase = await _claseDAO.obtenerClasePorCodigoAsync(codigoClase);
-        return clase;
+        return await _claseDAO.obtenerClasePorCodigoAsync(codigoClase);
     }
 
-    private async Task<Clase?> buscarClasePorId(int idClase)
+    private async Task<Clase?> buscarClaseConCodigoAsync(string codigoClase)
     {
-        var clase = await _claseDAO.obtenerClasePorCodigoAsync(idClase.ToString());
+        var clase = await _claseDAO.obtenerClasePorCodigoAsync(codigoClase);
         if (clase == null)
         {
             throw new RecursoNoEncontradoException("No se encontró ninguna clase");
@@ -232,7 +282,17 @@ public class ClasesService : IClasesService
         return clase;
     }
 
-    private async Task<bool> verificarRegistrosClase(int idClase)
+    private async Task<Clase?> buscarClasePorIdAsync(int idClase)
+    {
+        var clase = await _claseDAO.obtenerClasePorIdAsync(idClase);
+        if (clase == null)
+        {
+            throw new RecursoNoEncontradoException("No se encontró ninguna clase");
+        }
+        return clase;
+    }
+
+    private async Task<bool> verificarRegistrosClaseAsync(int idClase)
     {
         var registros = await _registroDAO.obtenerRegistrosPorClaseAsync(idClase);
         if (registros.Count > 0)
@@ -242,14 +302,14 @@ public class ClasesService : IClasesService
         return false;
     }
 
-    private async Task borrarDocenteDeClase(int idClase)
+    private async Task borrarDocenteDeClaseAsync(int idClase)
     {
-        var clase = await buscarClasePorId(idClase);
+        var clase = await buscarClasePorIdAsync(idClase);
         clase.IdDocente = 0;
         await _claseDAO.actualizarClaseAsync(clase);
     }
 
-    private async Task<Registro?> buscarRegistroPorIdAlumnoYClase(int idAlumno, int idClase)
+    private async Task<Registro?> buscarRegistroPorIdAlumnoYClaseAsync(int idAlumno, int idClase)
     {
         var registro = await _registroDAO.obtenerRegistroPorIdAlumnoYClaseAsync(idAlumno, idClase);
         if (registro == null)

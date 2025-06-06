@@ -16,6 +16,12 @@ public partial class ClasesDbContext : DbContext
 
     public virtual DbSet<Registro> Registro { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+        if (!optionsBuilder.IsConfigured){
+            optionsBuilder.UseMySql("server=localhost;uid=clases_assignu;pwd=clase123;database=clases_bd_assignu", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.4.4-mysql"));
+        }
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder

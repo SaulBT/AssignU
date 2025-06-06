@@ -26,13 +26,12 @@ public class RegistroDAO : IRegistroDAO
         }
     }
 
-    public async Task eliminarRegistroAsync(int idRegistro)
+    public async Task eliminarRegistroAsync(Registro registro)
     {
         try
         {
-            await _context.Registro
-                .Where(r => r.IdRegistro == idRegistro)
-                .ExecuteDeleteAsync();
+            _context.Registro.Remove(registro);
+            await _context.SaveChangesAsync();
         }
         catch (Exception ex)
         {
@@ -48,6 +47,7 @@ public class RegistroDAO : IRegistroDAO
                 .FirstOrDefaultAsync(r => r.IdRegistro == registro.IdRegistro);
             registroActual.UltimoInicio = registro.UltimoInicio;
             _context.Registro.Update(registroActual);
+            await _context.SaveChangesAsync();
         }
         catch (Exception ex)
         {

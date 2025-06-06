@@ -1,0 +1,6 @@
+usuarios_bd_assignu:
+ - nombre: usuarios_assignu
+ - contra: usuario123
+clases_bd_assignu:
+ - nombre: clases_assignu
+ - contra: clase123

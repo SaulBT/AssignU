@@ -13,7 +13,6 @@ using ServicioUsuarios.Middlewares.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<usuarios_bd_assignuContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
@@ -48,13 +47,12 @@ builder.Services.AddAuthentication(options => {
 });
 builder.Services.AddAuthorization();
 
-//builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-app.MapControllers();
 app.UseManejoExcepciones();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -196,7 +194,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.MapControllers();
 
 app.Run();

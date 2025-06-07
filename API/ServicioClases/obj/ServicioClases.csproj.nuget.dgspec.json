@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\x\\Documents\\AsignU\\API\\ServicioClases\\ServicioClases.csproj": {}
+    "c:\\Users\\x\\Documents\\AsignU\\API\\ServicioClases\\ServicioClases.csproj": {}
   },
   "projects": {
-    "C:\\Users\\x\\Documents\\AsignU\\API\\ServicioClases\\ServicioClases.csproj": {
+    "c:\\Users\\x\\Documents\\AsignU\\API\\ServicioClases\\ServicioClases.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\x\\Documents\\AsignU\\API\\ServicioClases\\ServicioClases.csproj",
+        "projectUniqueName": "c:\\Users\\x\\Documents\\AsignU\\API\\ServicioClases\\ServicioClases.csproj",
         "projectName": "ServicioClases",
-        "projectPath": "C:\\Users\\x\\Documents\\AsignU\\API\\ServicioClases\\ServicioClases.csproj",
+        "projectPath": "c:\\Users\\x\\Documents\\AsignU\\API\\ServicioClases\\ServicioClases.csproj",
         "packagesPath": "C:\\Users\\x\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\x\\Documents\\AsignU\\API\\ServicioClases\\obj\\",
+        "outputPath": "c:\\Users\\x\\Documents\\AsignU\\API\\ServicioClases\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

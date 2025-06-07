@@ -3558,11 +3558,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\x\\Documents\\AsignU\\API\\ServicioClases\\ServicioClases.csproj",
+      "projectUniqueName": "c:\\Users\\x\\Documents\\AsignU\\API\\ServicioClases\\ServicioClases.csproj",
       "projectName": "ServicioClases",
-      "projectPath": "C:\\Users\\x\\Documents\\AsignU\\API\\ServicioClases\\ServicioClases.csproj",
+      "projectPath": "c:\\Users\\x\\Documents\\AsignU\\API\\ServicioClases\\ServicioClases.csproj",
       "packagesPath": "C:\\Users\\x\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\x\\Documents\\AsignU\\API\\ServicioClases\\obj\\",
+      "outputPath": "c:\\Users\\x\\Documents\\AsignU\\API\\ServicioClases\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3652,7 +3652,7 @@
       "code": "NU1603",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "ServicioClases depende de Pomelo.EntityFrameworkCore.MySql (>= 9.0.0-preview.2), pero no se encontró Pomelo.EntityFrameworkCore.MySql 9.0.0-preview.2. Pomelo.EntityFrameworkCore.MySql 9.0.0-preview.2.efcore.9.0.0 se resolvió en su lugar.",
+      "message": "ServicioClases depends on Pomelo.EntityFrameworkCore.MySql (>= 9.0.0-preview.2) but Pomelo.EntityFrameworkCore.MySql 9.0.0-preview.2 was not found. Pomelo.EntityFrameworkCore.MySql 9.0.0-preview.2.efcore.9.0.0 was resolved instead.",
       "libraryId": "Pomelo.EntityFrameworkCore.MySql",
       "targetGraphs": [
         "net9.0"

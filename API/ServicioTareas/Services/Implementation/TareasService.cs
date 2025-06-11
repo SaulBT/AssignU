@@ -9,6 +9,7 @@ namespace ServicioTareas.Services.Implementations;
 public class TareasService : ITareasServices
 {
     private readonly ITareaDAO _tareaDAO;
+    private readonly RabbitMQPublisher _rabbitMQPublisher;
 
     public TareasService(ITareaDAO tareaDAO)
     {
@@ -22,6 +23,10 @@ public class TareasService : ITareasServices
         await verificarNombreTareaCreacionAsync(crearTareaDTO.idClase, crearTareaDTO.nombre);
 
         var tarea = await _tareaDAO.crearTareaAsync(crearTareaDTO);
+        var cuestionario = crearTareaDTO.cuestionario;
+        cuestionario.idTarea = tarea.IdTarea;
+        await _rabbitMQPublisher.PublicarCuestionarioAsync(cuestionario);
+
         return tarea;
     }
 

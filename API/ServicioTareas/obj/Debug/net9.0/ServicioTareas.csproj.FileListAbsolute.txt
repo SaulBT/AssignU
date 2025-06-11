@@ -41,6 +41,7 @@ C:\Users\x\Documents\AsignU\API\ServicioTareas\bin\Debug\net9.0\Microsoft.OpenAp
 C:\Users\x\Documents\AsignU\API\ServicioTareas\bin\Debug\net9.0\Mono.TextTemplating.dll
 C:\Users\x\Documents\AsignU\API\ServicioTareas\bin\Debug\net9.0\MySqlConnector.dll
 C:\Users\x\Documents\AsignU\API\ServicioTareas\bin\Debug\net9.0\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\x\Documents\AsignU\API\ServicioTareas\bin\Debug\net9.0\RabbitMQ.Client.dll
 C:\Users\x\Documents\AsignU\API\ServicioTareas\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\x\Documents\AsignU\API\ServicioTareas\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\x\Documents\AsignU\API\ServicioTareas\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll

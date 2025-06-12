@@ -5,16 +5,27 @@ const asyncHandler = require('../middleware/asyncHandler');
 const Cuestionario = require('../models/Cuestionario');
 
 function validarCuestionario(idTarea, preguntas) {
+    console.log("Se entra a validar");
+    console.log("Se va a validar la idTarea");
     validarIdTarea(idTarea);
+    console.log("Se va a validar el estado de las preguntas");
     validarDatosPreguntas(preguntas);
+    console.log("Se va a validar la cantidad de las preguntas");
     validarCantidadPreguntas(preguntas);
 
-    preguntas.forEach(validarPregunta);
+    console.log("Se va a validar cada pregunta");
+    preguntas.forEach(pregunta => {
+        validarPregunta(pregunta);
+    });
 }
 
 function validarPregunta(pregunta, index) {
+    var resultado;
+    console.log("Se va a validar el tipo pregunta");
     validarTipoPregunta(pregunta, index);
+    console.log("Se va a validar el texto de la pregunta");
     validarTextoPregunta(pregunta, index);
+    console.log("Se va a validar la cantidad de opciones");
     validarCantidadOpciones(pregunta, index);
 }
 
@@ -36,14 +47,15 @@ const validarIdTarea = (idTarea) => {
 }
 
 const validarDatosPreguntas = (preguntas) => {
-    if (preguntas == null || !Array.isArray(preguntas)) {
-        throw new ValorInvalidoError("Las preguntas son inválidas");
+    if (preguntas == null) {
+        throw new ValorInvalidoError("Las preguntas son inválidas: Valor nulo");
+    } else if (!Array.isArray(preguntas)) {
+        throw new ValorInvalidoError("Las preguntas son inválidas: No es array");
     }
 }
 
 const validarCantidadPreguntas = (preguntas) => {
     const numeroPreguntas = preguntas.length;
-
     if (numeroPreguntas < 1) {
         throw new CuestionarioInvalidoError("El Cuestionario debe de tener más de una pregunta");
     } else if (numeroPreguntas > 50) {
@@ -64,7 +76,7 @@ const validarTipoPregunta = (pregunta, index) => {
     } else if (tipo.trim() === '') {
         throw new PreguntaInvalidaError(`El tipo de la pregunta ${index + 1} es inválido: Cadena vacía`);
     } else if (!tiposValidos.includes(tipo)) {
-        throw new PreguntaInvalidaError(`El tipo de la pregunta ${index + 1} es inválido: Tipo desconocido: ${tipo}`);
+        throw new PreguntaInvalidaError(`El tipo de la pregunta ${index + 1} es inválido: Tipo desconocido`);
     }
 }
 
@@ -72,11 +84,11 @@ const validarTextoPregunta = (pregunta, index) => {
     const texto = pregunta.texto;
 
     if(!texto) {
-        throw new PreguntaInvalidaError(`El texto de la pregunta ${index + 1} es inválido: Valor nulo`);
+        throw new PreguntaInvalidaError(`El tipo de la pregunta ${index + 1} es inválido: Valor nulo`);
     } else if (typeof texto !== 'string') {
-        throw new PreguntaInvalidaError(`El texto de la pregunta ${index + 1} es inválido: No es string`);
+        throw new PreguntaInvalidaError(`El tipo de la pregunta ${index + 1} es inválido: No es string`);
     } else if (texto.trim() === '') {
-        throw new PreguntaInvalidaError(`El texto de la pregunta ${index + 1} es inválido: Cadena vacía`);
+        throw new PreguntaInvalidaError(`El tipo de la pregunta ${index + 1} es inválido: Cadena vacía`);
     }
 }
 

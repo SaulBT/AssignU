@@ -3,8 +3,8 @@ const router = express.Router();
 
 const {
     crearCuestionarioAsync,
-    editarCuestionarioAsync,
-    eliminarCuestionarioAsync,
+    //editarCuestionarioAsync,
+    //eliminarCuestionarioAsync,
     obtenerCuestionarioAsync
 } = require('../controllers/CuestionarioControllers');
 
@@ -27,8 +27,8 @@ const {
  *         description: Error de validación
  */
 router.post('/', crearCuestionarioAsync);
-router.put('/:id', editarCuestionarioAsync);
-router.delete('/:id', eliminarCuestionarioAsync);
+//router.put('/:id', editarCuestionarioAsync);
+//router.delete('/:id', eliminarCuestionarioAsync);
 router.get('/:id', obtenerCuestionarioAsync);
 
 module.exports = router;

@@ -2,18 +2,21 @@ using ServicioTareas.Data.DAOs.Interfaces;
 using ServicioTareas.Data.DTOs;
 using ServicioTareas.Exceptions;
 using ServicioTareas.Models;
+using ServicioTareas.Config;
 using ServicioTareas.Services.Interfaces;
+using ServicioTareas.Validations;
 
 namespace ServicioTareas.Services.Implementations;
 
 public class TareasService : ITareasServices
 {
     private readonly ITareaDAO _tareaDAO;
-    private readonly RabbitMQPublisher _rabbitMQPublisher;
+    private readonly RpcClientRabbitMQ _rpcClient;
 
-    public TareasService(ITareaDAO tareaDAO)
+    public TareasService(ITareaDAO tareaDAO, RpcClientRabbitMQ rpcClient)
     {
         _tareaDAO = tareaDAO;
+        _rpcClient = rpcClient;
     }
 
     public async Task<Tarea> crearTareaAsync(CrearTareaDTO crearTareaDTO, HttpContext httpContext)
@@ -24,8 +27,10 @@ public class TareasService : ITareasServices
 
         var tarea = await _tareaDAO.crearTareaAsync(crearTareaDTO);
         var cuestionario = crearTareaDTO.cuestionario;
-        cuestionario.idTarea = tarea.IdTarea;
-        await _rabbitMQPublisher.PublicarCuestionarioAsync(cuestionario);
+        string mensajeJson = crearMensajeRPC("crearCuestionario", tarea.IdTarea, cuestionario);
+
+        Console.WriteLine("Mensaje: " + mensajeJson);
+        await enviarMensajeRPC(mensajeJson);
 
         return tarea;
     }
@@ -101,6 +106,38 @@ public class TareasService : ITareasServices
         if (idClase <= 0)
         {
             throw new ArgumentException("La id de la clase es inválida");
+        }
+    }
+
+    private string crearMensajeRPC(string accion, int idTarea, CuestionarioDTO cuestionario)
+    {
+        var mensaje = new
+        {
+            accion = accion,
+            data = new
+            {
+                idTarea = idTarea,
+                cuestionario = cuestionario
+            }
+        };
+        return System.Text.Json.JsonSerializer.Serialize(mensaje);
+    }
+
+    private async Task enviarMensajeRPC(string mensajeJson)
+    {
+        string respuestaJson = await _rpcClient.CallAsync("cola_cuestionarios", mensajeJson);
+        var respuesta = System.Text.Json.JsonSerializer.Deserialize<RespuestaCuestionario>(respuestaJson);
+        if (respuesta == null)
+        {
+            throw new Exception("No hay respuesta");
+        }
+        else if (!respuesta.Success)
+        {
+            if (respuesta.Error == null)
+            {
+                throw new InvalidOperationException("No hay error");
+            }
+            throw LanzarExcepciones.lanzarExcepcion(respuesta.Error.Tipo, respuesta.Error.Mensaje);
         }
     }
 

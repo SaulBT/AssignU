@@ -4,6 +4,5 @@ namespace ServicioTareas.Data.DTOs;
 
 public class CuestionarioDTO
 {
-    public int idTarea = 0;
-    public List<PreguntaDTO> preguntas = new();
+    public List<PreguntaDTO> preguntas { get; set; } = new();
 }

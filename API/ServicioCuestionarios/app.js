@@ -8,6 +8,8 @@ const swaggerSpec = require('./middleware/swaggerConfig');
 const errorHandler = require('./middleware/errorHandler');
 const asyncHandler = require('./middleware/asyncHandler');
 
+const { iniciarServidorRPC } = require('./RPCServer');
+
 const app = express();
 
 app.use(cors());
@@ -24,5 +26,7 @@ app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(errorHandler);
 //app.use(asyncHandler);
+
+iniciarServidorRPC();
 
 module.exports = app;

@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const asyncHandler = require('../middleware/asyncHandler');
 
 const Cuestionario = require('../models/Cuestionario');
+const { ManejarErrores } = require('../validations/ManejarErrores');
 
 const {
     validarCuestionario,
@@ -10,27 +11,33 @@ const {
     validarIdTarea
  } = require('../validations/CuestionarioValidations');
 
-const crearCuestionarioAsync = async (req, res = response, next) => {
+const crearCuestionarioAsync = async (data) => {
     try{
-        if (!req.body) {
-            throw { statusCode: 400, mensaje: 'Cuerpo de la solicitud vacío o mal formado' };
+        if (!data) {
+            return {
+                Success: false,
+                Message: 'No se enviaron datos'
+            }
         }
-        const {idTarea, preguntas} = req.body;
+        idTarea = data.idTarea;
+        preguntas = data.cuestionario.preguntas;
 
         validarCuestionario(idTarea, preguntas);
 
         const cuestionario = new Cuestionario({
-            idTarea,
-            preguntas
+            idTarea: idTarea,
+            preguntas: preguntas
         });
         await cuestionario.save();
-
-        res.status(201).json(cuestionario);
+        return {
+            Success: true
+        }
     } catch(err) {
-        next(err);
+        console.log("Error: " + err.message);
+        return ManejarErrores(err, err.message);
     }
 }
-
+/*
 const editarCuestionarioAsync = async (req, res = response, next) => {
     try {
         if (!req.body) {
@@ -65,7 +72,7 @@ const eliminarCuestionarioAsync = async (req, res = response, next) => {
         next(err);
     }
 }
-
+*/
 const obtenerCuestionarioAsync = async (req, res = repsonse, next) => {
     try {
         if (!req.body) {
@@ -84,7 +91,7 @@ const obtenerCuestionarioAsync = async (req, res = repsonse, next) => {
 
 module.exports = {
     crearCuestionarioAsync,
-    editarCuestionarioAsync,
-    eliminarCuestionarioAsync,
+    //editarCuestionarioAsync,
+    //eliminarCuestionarioAsync,
     obtenerCuestionarioAsync
 };

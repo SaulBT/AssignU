@@ -2,6 +2,6 @@ namespace ServicioTareas.Data.DTOs;
 
 public class OpcionDTO
 {
-    private string texto { get; set; } = string.Empty;
-    private bool esCorrecta { get; set; }
+    public string texto { get; set; } = string.Empty;
+    public bool esCorrecta { get; set; }
 }

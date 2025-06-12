@@ -11,6 +11,7 @@ using ServicioTareas.Data.DAOs.Implementations;
 using ServicioTareas.Data.DTOs;
 using RabbitMQ.Client;
 using ServicioTareas.Services;
+using ServicioTareas.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,22 +19,10 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<TareasDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-var factory = new ConnectionFactory
-{
-    HostName = builder.Configuration["RabbitMQ:HostName"] ?? "localhost",
-    UserName = builder.Configuration["RabbitMQ:UserName"] ?? "guest",
-    Password = builder.Configuration["RabbitMQ:Password"] ?? "guest"
-};
-
-var connection = factory.CreateConnectionAsync().Result;
-var channel = connection.CreateChannelAsync().Result;
-
-builder.Services.AddSingleton<IConnection>(connection);
-builder.Services.AddSingleton<IChannel>(channel);
-builder.Services.AddSingleton<RabbitMQPublisher>();
-
 builder.Services.AddScoped<ITareasServices, TareasService>();
 builder.Services.AddScoped<ITareaDAO, TareaDAO>();
+builder.Services.AddSingleton<RpcClientRabbitMQ>();
+builder.Services.AddHostedService<RabbitMqInitializer>();
 
 builder.Services.AddAuthentication(options => {    
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

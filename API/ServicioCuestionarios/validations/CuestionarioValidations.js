@@ -1,31 +1,21 @@
 const ValorInvalidoError = require('../errors/ValorInvalidoError');
 const CuestionarioInvalidoError = require('../errors/CuestionarioInvalidoError');
 const PreguntaInvalidaError = require('../errors/PreguntaInvalidaError');
-const asyncHandler = require('../middleware/asyncHandler');
 const Cuestionario = require('../models/Cuestionario');
 
 function validarCuestionario(idTarea, preguntas) {
-    console.log("Se entra a validar");
-    console.log("Se va a validar la idTarea");
     validarIdTarea(idTarea);
-    console.log("Se va a validar el estado de las preguntas");
     validarDatosPreguntas(preguntas);
-    console.log("Se va a validar la cantidad de las preguntas");
     validarCantidadPreguntas(preguntas);
 
-    console.log("Se va a validar cada pregunta");
     preguntas.forEach(pregunta => {
         validarPregunta(pregunta);
     });
 }
 
 function validarPregunta(pregunta, index) {
-    var resultado;
-    console.log("Se va a validar el tipo pregunta");
     validarTipoPregunta(pregunta, index);
-    console.log("Se va a validar el texto de la pregunta");
     validarTextoPregunta(pregunta, index);
-    console.log("Se va a validar la cantidad de opciones");
     validarCantidadOpciones(pregunta, index);
 }
 

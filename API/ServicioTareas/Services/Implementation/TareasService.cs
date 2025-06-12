@@ -27,9 +27,7 @@ public class TareasService : ITareasServices
 
         var tarea = await _tareaDAO.crearTareaAsync(crearTareaDTO);
         var cuestionario = crearTareaDTO.cuestionario;
-        string mensajeJson = crearMensajeRPC("crearCuestionario", tarea.IdTarea, cuestionario);
-
-        Console.WriteLine("Mensaje: " + mensajeJson);
+        string mensajeJson = crearMensajeRPCConCuestionario("crearCuestionario", tarea.IdTarea, cuestionario);
         await enviarMensajeRPC(mensajeJson);
 
         return tarea;
@@ -43,6 +41,10 @@ public class TareasService : ITareasServices
         await verificarTareaExisteAsync(editarTareaDTO.idTarea);
 
         var tarea = await _tareaDAO.editarTareaAsync(editarTareaDTO);
+        var cuestionario = editarTareaDTO.cuestionario;
+        string mensajeJson = crearMensajeRPCConCuestionario("editarCuestionario", tarea.IdTarea, cuestionario);
+        await enviarMensajeRPC(mensajeJson);
+
         return tarea;
     }
 
@@ -54,6 +56,8 @@ public class TareasService : ITareasServices
 
         var tarea = await _tareaDAO.obtenerTareaPorIdAsync(idTarea);
         await _tareaDAO.eliminarTareaAsync(tarea);
+        string mensajeJson = crearMensajeRPC("eliminarCuestionario", idTarea);
+        await enviarMensajeRPC(mensajeJson);
     }
 
     public async Task<List<Tarea>?> obtenerTareasDeClaseAsync(int idClase)
@@ -109,7 +113,7 @@ public class TareasService : ITareasServices
         }
     }
 
-    private string crearMensajeRPC(string accion, int idTarea, CuestionarioDTO cuestionario)
+    private string crearMensajeRPCConCuestionario(string accion, int idTarea, CuestionarioDTO cuestionario)
     {
         var mensaje = new
         {
@@ -118,6 +122,19 @@ public class TareasService : ITareasServices
             {
                 idTarea = idTarea,
                 cuestionario = cuestionario
+            }
+        };
+        return System.Text.Json.JsonSerializer.Serialize(mensaje);
+    }
+
+    private string crearMensajeRPC(string accion, int idTarea)
+    {
+        var mensaje = new
+        {
+            accion = accion,
+            data = new
+            {
+                idTarea = idTarea
             }
         };
         return System.Text.Json.JsonSerializer.Serialize(mensaje);

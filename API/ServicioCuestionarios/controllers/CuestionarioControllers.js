@@ -37,42 +37,55 @@ const crearCuestionarioAsync = async (data) => {
         return ManejarErrores(err, err.message);
     }
 }
-/*
-const editarCuestionarioAsync = async (req, res = response, next) => {
+
+const editarCuestionarioAsync = async (data) => {
     try {
-        if (!req.body) {
-            throw { statusCode: 400, mensaje: 'Cuerpo de la solicitud vacío o mal formado' };
+        if (!data) {
+            return {
+                Success: false,
+                Message: 'No se enviaron datos'
+            }
         }
-        const {idTarea, preguntas} = req.body;
+        idTarea = data.idTarea;
+        preguntas = data.cuestionario.preguntas;
 
         validarCuestionario(idTarea, preguntas);
         const cuestionario = await validarExistenciaCuestionarioAsync(idTarea);
 
         cuestionario.preguntas = preguntas;
         await cuestionario.save();
-        res.status(200).json(cuestionario);
+        return {
+            Success: true
+        }
     } catch(err) {
-        next(err);
+        console.log("Error: " + err.message);
+        return ManejarErrores(err, err.message);
     }
 };
 
-const eliminarCuestionarioAsync = async (req, res = response, next) => {
+const eliminarCuestionarioAsync = async (data) => {
     try {
-        if (!req.body) {
-            throw { statusCode: 400, mensaje: 'Cuerpo de la solicitud vacío o mal formado' };
+        if (!data) {
+            return {
+                Success: false,
+                Message: 'No se enviaron datos'
+            }
         }
-        const {idTarea} = req.body;
+        const idTarea = data.idTarea;
 
         validarIdTarea(idTarea);
         const cuestionario = await validarExistenciaCuestionarioAsync(idTarea);
 
         await cuestionario.deleteOne();
-        return res.status(204).send();
+        return {
+            Success: true
+        }
     } catch (err) {
-        next(err);
+        console.log("Error: " + err.message);
+        return ManejarErrores(err, err.message);
     }
 }
-*/
+
 const obtenerCuestionarioAsync = async (req, res = repsonse, next) => {
     try {
         if (!req.body) {
@@ -91,7 +104,7 @@ const obtenerCuestionarioAsync = async (req, res = repsonse, next) => {
 
 module.exports = {
     crearCuestionarioAsync,
-    //editarCuestionarioAsync,
-    //eliminarCuestionarioAsync,
+    editarCuestionarioAsync,
+    eliminarCuestionarioAsync,
     obtenerCuestionarioAsync
 };

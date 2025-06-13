@@ -14,7 +14,7 @@ public class ClaseDAO : IClaseDAO
         _context = context;
     }
 
-    public async Task<Clase> crearClaseAsync(Clase clase, string codigoClase)
+    public async Task<Clase> CrearClaseAsync(Clase clase, string codigoClase)
     {
         try
         {
@@ -38,7 +38,7 @@ public class ClaseDAO : IClaseDAO
         }
     }
 
-    public async Task actualizarClaseAsync(Clase clase)
+    public async Task ActualizarClaseAsync(Clase clase)
     {
         try
         {
@@ -54,7 +54,7 @@ public class ClaseDAO : IClaseDAO
         }
     }
 
-    public async Task eliminarClaseAsync(Clase clase)
+    public async Task EliminarClaseAsync(Clase clase)
     {
         try
         {
@@ -67,7 +67,7 @@ public class ClaseDAO : IClaseDAO
         }
     }
 
-    public async Task<Clase> obtenerClasePorIdAsync(int idClase)
+    public async Task<Clase> ObtenerClasePorIdAsync(int idClase)
     {
         try
         {
@@ -80,7 +80,7 @@ public class ClaseDAO : IClaseDAO
         }
     }
 
-    public async Task<Clase?> obtenerClasePorCodigoAsync(string codigoClase)
+    public async Task<Clase?> ObtenerClasePorCodigoAsync(string codigoClase)
     {
         try
         {
@@ -93,14 +93,14 @@ public class ClaseDAO : IClaseDAO
         }
     }
 
-    public async Task<List<Clase>> obtenerClasesDeAlumnoAsync(List<Registro> registros)
+    public async Task<List<Clase>> ObtenerClasesDeAlumnoAsync(List<Registro> registros)
     {
         try
         {
             var clases = new List<Clase>();
             foreach (var registro in registros)
             {
-                var clase = await obtenerClasePorIdAsync(registro.IdClase);
+                var clase = await ObtenerClasePorIdAsync(registro.IdClase);
                 if (clase != null)
                 {
                     clases.Add(clase);
@@ -116,7 +116,7 @@ public class ClaseDAO : IClaseDAO
         
     }
 
-    public async Task<List<Clase>> obtenerClasesDeDocenteAsync(int idDocente)
+    public async Task<List<Clase>> ObtenerClasesDeDocenteAsync(int idDocente)
     {
          try
         {

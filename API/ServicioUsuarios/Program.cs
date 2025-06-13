@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ServicioUsuarios.DAOs.Interfaces;
-using ServicioUsuarios.Middlewares.Interfaces;
+using ServicioUsuarios.DAOs.Implementation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,15 +17,15 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<usuarios_bd_assignuContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-builder.Services.AddScoped<IAlumnoService, AlumnoService>();
+builder.Services.AddScoped<IServicioAlumno, ServicioAlumno>();
 builder.Services.AddScoped<IAlumnoDAO, AlumnoDAO>();
-builder.Services.AddScoped<IDocenteService, DocenteService>();
+builder.Services.AddScoped<IServicioDocente, SerivicioDocente>();
 builder.Services.AddScoped<IDocenteDAO, DocenteDAO>();
-builder.Services.AddScoped<ICatalogosService, CatalogosService>();
+builder.Services.AddScoped<ServicioCatalogo, ServicioCatalogo>();
 builder.Services.AddScoped<IGradoEstudiosDAO, GradoEstudiosDAO>();
 builder.Services.AddScoped<IGradoProfesionalDAO, GradoProfesionalDAO>();
-builder.Services.AddScoped<ILoginService, LoginService>();
-builder.Services.AddScoped<IGeneradorToken, GeneradorToken>();
+builder.Services.AddScoped<IServicioLogin, LoginService>();
+builder.Services.AddScoped<GeneradorToken>();
 
 builder.Services.AddAuthentication(options => {    
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -57,44 +57,44 @@ app.UseManejoExcepciones();
 app.UseAuthentication();
 app.UseAuthorization();
 
-//AlumnoService
-app.MapPost("/alumno", async (RegistrarAlumnoDTO alumnoNuevoDto, IAlumnoService servicio) =>
+//ServicioAlumno
+app.MapPost("/alumno", async (RegistrarAlumnoDTO alumnoNuevoDto, IServicioAlumno servicio) =>
 {
-    var alumno = await servicio.registrarAsync(alumnoNuevoDto);
+    var alumno = await servicio.RegistrarAsync(alumnoNuevoDto);
     return Results.Created($"/alumno/{alumno.idAlumno}", alumno);
 })
 .WithName("RegistrarAlumno")
 .WithOpenApi();
 
-app.MapGet("/alumno/{id:int}", async (int id, IAlumnoService servicio) =>
+app.MapGet("/alumno/{id:int}", async (int id, IServicioAlumno servicio) =>
 {
-    var alumno = await servicio.obtenerPorIdAsync(id);
+    var alumno = await servicio.ObtenerPorIdAsync(id);
     return Results.Ok(alumno);
 })
 .WithName("ObtenerAlumnoPorId")
 .WithOpenApi();
 
-app.MapPut("/alumnos", async (HttpContext context, ActualizarAlumnoDTO alumnoActualizadoDTO, IAlumnoService servicio) =>
+app.MapPut("/alumnos", async (HttpContext context, ActualizarAlumnoDTO alumnoActualizadoDTO, IServicioAlumno servicio) =>
 {
-    await servicio.actualizarAsync(context, alumnoActualizadoDTO);
+    await servicio.ActualizarAsync(context, alumnoActualizadoDTO);
     return Results.Ok();
 })
 .WithName("ActualizarAlumno")
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapDelete("/alumnos", async (HttpContext context, IAlumnoService servicio) =>
+app.MapDelete("/alumnos", async (HttpContext context, IServicioAlumno servicio) =>
 {
-    await servicio.eliminarAsync(context);
+    await servicio.EliminarAsync(context);
     return Results.Ok();
 })
 .WithName("EliminarAlumno")
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapPut("/alumnos/cambiar-contrasenia", async (CambiarContraseniaDTO cambiarContraseniaDto, IAlumnoService servicio, HttpContext context) =>
+app.MapPut("/alumnos/cambiar-contrasenia", async (CambiarContraseniaDTO cambiarContraseniaDto, IServicioAlumno servicio, HttpContext context) =>
 {
-    await servicio.cambiarContraseniaAsync(cambiarContraseniaDto, context);
+    await servicio.CambiarContraseniaAsync(cambiarContraseniaDto, context);
     return Results.Ok();
 })
 .WithName("CambiarContraseniaAlumno")
@@ -102,84 +102,84 @@ app.MapPut("/alumnos/cambiar-contrasenia", async (CambiarContraseniaDTO cambiarC
 .WithOpenApi();
 
 //DocenteService
-app.MapPost("/docentes", async (RegistrarDocenteDTO docenteNuevoDto, IDocenteService servicio) =>
+app.MapPost("/docentes", async (RegistrarDocenteDTO docenteNuevoDto, IServicioDocente servicio) =>
 {
-    var docente = await servicio.registrarAsync(docenteNuevoDto);
+    var docente = await servicio.RegistrarAsync(docenteNuevoDto);
     return Results.Created($"/docentes/{docente.idDocente}", docente);
 })
 .WithName("RegistrarDocente")
 .WithOpenApi();
 
-app.MapGet("/docentes/{id:int}", async (int id, IDocenteService servicio) =>
+app.MapGet("/docentes/{id:int}", async (int id, IServicioDocente servicio) =>
 {
-    var docente = await servicio.obtenerPorIdAsync(id);
+    var docente = await servicio.ObtenerPorIdAsync(id);
     return Results.Ok(docente);
 })
 .WithName("ObtenerDocentePorId")
 .WithOpenApi();
 
-app.MapPut("/docentes", async (HttpContext context, ActualizarDocenteDTO docenteActualizadoDTO, IDocenteService servicio) =>
+app.MapPut("/docentes", async (HttpContext context, ActualizarDocenteDTO docenteActualizadoDTO, IServicioDocente servicio) =>
 {
-    await servicio.actualizarAsync(context, docenteActualizadoDTO);
+    await servicio.ActualizarAsync(context, docenteActualizadoDTO);
     return Results.Ok();
 })
 .WithName("ActualizarDocente")
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapDelete("/docentes", async (HttpContext context, IDocenteService servicio) =>
+app.MapDelete("/docentes", async (HttpContext context, IServicioDocente servicio) =>
 {
-    await servicio.eliminarAsync(context);
+    await servicio.EliminarAsync(context);
     return Results.Ok();
 })
 .WithName("EliminarDocente")
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapPut("/docentes/cambiar-contrasenia", async (CambiarContraseniaDTO cambiarContraseniaDto, IDocenteService servicio, HttpContext context) =>
+app.MapPut("/docentes/cambiar-contrasenia", async (CambiarContraseniaDTO cambiarContraseniaDto, IServicioDocente servicio, HttpContext context) =>
 {
-    await servicio.cambiarContraseniaAsync(cambiarContraseniaDto, context);
+    await servicio.CambiarContraseniaAsync(cambiarContraseniaDto, context);
     return Results.Ok();
 })
 .WithName("CambiarContraseniaDocente")
 .RequireAuthorization()
 .WithOpenApi();
 
-//CatalogosService
-app.MapGet("/catalogos/grados-estudios", async (ICatalogosService servicio) =>
+//ServicioCatalogo
+app.MapGet("/catalogos/grados-estudios", async (ServicioCatalogo servicio) =>
 {
-    var gradosEstudios = await servicio.obtenerGradosEstudiosAsync();
+    var gradosEstudios = await servicio.ObtenerGradosEstudiosAsync();
     return Results.Ok(gradosEstudios);
 })
 .WithName("ObtenerGradosEstudios")
 .WithOpenApi();
 
-app.MapGet("/catalogos/grados-profesionales", async (ICatalogosService servicio) =>
+app.MapGet("/catalogos/grados-profesionales", async (ServicioCatalogo servicio) =>
 {
-    var gradosProfesionales = await servicio.obtenerGradosProfesionalesAsync();
+    var gradosProfesionales = await servicio.ObtenerGradosProfesionalesAsync();
     return Results.Ok(gradosProfesionales);
 })
 .WithName("ObtenerGradosProfesionales")
 .WithOpenApi();
 
-app.MapGet("/catalogos/grado-estudio/{id:int}", async (int id, ICatalogosService servicio) =>
+app.MapGet("/catalogos/grado-estudio/{id:int}", async (int id, ServicioCatalogo servicio) =>
 {
-    var gradoEstudio = await servicio.obtenerGradoEstudioPorIdAsync(id);
+    var gradoEstudio = await servicio.ObtenerGradoEstudioPorIdAsync(id);
     return Results.Ok(gradoEstudio);
 })
 .WithName("ObtenerGradoEstudioPorId")
 .WithOpenApi();
 
-app.MapGet("/catalogos/grado-profesional/{id:int}", async (int id, ICatalogosService servicio) =>
+app.MapGet("/catalogos/grado-profesional/{id:int}", async (int id, ServicioCatalogo servicio) =>
 {
-    var gradoProfesional = await servicio.obtenerGradoProfesionalPorIdAsync(id);
+    var gradoProfesional = await servicio.ObtenerGradoProfesionalPorIdAsync(id);
     return Results.Ok(gradoProfesional);
 })
 .WithName("ObtenerGradoProfesionalPorId")
 .WithOpenApi();
 
 // LoginService
-app.MapPost("/login", async (IniciarSesionDTO usuarioDto, ILoginService servicio) =>
+app.MapPost("/login", async (IniciarSesionDTO usuarioDto, IServicioLogin servicio) =>
 {
     var resultado = await servicio.IniciarSesion(usuarioDto);
     return Results.Ok(resultado);

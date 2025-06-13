@@ -19,7 +19,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<TareasDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-builder.Services.AddScoped<ITareasServices, TareasService>();
+builder.Services.AddScoped<IServicioTarea, ServicioTarea>();
 builder.Services.AddScoped<ITareaDAO, TareaDAO>();
 builder.Services.AddSingleton<RpcClientRabbitMQ>();
 builder.Services.AddHostedService<RabbitMqInitializer>();
@@ -54,37 +54,37 @@ app.UseManejoExcepciones();
 app.UseAuthentication();
 app.UseAuthorization();
 
-//TareasService
-app.MapPost("/clase/{codigo}", async (ITareasServices servicio, CrearTareaDTO crearTareaDto, HttpContext httpContext) =>
+//ServicioTarea
+app.MapPost("/clase/{codigo}", async (IServicioTarea servicio, CrearTareaDTO crearTareaDto, HttpContext httpContext) =>
 {
-    var tarea = await servicio.crearTareaAsync(crearTareaDto, httpContext);
+    var tarea = await servicio.CrearTareaAsync(crearTareaDto, httpContext);
     return Results.Created($"/clase/{tarea.IdClase}/{tarea.IdTarea}", tarea);
 })
 .WithName("CrearTarea")
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapPut("/clase/{codigo}/{idTarea:int}", async (ITareasServices servicio, EditarTareaDTO editarTareaDTO, HttpContext httpContext) =>
+app.MapPut("/clase/{codigo}/{idTarea:int}", async (IServicioTarea servicio, EditarTareaDTO editarTareaDTO, HttpContext httpContext) =>
 {
-    var tarea = await servicio.editarTareaAsync(editarTareaDTO, httpContext);
+    var tarea = await servicio.EditarTareaAsync(editarTareaDTO, httpContext);
     return Results.Ok(tarea);
 })
 .WithName("EditarTarea")
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapDelete("/clase/{codigo}/", async (ITareasServices servicio, int idTarea, HttpContext httpContext) =>
+app.MapDelete("/clase/{codigo}/", async (IServicioTarea servicio, int idTarea, HttpContext httpContext) =>
 {
-    await servicio.eliminarTareaAsync(idTarea, httpContext);
+    await servicio.EliminarTareaAsync(idTarea, httpContext);
     return Results.Ok();
 })
 .WithName("EliminarTarea")
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapGet("/clase/{codigo}/tareas", async (ITareasServices servicio, int idClase) =>
+app.MapGet("/clase/{codigo}/tareas", async (IServicioTarea servicio, int idClase) =>
 {
-    var tareas = await servicio.obtenerTareasDeClaseAsync(idClase);
+    var tareas = await servicio.ObtenerTareasDeClaseAsync(idClase);
     return Results.Ok(tareas);
 })
 .WithName("ObtenerTareasDeClase")

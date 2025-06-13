@@ -5,11 +5,11 @@ namespace ServicioClases.Data.DAOs.Interfaces;
 
 public interface IClaseDAO
 {
-    Task<Clase> crearClaseAsync(Clase clase, string codigoClase);
-    Task actualizarClaseAsync(Clase clase);
-    Task eliminarClaseAsync(Clase clase);
-    Task<Clase> obtenerClasePorIdAsync(int idClase);
-    Task<Clase?> obtenerClasePorCodigoAsync(string codigoClase);
-    Task<List<Clase>> obtenerClasesDeAlumnoAsync(List<Registro> registros);
-    Task<List<Clase>> obtenerClasesDeDocenteAsync(int idDocente);
+    Task<Clase> CrearClaseAsync(Clase clase, string codigoClase);
+    Task ActualizarClaseAsync(Clase clase);
+    Task EliminarClaseAsync(Clase clase);
+    Task<Clase> ObtenerClasePorIdAsync(int idClase);
+    Task<Clase?> ObtenerClasePorCodigoAsync(string codigoClase);
+    Task<List<Clase>> ObtenerClasesDeAlumnoAsync(List<Registro> registros);
+    Task<List<Clase>> ObtenerClasesDeDocenteAsync(int idDocente);
 }

@@ -4,9 +4,9 @@ namespace ServicioTareas.Data.DTOs;
 
 public class CrearTareaDTO
 {
-    public int idClase { get; set; } = 0;
-    public string nombre { get; set; } = null!;
-    public int idArchivo { get; set; } = 0;
-    public DateTime fechaLimite { get; set; }
-    public CuestionarioDTO cuestionario { get; set; } = new();
+    public int IdClase { get; set; } = 0;
+    public string Nombre { get; set; } = null!;
+    public int IdArchivo { get; set; } = 0;
+    public DateTime FechaLimite { get; set; }
+    public CuestionarioDTO Cuestionario { get; set; } = new();
 }

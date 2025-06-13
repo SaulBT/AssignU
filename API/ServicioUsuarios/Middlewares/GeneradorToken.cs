@@ -2,11 +2,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using ServicioUsuarios.Middlewares.Interfaces;
 
 namespace ServicioUsuarios.Middlewares;
 
-public class GeneradorToken : IGeneradorToken
+public class GeneradorToken
 {
     private readonly IConfiguration _configuration;
 

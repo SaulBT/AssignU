@@ -13,7 +13,7 @@ public class RegistroDAO : IRegistroDAO
         _context = context;
     }
 
-    public async Task crearRegistroAsync(Registro registro)
+    public async Task CrearRegistroAsync(Registro registro)
     {
         try
         {
@@ -26,7 +26,7 @@ public class RegistroDAO : IRegistroDAO
         }
     }
 
-    public async Task eliminarRegistroAsync(Registro registro)
+    public async Task EliminarRegistroAsync(Registro registro)
     {
         try
         {
@@ -39,7 +39,7 @@ public class RegistroDAO : IRegistroDAO
         }
     }
 
-    public async Task actualizarRegistroAsync(Registro registro)
+    public async Task ActualizarRegistroAsync(Registro registro)
     {
         try
         {
@@ -55,7 +55,7 @@ public class RegistroDAO : IRegistroDAO
         }
     }
 
-    public async Task<List<Registro>> obtenerRegistrosPorClaseAsync(int idClase)
+    public async Task<List<Registro>> ObtenerRegistrosPorClaseAsync(int idClase)
     {
         try
         {
@@ -69,7 +69,7 @@ public class RegistroDAO : IRegistroDAO
         }
     }
 
-    public async Task<List<Registro>> obtenerRegistrosPorAlumnoAsync(int idAlumno)
+    public async Task<List<Registro>> ObtenerRegistrosPorAlumnoAsync(int idAlumno)
     {
         try
         {
@@ -83,7 +83,7 @@ public class RegistroDAO : IRegistroDAO
         }
     }
 
-    public async Task<Registro?> obtenerRegistroPorIdAlumnoYClaseAsync(int idAlumno, int idClase)
+    public async Task<Registro?> ObtenerRegistroPorIdAlumnoYClaseAsync(int idAlumno, int idClase)
     {
         try
         {

@@ -4,10 +4,10 @@ namespace ServicioClases.Data.DAOs.Interfaces;
 
 public interface IRegistroDAO
 {
-    Task crearRegistroAsync(Registro registro);
-    Task eliminarRegistroAsync(Registro registro);
-    Task actualizarRegistroAsync(Registro registro);
-    Task<List<Registro>> obtenerRegistrosPorClaseAsync(int idClase);
-    Task<List<Registro>> obtenerRegistrosPorAlumnoAsync(int idAlumno);
-    Task<Registro?> obtenerRegistroPorIdAlumnoYClaseAsync(int idAlumno, int idClase);
+    Task CrearRegistroAsync(Registro registro);
+    Task EliminarRegistroAsync(Registro registro);
+    Task ActualizarRegistroAsync(Registro registro);
+    Task<List<Registro>> ObtenerRegistrosPorClaseAsync(int idClase);
+    Task<List<Registro>> ObtenerRegistrosPorAlumnoAsync(int idAlumno);
+    Task<Registro?> ObtenerRegistroPorIdAlumnoYClaseAsync(int idAlumno, int idClase);
 }

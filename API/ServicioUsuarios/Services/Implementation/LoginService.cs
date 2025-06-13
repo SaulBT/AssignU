@@ -2,19 +2,18 @@ using ServicioUsuarios.DAOs.Interfaces;
 using ServicioUsuarios.DTOs;
 using ServicioUsuarios.Entities;
 using ServicioUsuarios.Middlewares;
-using ServicioUsuarios.Middlewares.Interfaces;
 using ServicioUsuarios.Services.Interfaces;
 
 namespace ServicioUsuarios.Services.Implementation;
 
-public class LoginService : ILoginService
+public class LoginService : IServicioLogin
 {
     private readonly usuarios_bd_assignuContext _context;
     private IAlumnoDAO _alumnoDAO;
     private IDocenteDAO _docenteDAO;
-    private readonly IGeneradorToken _generadorToken;
+    private readonly GeneradorToken _generadorToken;
 
-    public LoginService(usuarios_bd_assignuContext context, IAlumnoDAO alumnoDAO, IDocenteDAO docenteDAO, IGeneradorToken generadorToken)
+    public LoginService(usuarios_bd_assignuContext context, IAlumnoDAO alumnoDAO, IDocenteDAO docenteDAO, GeneradorToken generadorToken)
     {
         _context = context;
         _alumnoDAO = alumnoDAO;
@@ -61,7 +60,7 @@ public class LoginService : ILoginService
 
     private async Task<AlumnoDTO> verificarCredencialesAlumnoAsync(IniciarSesionDTO usuarioDto)
     {
-        var alumnoDto = await _alumnoDAO.obtenerPorNombreUsuarioOCorreoAsync(usuarioDto.nombreUsuarioOCorreo);
+        var alumnoDto = await _alumnoDAO.ObtenerPorNombreUsuarioOCorreoAsync(usuarioDto.nombreUsuarioOCorreo);
         if (alumnoDto == null)
         {
             throw new UnauthorizedAccessException("Credenciales incorrectas para el alumno.");
@@ -72,7 +71,7 @@ public class LoginService : ILoginService
 
     private async Task<DocenteDTO> verificarCredencialesDocenteAsync(IniciarSesionDTO usuarioDto)
     {
-        var docenteDto = await _docenteDAO.obtenerPorNombreUsuarioOCorreoAsync(usuarioDto.nombreUsuarioOCorreo);
+        var docenteDto = await _docenteDAO.ObtenerPorNombreUsuarioOCorreoAsync(usuarioDto.nombreUsuarioOCorreo);
         if (docenteDto == null)
         {
             throw new UnauthorizedAccessException("Credenciales incorrectas para el docente.");

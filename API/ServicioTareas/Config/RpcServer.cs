@@ -41,7 +41,6 @@ namespace ServicioTareas.Config
 
             var mensaje = JsonSerializer.Deserialize<SolicitudRPCDTO>(mensajeJson);
             var respuesta = await procesarMensajeAsync(mensaje);
-
             var props = ea.BasicProperties;
             var replyProps = new BasicProperties
             {

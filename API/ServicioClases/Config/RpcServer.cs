@@ -1,9 +1,9 @@
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using ServicioUsuarios.DTOs;
+using ServicioClases.Data.DTOs;
 using System.Text;
 using System.Text.Json;
-using ServicioUsuarios.Services.Interfaces;
+using ServicioClases.Services.Interfaces;
 
 namespace ServicioUsuarios.Config
 {
@@ -12,11 +12,11 @@ namespace ServicioUsuarios.Config
         private IConnection _connection;
         private IChannel _channel;
         private string _queueName;
-        private IServicioAlumno _servicioAlumno;
+        private IServicioClase _ServicioClase;
 
-        public async Task InicializarServidor(IServicioAlumno servicioAlumno, string rabbitMqHost = "localhost", string queueName = "cola_clases_usuarios")
+        public async Task InicializarServidor(IServicioClase ServicioClase, string rabbitMqHost = "localhost", string queueName = "cola_usuarios_clases")
         {
-            _servicioAlumno = servicioAlumno;
+            _ServicioClase = ServicioClase;
             var factory = new ConnectionFactory() { HostName = rabbitMqHost };
             _connection = await factory.CreateConnectionAsync();
             _channel = await _connection.CreateChannelAsync();
@@ -84,8 +84,8 @@ namespace ServicioUsuarios.Config
             string accion = mensaje.Accion;
             switch (accion)
             {
-                case "obtenerAlumnosDeClase":
-                    return await _servicioAlumno.ObtenerListaAlumnosAsync(mensaje.IdAlumnos);
+                case "obtenerClasesTareasYRespuesta":
+                    return await _ServicioClase.ObtenerClasesTareasRespuestasDeAlumnoAsync(mensaje.IdAlumno);
                 default:
                     return new RespuestaRPCDTO
                     {

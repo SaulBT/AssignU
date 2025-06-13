@@ -18,6 +18,7 @@ public class RespuestaDTO
 {
     public int idAlumno { get; set; }
     public int idTarea { get; set; }
+    public int Calificacion { get; set; }
     public List<PreguntaRespuestaDTO> Preguntas { get; set; }
 }
 

@@ -6,6 +6,7 @@ public class RespuestaRPCDTO
     public List<AlumnoRespuestaRPCEstadisticasClaseDTO> Alumnos { get; set; }
     public List<TareaEstadisticasClaseDTO> Tareas { get; set; }
     public List<RespuestasEstadisticaClaseDTO> Respuestas { get; set; }
+    public List<RespuestaDTO> RespuestasDeTarea { get; set; } = new List<RespuestaDTO>();
     public ErrorDTO Error { get; set; }
 }
 

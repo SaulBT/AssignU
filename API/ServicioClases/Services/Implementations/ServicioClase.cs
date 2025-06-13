@@ -192,7 +192,7 @@ public class ServicioClase : IServicioClase
         }
         //Pedir la idAlumno y nombre completo de cada alumno inscrito al servicio de alumnos
         string mensajeJsonAlumnos = crearMensajeRPC("obtenerAlumnosDeClase", idAlumnos, 0);
-        var alumnos = (await enviarMensajeRPCAsync(mensajeJsonAlumnos, "cola_clases_usuarios")).Alumnos;
+        var alumnos = (await enviarMensajeRPCAsync(mensajeJsonAlumnos, "cola_usuarios")).Alumnos;
         //Pedir todas las tareas y sus respuestas al servicio de tareas.
         string mensajeJsonTareas = crearMensajeRPC("obtenerTareasYRespuestasDeClase", new List<int>(), idClase);
         var resultadoTareasRespuestas = await enviarMensajeRPCAsync(mensajeJsonTareas, "cola_clases_tareas");
@@ -238,6 +238,69 @@ public class ServicioClase : IServicioClase
         };
 
         return estadisticas;
+    }
+
+    public async Task<RespuestaRPCDTO> ObtenerClasesTareasRespuestasDeAlumnoAsync(int idAlumno)
+    {
+        verificarIdUsuario(idAlumno);
+        var registros = await _registroDAO.ObtenerRegistrosPorAlumnoAsync(idAlumno);
+        var clases = await _claseDAO.ObtenerClasesDeAlumnoAsync(registros);
+        List<ClaseEstadisticaPerfilDTO> listaClases = new List<ClaseEstadisticaPerfilDTO>();
+        foreach (var clase in clases)
+        {
+            int idClase = clase.IdClase;
+            DateTime ultimaConexion = default(DateTime);
+
+            foreach (var registro in registros)
+            {
+                if (registro.IdClase == idClase)
+                {
+                    ultimaConexion = registro.UltimoInicio ?? default(DateTime);
+                }
+            }
+
+            var claseInscrita = new ClaseEstadisticaPerfilDTO
+            {
+                IdClase = idClase,
+                Nombre = clase.Nombre,
+                UltimaConexion = ultimaConexion
+            };
+
+            string mensajeJsonTareas = crearMensajeRPC("obtenerTareasYRespuestasDeClase", new List<int>(), idClase);
+            var resultadoTareasRespuestas = await enviarMensajeRPCAsync(mensajeJsonTareas, "cola_usuarios");
+            var tareas = resultadoTareasRespuestas.Tareas;
+            var respuestas = resultadoTareasRespuestas.Respuestas;
+
+            List<TareaEstadisticaPerfilDTO> listaTareas = new List<TareaEstadisticaPerfilDTO>();
+            foreach (var tarea in tareas)
+            {
+                foreach (var respuesta in respuestas)
+                {
+                    if (respuesta.IdTarea == tarea.IdTarea && respuesta.IdAlumno == idAlumno)
+                    {
+                        var tareaEnClase = new TareaEstadisticaPerfilDTO
+                        {
+                            IdTarea = tarea.IdTarea,
+                            Nombre = tarea.Nombre,
+                            Calificacion = respuesta.Calificacion
+                        };
+
+                        listaTareas.Add(tareaEnClase);
+                    }
+                }
+
+            }
+
+            claseInscrita.Tareas = listaTareas;
+            listaClases.Add(claseInscrita);
+        }
+        //Console.WriteLine("Clases: " + listaClases.Count);
+
+        return new RespuestaRPCDTO
+        {
+            Success = true,
+            Clases = listaClases
+        };
     }
 
     private void verificarAutorizacion(HttpContext httpContext)

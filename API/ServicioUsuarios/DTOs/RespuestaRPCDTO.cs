@@ -4,7 +4,7 @@ public class RespuestaRPCDTO
 {
     public bool Success { get; set; }
     public List<AlumnoRespuestaRPCEstadisticasClaseDTO> Alumnos { get; set; }
-    public List<ClaseEstadisticaPerfilDTO> Clases = new List<ClaseEstadisticaPerfilDTO>();
+    public List<ClaseEstadisticaPerfilDTO> Clases { get; set; } = new List<ClaseEstadisticaPerfilDTO>();
     public ErrorDTO Error { get; set; }
 }
 

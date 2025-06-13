@@ -16,4 +16,5 @@ public interface IServicioClase
     Task SalirDeClaseAsync(int idClase, HttpContext httpContext);
     Task<Registro> ObtenerRegistroAlumno(int idAlumno, int idClase, HttpContext httpContext);
     Task<EstadisticasClaseDTO> ObtenerEstadisticasDeLaClase(int idClase);
+    Task<RespuestaRPCDTO> ObtenerClasesTareasRespuestasDeAlumnoAsync(int idAlumno);
 }

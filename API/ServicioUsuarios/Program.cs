@@ -109,6 +109,15 @@ app.MapPut("/alumnos/cambiar-contrasenia", async (CambiarContraseniaDTO cambiarC
 .RequireAuthorization()
 .WithOpenApi();
 
+app.MapGet("/alumno/{id:int}/estadisticas", async (HttpContext context, IServicioAlumno servicio) =>
+{
+    var estadisticas = await servicio.ObtenerEstadisticasPerfilAlumnoAsync(context);
+    return Results.Ok(estadisticas);
+})
+.WithName("ObtenerPerfilAlumno")
+.RequireAuthorization()
+.WithOpenApi();
+
 //DocenteService
 app.MapPost("/docentes", async (RegistrarDocenteDTO docenteNuevoDto, IServicioDocente servicio) =>
 {

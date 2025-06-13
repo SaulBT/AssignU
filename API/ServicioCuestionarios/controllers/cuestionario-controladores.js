@@ -224,12 +224,37 @@ const obtenerRespuestas = async (data) => {
             IdTarea: respuesta.idTarea,
             Calificacion: respuesta.calificacion
         }));
-        console.log("idAlumno:" + respuestasDto[0].IdAlumno);
+        //console.log("idAlumno:" + respuestasDto[0].IdAlumno);
         return {
             Success: true,
             Respuestas: respuestasDto
         }
 
+    } catch (err) {
+        console.log("Error: " + err.message);
+        return manejadorTipoErrores(err, err.message);
+    }
+}
+
+const obtenerRespuestasDeTareaAsync = (data) =>{
+    try{
+        if (!data) {
+            return {
+                Success: false,
+                Message: 'No se enviaron datos'
+            }
+        }
+        const { idTarea } = data.IdTarea;
+        validarIdTarea(idTarea);
+
+        const respuestas = Respuesta.find({
+            idTarea: idTarea
+        });
+
+        return {
+            Success: true,
+            RespuestasDeTarea: respuestas
+        };
     } catch (err) {
         console.log("Error: " + err.message);
         return manejadorTipoErrores(err, err.message);
@@ -267,5 +292,6 @@ module.exports = {
     guardarRespuestaCuestionarioAsync,
     obtenerRespuestaCuestionarioHttpAsync,
     obtenerRespuestaCuestionarioAsync,
-    obtenerRespuestas
+    obtenerRespuestas,
+    obtenerRespuestasDeTareaAsync
 };

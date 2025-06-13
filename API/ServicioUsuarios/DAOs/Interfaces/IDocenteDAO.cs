@@ -5,13 +5,13 @@ namespace ServicioUsuarios.DAOs.Interfaces;
 
 public interface IDocenteDAO
 {
-    Task actualizarAsync(docente docente);
-    Task eliminarAsync(int id);
-    Task<DocenteDTO?> obtenerPorIdDtoAsync(int id);
-    Task<docente?> obtenerPorIdNormalAsync(int id);
-    Task<docente?> obtenerPorNombreUsuarioAsync(string nombreUsuario);
-    Task<docente?> obtenerPorNombreUsuarioEIdAsync(string nombreUsuario, int id);
-    Task<docente?> obtenerPorCorreoAsync(string correo);
-    Task agregarDocenteAsync(docente docente);
-    Task<DocenteDTO?> obtenerPorNombreUsuarioOCorreoAsync(string nombreUsuarioOCorreo);
+    Task ActualizarAsync(docente docente);
+    Task EliminarAsync(int id);
+    Task<DocenteDTO?> ObtenerPorIdDtoAsync(int id);
+    Task<docente?> ObtenerPorIdNormalAsync(int id);
+    Task<docente?> ObtenerPorNombreUsuarioAsync(string nombreUsuario);
+    Task<docente?> ObtenerPorNombreUsuarioEIdAsync(string nombreUsuario, int id);
+    Task<docente?> ObtenerPorCorreoAsync(string correo);
+    Task AgregarDocenteAsync(docente docente);
+    Task<DocenteDTO?> ObtenerPorNombreUsuarioOCorreoAsync(string nombreUsuarioOCorreo);
 }

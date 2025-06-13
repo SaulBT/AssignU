@@ -42,6 +42,21 @@ public class ManejoExcepcionesMiddleware
                 contexto.Response.StatusCode = (int)HttpStatusCode.Conflict;
                 await contexto.Response.WriteAsJsonAsync(new { error = exception.Message });
                 break;
+            case CuestionarioInvalidoException exception:
+                _logger.LogWarning(ex, "Cuestionario Invalido");
+                contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                await contexto.Response.WriteAsJsonAsync(new { error = exception.Message });
+                break;
+            case PreguntaInvalidaException exception:
+                _logger.LogWarning(ex, "Pregunta Invalida");
+                contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                await contexto.Response.WriteAsJsonAsync(new { error = exception.Message });
+                break;
+            case ValorInvalidoException exception:
+                _logger.LogWarning(ex, "Valor Invalido");
+                contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                await contexto.Response.WriteAsJsonAsync(new { error = exception.Message });
+                break;
             default:
                 _logger.LogError(ex, "Ocurrió un error inesperado.");
                 contexto.Response.StatusCode = StatusCodes.Status500InternalServerError;

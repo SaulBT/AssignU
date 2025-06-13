@@ -14,22 +14,22 @@ public class TareaDAO : ITareaDAO
         _contexto = contexto;
     }
 
-    public async Task<Tarea> crearTareaAsync(CrearTareaDTO crearTareaDTO)
+    public async Task<Tarea> CrearTareaAsync(CrearTareaDTO crearTareaDTO)
     {
         try
         {
             var tarea = new Tarea
             {
-                IdClase = crearTareaDTO.idClase,
-                Nombre = crearTareaDTO.nombre,
-                IdArchivo = crearTareaDTO.idArchivo,
-                FechaLimite = crearTareaDTO.fechaLimite,
+                IdClase = crearTareaDTO.IdClase,
+                Nombre = crearTareaDTO.Nombre,
+                IdArchivo = crearTareaDTO.IdArchivo,
+                FechaLimite = crearTareaDTO.FechaLimite,
                 Estado = "activa"
             };
             _contexto.Tarea.Add(tarea);
             await _contexto.SaveChangesAsync();
 
-            tarea = await obtenerTareaPorIdClaseYNombreAsync(crearTareaDTO.idClase, crearTareaDTO.nombre);
+            tarea = await ObtenerTareaPorIdClaseYNombreAsync(crearTareaDTO.IdClase, crearTareaDTO.Nombre);
             return tarea;
         }
         catch (Exception ex)
@@ -38,14 +38,14 @@ public class TareaDAO : ITareaDAO
         }
     }
 
-    public async Task<Tarea> editarTareaAsync(EditarTareaDTO editarTareaDTO)
+    public async Task<Tarea> EditarTareaAsync(EditarTareaDTO editarTareaDTO)
     {
         try
         {
-            var tarea = await obtenerTareaPorIdAsync(editarTareaDTO.idTarea);
-            tarea.Nombre = editarTareaDTO.nombre;
-            tarea.IdArchivo = editarTareaDTO.idArchivo;
-            tarea.FechaLimite = editarTareaDTO.fechaLimite;
+            var tarea = await ObtenerTareaPorIdAsync(editarTareaDTO.IdTarea);
+            tarea.Nombre = editarTareaDTO.Nombre;
+            tarea.IdArchivo = editarTareaDTO.IdArchivo;
+            tarea.FechaLimite = editarTareaDTO.FechaLimite;
             tarea.Estado = "activa";
             _contexto.Tarea.Update(tarea);
             await _contexto.SaveChangesAsync();
@@ -58,7 +58,7 @@ public class TareaDAO : ITareaDAO
         }
     }
 
-    public async Task eliminarTareaAsync(Tarea tarea)
+    public async Task EliminarTareaAsync(Tarea tarea)
     {
         try
         {
@@ -71,7 +71,7 @@ public class TareaDAO : ITareaDAO
         }
     }
 
-    public async Task<Tarea?> obtenerTareaPorIdAsync(int idTarea)
+    public async Task<Tarea?> ObtenerTareaPorIdAsync(int idTarea)
     {
         try
         {
@@ -84,7 +84,7 @@ public class TareaDAO : ITareaDAO
         }
     }
 
-    public async Task<Tarea?> obtenerTareaPorIdClaseYNombreAsync(int idClase, string nombre)
+    public async Task<Tarea?> ObtenerTareaPorIdClaseYNombreAsync(int idClase, string nombre)
     {
         try
         {
@@ -97,7 +97,7 @@ public class TareaDAO : ITareaDAO
         }
     }
 
-    public async Task<Tarea?> obtenerTareaPorIdTareaYNombreAsync(int idTarea, string nombre)
+    public async Task<Tarea?> ObtenerTareaPorIdTareaYNombreAsync(int idTarea, string nombre)
     {
         try
         {
@@ -110,7 +110,7 @@ public class TareaDAO : ITareaDAO
         }
     }
 
-    public async Task<List<Tarea>?> obtenerTareasPorIdClaseAsync(int idClase)
+    public async Task<List<Tarea>?> ObtenerTareasPorIdClaseAsync(int idClase)
     {
         try
         {

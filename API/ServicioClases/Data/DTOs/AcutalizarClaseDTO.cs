@@ -2,6 +2,6 @@ namespace ServicioClases.Data.DTOs;
 
 public class ActualizarClaseDTO
 {
-    public int idClase { get; set; } = 0;
-    public string? nombre { get; set; } = null!; 
+    public int IdClase { get; set; } = 0;
+    public string? Nombre { get; set; } = null!; 
 }

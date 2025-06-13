@@ -32,6 +32,9 @@ builder.Services.AddScoped<GeneradorToken>();
 builder.Services.AddSingleton<RpcServerRabbitMQ>();
 builder.Services.AddHostedService<InicializadorRpcServer>();
 
+builder.Services.AddSingleton<RpcClientRabbitMQ>();
+builder.Services.AddHostedService<RabbitMqInitializer>();
+
 builder.Services.AddAuthentication(options => {    
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;    

@@ -3,16 +3,20 @@ using ServicioUsuarios.Services.Interfaces;
 using ServicioUsuarios.Exceptions;
 using ServicioUsuarios.DTOs;
 using ServicioUsuarios.DAOs.Interfaces;
+using ServicioUsuarios.Config;
+using ServicioUsuarios.Validations;
 
 namespace ServicioUsuarios.Services.Implementation;
 
 public class ServicioAlumno : IServicioAlumno
 {
     private readonly IAlumnoDAO _alumnoDAO;
+    private readonly RpcClientRabbitMQ _rpcClient;
 
-    public ServicioAlumno(IAlumnoDAO alumnoDAO)
+    public ServicioAlumno(IAlumnoDAO alumnoDAO, RpcClientRabbitMQ rpcClient)
     {
         _alumnoDAO = alumnoDAO;
+        _rpcClient = rpcClient;
     }
 
     public async Task<AlumnoDTO?> ObtenerPorIdAsync(int id)
@@ -103,6 +107,29 @@ public class ServicioAlumno : IServicioAlumno
         return respuesta;
     }
 
+    public async Task<EstadisticasPerfilDTO> ObtenerEstadisticasPerfilAlumnoAsync(HttpContext httpContext)
+    {
+        verificarAutorizacion(httpContext);
+        var idAlumno = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
+        //Obtener los datos del alumno
+        var datosPerfil = await ObtenerAlumnoPorIdAsync(idAlumno);
+        //Obtener las clases del alumno y cada clase
+        string mensajeJson = crearMensajeRPC("obtenerClasesTareasYRespuesta", idAlumno);
+        var resultadoClasesTareasRespuesta = await enviarMensajeRPCAsync(mensajeJson, "cola_usuarios_clases");
+
+        var estadistica = new EstadisticasPerfilDTO
+        {
+            IdAlumno = idAlumno,
+            NombreUsuario = datosPerfil.nombreUsuario,
+            NombreCompleto = datosPerfil.nombreCompleto,
+            Correo = datosPerfil.correo,
+            idGradoEstudios = (int)datosPerfil.idGradoEstudios,
+            Clases = resultadoClasesTareasRespuesta.Clases
+        };
+
+        return estadistica;
+    }
+
     private void verificarIdValida(int id)
     {
         if (id <= 0)
@@ -166,6 +193,37 @@ public class ServicioAlumno : IServicioAlumno
         }
 
         return resultado;
+    }
+
+    private string crearMensajeRPC(string accion, int idAlumno)
+    {
+        SolicitudRPCDTO solicitud = new SolicitudRPCDTO
+        {
+            Accion = accion,
+            IdAlumno = idAlumno
+        };
+        return System.Text.Json.JsonSerializer.Serialize(solicitud);
+    }
+
+    private async Task<RespuestaRPCDTO> enviarMensajeRPCAsync(string mensajeJson, string cola)
+    {
+        string respuestaJson = await _rpcClient.CallAsync(cola, mensajeJson);
+        var respuesta = System.Text.Json.JsonSerializer.Deserialize<RespuestaRPCDTO>(respuestaJson);
+        
+        if (respuesta == null)
+        {
+            throw new Exception("No hay respuesta");
+        }
+        else if (!respuesta.Success)
+        {
+            if (respuesta.Error == null)
+            {
+                throw new InvalidOperationException("No hay error");
+            }
+            throw LanzarExcepciones.lanzarExcepcion(respuesta.Error.Tipo, respuesta.Error.Mensaje);
+        }
+        
+        return respuesta;
     }
 
     private async Task verificarAlumnoNombreRegistroAsync(string nombreUsuario)

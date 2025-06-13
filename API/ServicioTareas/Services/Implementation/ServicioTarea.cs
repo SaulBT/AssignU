@@ -28,7 +28,7 @@ public class ServicioTarea : IServicioTarea
         var tarea = await _tareaDAO.CrearTareaAsync(crearTareaDTO);
         var cuestionario = crearTareaDTO.Cuestionario;
         string mensajeJson = crearMensajeRPCConCuestionario("crearCuestionario", tarea.IdTarea, cuestionario);
-        await enviarMensajeRPC(mensajeJson);
+        await enviarMensajeRPCAsync(mensajeJson);
 
         return tarea;
     }
@@ -43,7 +43,7 @@ public class ServicioTarea : IServicioTarea
         var tarea = await _tareaDAO.EditarTareaAsync(editarTareaDTO);
         var cuestionario = editarTareaDTO.Cuestionario;
         string mensajeJson = crearMensajeRPCConCuestionario("editarCuestionario", tarea.IdTarea, cuestionario);
-        await enviarMensajeRPC(mensajeJson);
+        await enviarMensajeRPCAsync(mensajeJson);
 
         return tarea;
     }
@@ -56,8 +56,8 @@ public class ServicioTarea : IServicioTarea
 
         var tarea = await _tareaDAO.ObtenerTareaPorIdAsync(idTarea);
         await _tareaDAO.EliminarTareaAsync(tarea);
-        string mensajeJson = crearMensajeRPC("eliminarCuestionario", idTarea);
-        await enviarMensajeRPC(mensajeJson);
+        string mensajeJson = crearMensajeRPCConIdTarea("eliminarCuestionario", idTarea);
+        await enviarMensajeRPCAsync(mensajeJson);
     }
 
     public async Task<List<Tarea>?> ObtenerTareasDeClaseAsync(int idClase)
@@ -66,6 +66,36 @@ public class ServicioTarea : IServicioTarea
 
         var tareas = await _tareaDAO.ObtenerTareasPorIdClaseAsync(idClase);
         return tareas;
+    }
+
+    public async Task<RespuestaRPCDTO> ObtenerTareasYRespuestasAsync(int idClase)
+    {
+        var tareas = await ObtenerTareasDeClaseAsync(idClase);
+        List<int> idTareas = new List<int>();
+        List<TareaEstadisticasClaseDTO> tareasDto = new List<TareaEstadisticasClaseDTO>();
+        foreach (Tarea tarea in tareas)
+        {
+            var tareaDto = new TareaEstadisticasClaseDTO
+            {
+                IdTarea = tarea.IdTarea,
+                Nombre = tarea.Nombre
+            };
+            int idTarea = tarea.IdTarea;
+            idTareas.Add(idTarea);
+            tareasDto.Add(tareaDto);
+        }
+        string mensajeJson = crearMensajeRPCConIdTareas("obtenerRespuestas", idTareas);
+        var respuestas = await enviarMensajeRPCConRespuestaAsync(mensajeJson);
+
+        RespuestaRPCDTO respuestaRpc = new RespuestaRPCDTO
+        {
+            Success = respuestas.Success,
+            Tareas = tareasDto,
+            Respuestas = respuestas.Respuestas,
+            Error = respuestas.Error
+        };
+        
+        return respuestaRpc;
     }
 
     private void validarAutorizacion(HttpContext httpContext)
@@ -114,7 +144,7 @@ public class ServicioTarea : IServicioTarea
     {
         var mensaje = new
         {
-            accion = accion,
+            Accion = accion,
             data = new
             {
                 idTarea = idTarea,
@@ -124,11 +154,11 @@ public class ServicioTarea : IServicioTarea
         return System.Text.Json.JsonSerializer.Serialize(mensaje);
     }
 
-    private string crearMensajeRPC(string accion, int idTarea)
+    private string crearMensajeRPCConIdTarea(string accion, int idTarea)
     {
         var mensaje = new
         {
-            accion = accion,
+            Accion = accion,
             data = new
             {
                 idTarea = idTarea
@@ -137,7 +167,20 @@ public class ServicioTarea : IServicioTarea
         return System.Text.Json.JsonSerializer.Serialize(mensaje);
     }
 
-    private async Task enviarMensajeRPC(string mensajeJson)
+    private string crearMensajeRPCConIdTareas(string accion, List<int> idTareas)
+    {
+        var mensaje = new
+        {
+            Accion = accion,
+            data = new
+            {
+                IdTareas = idTareas
+            }
+        };
+        return System.Text.Json.JsonSerializer.Serialize(mensaje);
+    }
+
+    private async Task enviarMensajeRPCAsync(string mensajeJson)
     {
         string respuestaJson = await _rpcClient.CallAsync("cola_cuestionarios", mensajeJson);
         var respuesta = System.Text.Json.JsonSerializer.Deserialize<RespuestaCuestionarioDTO>(respuestaJson);
@@ -153,6 +196,14 @@ public class ServicioTarea : IServicioTarea
             }
             throw LanzarExcepciones.lanzarExcepcion(respuesta.Error.Tipo, respuesta.Error.Mensaje);
         }
+    }
+
+    private async Task<RespuestaRPCDTO> enviarMensajeRPCConRespuestaAsync(string mensajeJson)
+    {
+        string respuestaJson = await _rpcClient.CallAsync("cola_cuestionarios", mensajeJson);
+        var respuesta = System.Text.Json.JsonSerializer.Deserialize<RespuestaRPCDTO>(respuestaJson);
+
+        return respuesta;
     }
 
     private async Task verificarNombreTareaCreacionAsync(int idClase, string nombre)

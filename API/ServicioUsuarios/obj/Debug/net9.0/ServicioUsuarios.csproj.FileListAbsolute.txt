@@ -141,3 +141,4 @@ C:\Users\x\Documents\AsignU\API\ServicioUsuarios\obj\Debug\net9.0\refint\Servici
 C:\Users\x\Documents\AsignU\API\ServicioUsuarios\obj\Debug\net9.0\ServicioUsuarios.pdb
 C:\Users\x\Documents\AsignU\API\ServicioUsuarios\obj\Debug\net9.0\ServicioUsuarios.genruntimeconfig.cache
 C:\Users\x\Documents\AsignU\API\ServicioUsuarios\obj\Debug\net9.0\ref\ServicioUsuarios.dll
+C:\Users\x\Documents\AsignU\API\ServicioUsuarios\bin\Debug\net9.0\RabbitMQ.Client.dll

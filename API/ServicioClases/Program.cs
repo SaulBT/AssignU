@@ -9,6 +9,8 @@ using System.Text;
 using ServicioClases.Data.DAOs.Interfaces;
 using ServicioClases.Data.DAOs.Implementations;
 using ServicioClases.Data.DTOs;
+using ServicioClases.Config;
+using ServicioClases.BackgroundService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,8 @@ builder.Services.AddDbContext<ClasesDbContext>(options =>
 builder.Services.AddScoped<IServicioClase, ServicioClase>();
 builder.Services.AddScoped<IClaseDAO, ClaseDAO>();
 builder.Services.AddScoped<IRegistroDAO, RegistroDAO>();
+builder.Services.AddSingleton<RpcClientRabbitMQ>();
+builder.Services.AddHostedService<RabbitMqInitializer>();
 
 builder.Services.AddAuthentication(options => {    
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -138,6 +142,15 @@ app.MapGet("/clase/alumnos/{id:int}", async (IServicioClase servicio, int idAlum
 })
 .WithName("ObtenerRegistroDeAlumno")
 .RequireAuthorization()
+.WithOpenApi();
+
+app.MapGet("/clase/estadisticas", async (IServicioClase servicio, int idClase) =>
+{
+    var estadísticas = await servicio.ObtenerEstadisticasDeLaClase(idClase);
+    return Results.Ok(estadísticas);
+})
+.WithName("ObtenerEstadistica")
+//.RequireAuthorization()
 .WithOpenApi();
 
 if (app.Environment.IsDevelopment())

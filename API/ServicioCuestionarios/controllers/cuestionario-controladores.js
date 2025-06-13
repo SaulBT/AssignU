@@ -206,6 +206,36 @@ const obtenerRespuestaCuestionarioAsync = async (data) => {
     }
 }
 
+const obtenerRespuestas = async (data) => {
+    try {
+        if (!data) {
+            return {
+                Success: false,
+                Message: 'No se enviaron datos'
+            }
+        }
+        const idTareas = data.IdTareas;
+        const respuestas = await Respuesta.find({
+            idTarea: { $in: idTareas }
+        }).exec();
+
+        const respuestasDto = respuestas.map( respuesta => ({
+            IdAlumno: respuesta.idAlumno,
+            IdTarea: respuesta.idTarea,
+            Calificacion: respuesta.calificacion
+        }));
+        console.log("idAlumno:" + respuestasDto[0].IdAlumno);
+        return {
+            Success: true,
+            Respuestas: respuestasDto
+        }
+
+    } catch (err) {
+        console.log("Error: " + err.message);
+        return manejadorTipoErrores(err, err.message);
+    }
+}
+
 const calificarRespuestaAsync = async (preguntasResueltas, idTarea) => {
     const cuestionario = await validarExistenciaCuestionarioAsync(idTarea);
     preguntas = cuestionario.preguntas;
@@ -236,5 +266,6 @@ module.exports = {
     resolverCuestionarioAsync,
     guardarRespuestaCuestionarioAsync,
     obtenerRespuestaCuestionarioHttpAsync,
-    obtenerRespuestaCuestionarioAsync
+    obtenerRespuestaCuestionarioAsync,
+    obtenerRespuestas
 };

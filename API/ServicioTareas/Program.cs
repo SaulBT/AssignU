@@ -12,6 +12,7 @@ using ServicioTareas.Data.DTOs;
 using RabbitMQ.Client;
 using ServicioTareas.Services;
 using ServicioTareas.Config;
+using ServicioTareas.BackgroundServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,9 @@ builder.Services.AddScoped<IServicioTarea, ServicioTarea>();
 builder.Services.AddScoped<ITareaDAO, TareaDAO>();
 builder.Services.AddSingleton<RpcClientRabbitMQ>();
 builder.Services.AddHostedService<RabbitMqInitializer>();
+
+builder.Services.AddSingleton<RpcServerRabbitMQ>();
+builder.Services.AddHostedService<InicializadorRpcServer>();
 
 builder.Services.AddAuthentication(options => {    
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

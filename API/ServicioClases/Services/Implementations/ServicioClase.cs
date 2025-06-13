@@ -1,8 +1,10 @@
+using ServicioClases.Config;
 using ServicioClases.Data.DAOs.Interfaces;
 using ServicioClases.Data.DTOs;
 using ServicioClases.Exceptions;
 using ServicioClases.Models;
 using ServicioClases.Services.Interfaces;
+using ServicioClases.Validations;
 
 namespace ServicioClases.Services.Implementations;
 
@@ -10,11 +12,13 @@ public class ServicioClase : IServicioClase
 {
     private readonly IClaseDAO _claseDAO;
     private readonly IRegistroDAO _registroDAO;
+    private readonly RpcClientRabbitMQ _rpcClient;
 
-    public ServicioClase(IClaseDAO claseDAO, IRegistroDAO registroDAO)
+    public ServicioClase(IClaseDAO claseDAO, IRegistroDAO registroDAO, RpcClientRabbitMQ rpcClient)
     {
         _claseDAO = claseDAO;
         _registroDAO = registroDAO;
+        _rpcClient = rpcClient;
     }
 
     public async Task<Clase> CrearClaseAsync(CrearClaseDTO crearClaseDto, HttpContext httpContext)
@@ -178,13 +182,62 @@ public class ServicioClase : IServicioClase
 
     public async Task<EstadisticasClaseDTO> ObtenerEstadisticasDeLaClase(int idClase)
     {
+        verificarIdClase(idClase);
         //Obtener todos los registros de la clase.
+        var registros = await _registroDAO.ObtenerRegistrosPorClaseAsync(idClase);
+        List<int> idAlumnos = new List<int>();
+        foreach (var registro in registros)
+        {
+            idAlumnos.Add(registro.IdAlumno);
+        }
         //Pedir la idAlumno y nombre completo de cada alumno inscrito al servicio de alumnos
-        //Pedir todas las tareas al servicio de tareas.
+        string mensajeJsonAlumnos = crearMensajeRPC("obtenerAlumnosDeClase", idAlumnos, 0);
+        var alumnos = (await enviarMensajeRPCAsync(mensajeJsonAlumnos, "cola_clases_usuarios")).Alumnos;
+        //Pedir todas las tareas y sus respuestas al servicio de tareas.
+        string mensajeJsonTareas = crearMensajeRPC("obtenerTareasYRespuestasDeClase", new List<int>(), idClase);
+        var resultadoTareasRespuestas = await enviarMensajeRPCAsync(mensajeJsonTareas, "cola_clases_tareas");
+        var tareas = resultadoTareasRespuestas.Tareas;
+        var respuestas = resultadoTareasRespuestas.Respuestas;
         //Pedir los resultados de todas las tareas de cada alumno inscrito en la clase al servicio de tareas.
         //Crear el DTO y enviarlo
+        List<AlumnoEstadisticasClaseDTO> listaAlumnos = new List<AlumnoEstadisticasClaseDTO>();
+        foreach (var alumno in alumnos) {
+            List<RespuestasEstadisticaClaseDTO> listaRespuestas = new List<RespuestasEstadisticaClaseDTO>();
+            foreach (var respuesta in respuestas) {
+                Console.WriteLine("idAlumno en alumno = " + alumno.IdAlumno);
+                Console.WriteLine("idAlumno en respuesta = " + respuesta.IdAlumno);
+                if (respuesta.IdAlumno == alumno.IdAlumno)
+                {
+                    listaRespuestas.Add(respuesta);
+                }
+            }
+            
+            DateTime ultimaConexion = new DateTime();
+            foreach (var registro in registros) {
+                if (registro.IdAlumno == alumno.IdAlumno)
+                {
+                    ultimaConexion = registro.UltimoInicio ?? default(DateTime);
+                }
+            }
 
-        throw new NotImplementedException();
+            var alumnoDto = new AlumnoEstadisticasClaseDTO
+            {
+                IdAlumno = alumno.IdAlumno,
+                NombreComeplto = alumno.NombreCompleto,
+                Respuestas = listaRespuestas,
+                UltimaConexion = ultimaConexion
+            };
+            listaAlumnos.Add(alumnoDto);
+        }
+        
+        EstadisticasClaseDTO estadisticas = new EstadisticasClaseDTO
+        {
+            IdClase = idClase,
+            Alumnos = listaAlumnos,
+            Tareas = tareas
+        };
+
+        return estadisticas;
     }
 
     private void verificarAutorizacion(HttpContext httpContext)
@@ -258,6 +311,38 @@ public class ServicioClase : IServicioClase
             return true;
         }
         return false;
+    }
+
+    private string crearMensajeRPC(string accion, List<int> idAlumnos, int idClase)
+    {
+        SolicitudRPCDTO solicitud = new SolicitudRPCDTO
+        {
+            Accion = accion,
+            IdAlumnos = idAlumnos,
+            IdClase = idClase
+        };
+        return System.Text.Json.JsonSerializer.Serialize(solicitud);
+    }
+
+    private async Task<RespuestaRPCDTO> enviarMensajeRPCAsync(string mensajeJson, string cola)
+    {
+        string respuestaJson = await _rpcClient.CallAsync(cola, mensajeJson);
+        var respuesta = System.Text.Json.JsonSerializer.Deserialize<RespuestaRPCDTO>(respuestaJson);
+        
+        if (respuesta == null)
+        {
+            throw new Exception("No hay respuesta");
+        }
+        else if (!respuesta.Success)
+        {
+            if (respuesta.Error == null)
+            {
+                throw new InvalidOperationException("No hay error");
+            }
+            throw LanzarExcepciones.lanzarExcepcion(respuesta.Error.Tipo, respuesta.Error.Mensaje);
+        }
+        
+        return respuesta;
     }
 
     private async Task<string> asignarCodigoClaseAsync()

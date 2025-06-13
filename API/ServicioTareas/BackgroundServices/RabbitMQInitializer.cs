@@ -1,7 +1,6 @@
-using Microsoft.Extensions.Hosting;
 using ServicioTareas.Config;
-using System.Threading;
-using System.Threading.Tasks;
+
+namespace ServicioTareas.BackgroundServices;
 
 public class RabbitMqInitializer : IHostedService
 {

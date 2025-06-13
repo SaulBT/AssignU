@@ -9,4 +9,5 @@ public interface IServicioTarea
     Task<Tarea> EditarTareaAsync(EditarTareaDTO editarTareaDTO, HttpContext httpContext);
     Task EliminarTareaAsync(int idTarea, HttpContext httpContext);
     Task<List<Tarea>?> ObtenerTareasDeClaseAsync(int idClase);
+    Task<RespuestaRPCDTO> ObtenerTareasYRespuestasAsync(int idClase);
 }

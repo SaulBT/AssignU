@@ -141,3 +141,4 @@ C:\Users\x\Documents\AsignU\API\ServicioClases\bin\Debug\net9.0\Swashbuckle.AspN
 C:\Users\x\Documents\AsignU\API\ServicioClases\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\x\Documents\AsignU\API\ServicioClases\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\x\Documents\AsignU\API\ServicioClases\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\x\Documents\AsignU\API\ServicioClases\bin\Debug\net9.0\RabbitMQ.Client.dll

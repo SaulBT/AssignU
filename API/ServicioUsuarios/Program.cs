@@ -10,6 +10,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ServicioUsuarios.DAOs.Interfaces;
 using ServicioUsuarios.DAOs.Implementation;
+using ServicioUsuarios.Config;
+using ServicioUsuarios.BackgroundServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,9 @@ builder.Services.AddScoped<IGradoEstudiosDAO, GradoEstudiosDAO>();
 builder.Services.AddScoped<IGradoProfesionalDAO, GradoProfesionalDAO>();
 builder.Services.AddScoped<IServicioLogin, LoginService>();
 builder.Services.AddScoped<GeneradorToken>();
+
+builder.Services.AddSingleton<RpcServerRabbitMQ>();
+builder.Services.AddHostedService<InicializadorRpcServer>();
 
 builder.Services.AddAuthentication(options => {    
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

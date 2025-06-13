@@ -84,6 +84,25 @@ public class ServicioAlumno : IServicioAlumno
         await _alumnoDAO.ActualizarAsync(alumno);
     }
 
+    public async Task<RespuestaRPCDTO> ObtenerListaAlumnosAsync(List<int> idAlumnos)
+    {
+        var respuesta = verificarListaIdAlumnos(idAlumnos);
+        List<AlumnoRespuestaRPCEstadisticasClaseDTO> listaAlumnos = new List<AlumnoRespuestaRPCEstadisticasClaseDTO>();
+        foreach (int idAlumno in idAlumnos)
+        {
+            alumno alumno = await _alumnoDAO.ObtenerPorIdNormalAsync(idAlumno);
+            var alumnoInscrito = new AlumnoRespuestaRPCEstadisticasClaseDTO
+            {
+                IdAlumno = alumno.idAlumno,
+                NombreCompleto = alumno.nombreCompleto,
+            };
+            listaAlumnos.Add(alumnoInscrito);
+        }
+
+        respuesta.Alumnos = listaAlumnos;
+        return respuesta;
+    }
+
     private void verificarIdValida(int id)
     {
         if (id <= 0)
@@ -129,6 +148,24 @@ public class ServicioAlumno : IServicioAlumno
         {
             throw new ArgumentException("Los parámetros de cambio de contraseña son inválidos.");
         }
+    }
+
+    private RespuestaRPCDTO verificarListaIdAlumnos(List<int> idAlumnos)
+    {
+        var resultado = new RespuestaRPCDTO
+        {
+            Success = true
+        };
+        if (idAlumnos == null)
+        {
+            resultado.Success = false;
+            resultado.Error = new ErrorDTO
+            {
+                Mensaje = "La lista de idAlumnos es nula"
+            };
+        }
+
+        return resultado;
     }
 
     private async Task verificarAlumnoNombreRegistroAsync(string nombreUsuario)

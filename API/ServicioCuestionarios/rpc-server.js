@@ -6,7 +6,8 @@ const {
     eliminarCuestionarioAsync,
     obtenerRespuestaCuestionarioAsync,
     obtenerRespuestas,
-    obtenerRespuestasDeTareaAsync
+    obtenerRespuestasDeTareaAsync,
+    obtenerPreguntasDeTareaAsync
 } = require('./controllers/cuestionario-controladores');
 
 async function iniciarServidorRpc() {
@@ -43,8 +44,13 @@ async function iniciarServidorRpc() {
         case 'obtenerRespuestas':
           response = await obtenerRespuestas(request.data);
           break;
+        case 'obtenerPreguntasDeTarea':
+          response = await obtenerPreguntasDeTareaAsync(request.data);
+          break;
+          
         case 'obtenerRespuestasDeClase':
           response = await obtenerRespuestasDeTareaAsync(request.data);
+          break;
         default:
           response = {
             Success: false,

@@ -14,7 +14,7 @@ namespace ServicioUsuarios.Config
         private string _queueName;
         private IServicioAlumno _servicioAlumno;
 
-        public async Task InicializarServidor(IServicioAlumno servicioAlumno, string rabbitMqHost = "localhost", string queueName = "cola_clases_usuarios")
+        public async Task InicializarServidor(IServicioAlumno servicioAlumno, string rabbitMqHost = "localhost", string queueName = "cola_usuarios")
         {
             _servicioAlumno = servicioAlumno;
             var factory = new ConnectionFactory() { HostName = rabbitMqHost };
@@ -84,7 +84,7 @@ namespace ServicioUsuarios.Config
             string accion = mensaje.Accion;
             switch (accion)
             {
-                case "obtenerAlumnosDeClase":
+                case "obtenerListaAlumnos":
                     return await _servicioAlumno.ObtenerListaAlumnosAsync(mensaje.IdAlumnos);
                 default:
                     return new RespuestaRPCDTO

@@ -191,11 +191,11 @@ public class ServicioClase : IServicioClase
             idAlumnos.Add(registro.IdAlumno);
         }
         //Pedir la idAlumno y nombre completo de cada alumno inscrito al servicio de alumnos
-        string mensajeJsonAlumnos = crearMensajeRPC("obtenerAlumnosDeClase", idAlumnos, 0);
+        string mensajeJsonAlumnos = crearMensajeRPC("obtenerListaAlumnos", idAlumnos, 0);
         var alumnos = (await enviarMensajeRPCAsync(mensajeJsonAlumnos, "cola_usuarios")).Alumnos;
         //Pedir todas las tareas y sus respuestas al servicio de tareas.
         string mensajeJsonTareas = crearMensajeRPC("obtenerTareasYRespuestasDeClase", new List<int>(), idClase);
-        var resultadoTareasRespuestas = await enviarMensajeRPCAsync(mensajeJsonTareas, "cola_clases_tareas");
+        var resultadoTareasRespuestas = await enviarMensajeRPCAsync(mensajeJsonTareas, "cola_tareas");
         var tareas = resultadoTareasRespuestas.Tareas;
         var respuestas = resultadoTareasRespuestas.Respuestas;
         //Pedir los resultados de todas las tareas de cada alumno inscrito en la clase al servicio de tareas.

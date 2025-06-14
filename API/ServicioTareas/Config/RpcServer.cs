@@ -14,7 +14,7 @@ namespace ServicioTareas.Config
         private string _queueName;
         private IServicioTarea _servicioTarea;
 
-        public async Task InicializarServidor(IServicioTarea servicioTarea, string rabbitMqHost = "localhost", string queueName = "cola_clases_tareas")
+        public async Task InicializarServidor(IServicioTarea servicioTarea, string rabbitMqHost = "localhost", string queueName = "cola_tareas")
         {
             _servicioTarea = servicioTarea;
             var factory = new ConnectionFactory() { HostName = rabbitMqHost };

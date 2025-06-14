@@ -101,9 +101,14 @@ public class ServicioTarea : IServicioTarea
     public async Task<EstadisticasTareaDTO> ObtenerEstadisticasTareaAsync(int idTarea)
     {
         validarIdTarea(idTarea);
+        string mensajePreguntas = crearMensajeRPCConIdTarea("obtenerPreguntasDeTarea", idTarea);
+        var preguntas = (await enviarMensajeRPCConRespuestaAsync(mensajePreguntas, "cola_cuestionarios")).Preguntas;
+        Console.WriteLine("Número preguntas: " + preguntas.Count);
+        Console.WriteLine("Texto de la pregunta: " + preguntas[0].Texto);
         //Obtener las respuestas relacionadas a la tarea
         string mensajeJsonRespuestas = crearMensajeRPCConIdTarea("obtenerRespuestasDeClase", idTarea);
         var respuestas = (await enviarMensajeRPCConRespuestaAsync(mensajeJsonRespuestas, "cola_cuestionarios")).RespuestasDeTarea;
+        Console.WriteLine("Número respuestas: " + respuestas.Count);
         //Obtener los datos de los alumnos
         List<int> listaIdAlumnos = [];
         foreach (var respuesta in respuestas)
@@ -111,7 +116,35 @@ public class ServicioTarea : IServicioTarea
             listaIdAlumnos.Add(respuesta.idAlumno);
         }
         string mensajeAlumnos = crearMensajeRPCConIdAlumnos("obtenerListaAlumnos", listaIdAlumnos);
-        var alumnos = enviarMensajeRPCConRespuestaAsync(mensajeAlumnos, "cola_clases_usuario")
+        var alumnos = (await enviarMensajeRPCConRespuestaAsync(mensajeAlumnos, "cola_usuarios")).Alumnos;
+        Console.WriteLine("Número alumnos: " + alumnos.Count);
+        List<AlumnoEstadisticaTareaDTO> listaAlumnos = [];
+        foreach (var alumno in alumnos)
+        {
+            var alumnoEnLista = new AlumnoEstadisticaTareaDTO
+            {
+                IdAlumno = alumno.IdAlumno,
+                NombreCompleto = alumno.NombreCompleto
+            };
+            listaAlumnos.Add(alumnoEnLista);
+        }
+
+        List<string> ListaPreguntas = [];
+        foreach (var pregunta in preguntas)
+        {
+            string texto = pregunta.Texto;
+            Console.WriteLine(pregunta.Texto);
+            ListaPreguntas.Add(texto);
+        }
+        Console.WriteLine("Preguntas: " + ListaPreguntas.Count + ", Respuestas: " + respuestas.Count + ", Alumnos: " + alumnos.Count);
+        var estadistica = new EstadisticasTareaDTO
+        {
+            TextoPreguntas = ListaPreguntas,
+            Respuestas = respuestas,
+            Alumnos = listaAlumnos
+        };
+
+        return estadistica;
     }
 
     private void validarAutorizacion(HttpContext httpContext)
@@ -177,7 +210,7 @@ public class ServicioTarea : IServicioTarea
             Accion = accion,
             data = new
             {
-                idTarea = idTarea
+                IdTarea = idTarea
             }
         };
         return System.Text.Json.JsonSerializer.Serialize(mensaje);
@@ -201,10 +234,7 @@ public class ServicioTarea : IServicioTarea
         var mensaje = new
         {
             Accion = accion,
-            data = new
-            {
-                IdAlumnos = idAlumnos
-            }
+            IdAlumnos = idAlumnos
         };
         return System.Text.Json.JsonSerializer.Serialize(mensaje);
     }

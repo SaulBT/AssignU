@@ -115,7 +115,7 @@ public class ServicioAlumno : IServicioAlumno
         var datosPerfil = await ObtenerAlumnoPorIdAsync(idAlumno);
         //Obtener las clases del alumno y cada clase
         string mensajeJson = crearMensajeRPC("obtenerClasesTareasYRespuesta", idAlumno);
-        var resultadoClasesTareasRespuesta = await enviarMensajeRPCAsync(mensajeJson, "cola_usuarios_clases");
+        var resultadoClasesTareasRespuesta = await enviarMensajeRPCAsync(mensajeJson, "cola_clases");
         Console.WriteLine("Clases: " + resultadoClasesTareasRespuesta.Clases.Count);
 
         var estadistica = new EstadisticasPerfilDTO

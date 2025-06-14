@@ -94,6 +94,14 @@ app.MapGet("/clase/{codigo}/tareas", async (IServicioTarea servicio, int idClase
 .WithName("ObtenerTareasDeClase")
 .WithOpenApi();
 
+app.MapGet("/tarea/estadisticas/", async (IServicioTarea servicio, int idTarea) =>
+{
+    var estadisticas = await servicio.ObtenerEstadisticasTareaAsync(idTarea);
+    return Results.Ok(estadisticas);
+})
+.WithName("ObtenerEstadisticasTarea")
+.WithOpenApi();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -2,6 +2,7 @@ const {response} = require('express');
 
 const Cuestionario = require('../models/Cuestionario');
 const Respuesta = require('../models/respuesta-cuestionario');
+//const Pregunta = require('../models/respuesta-cuestionario');
 const { manejadorTipoErrores } = require('../validations/manejador-tipo-errores');
 
 const {
@@ -224,7 +225,6 @@ const obtenerRespuestas = async (data) => {
             IdTarea: respuesta.idTarea,
             Calificacion: respuesta.calificacion
         }));
-        //console.log("idAlumno:" + respuestasDto[0].IdAlumno);
         return {
             Success: true,
             Respuestas: respuestasDto
@@ -236,7 +236,7 @@ const obtenerRespuestas = async (data) => {
     }
 }
 
-const obtenerRespuestasDeTareaAsync = (data) =>{
+const obtenerRespuestasDeTareaAsync = async (data) =>{
     try{
         if (!data) {
             return {
@@ -244,16 +244,56 @@ const obtenerRespuestasDeTareaAsync = (data) =>{
                 Message: 'No se enviaron datos'
             }
         }
-        const { idTarea } = data.IdTarea;
+        const idTarea = data.IdTarea;
         validarIdTarea(idTarea);
 
-        const respuestas = Respuesta.find({
+        const respuestas = await Respuesta.find({
             idTarea: idTarea
         });
+        const respuestasEnviadas = respuestas.map( respuesta => ({
+            idAlumno: respuesta.idAlumno,
+            idTarea: respuesta.idTarea,
+            Calificacion: respuesta.calificacion,
+            Preguntas: respuesta.preguntas.map( pregunta => ({
+                Texto: pregunta.texto,
+                Opcion: {
+                    Texto: pregunta.opcion.texto
+                },
+                Correcta: pregunta.correcta
+            }))
+        }));
 
         return {
             Success: true,
-            RespuestasDeTarea: respuestas
+            RespuestasDeTarea: respuestasEnviadas
+        };
+    } catch (err) {
+        console.log("Error: " + err.message);
+        return manejadorTipoErrores(err, err.message);
+    }
+}
+
+const obtenerPreguntasDeTareaAsync = async (data) => {
+    try{
+        if (!data) {
+            return {
+                Success: false,
+                Message: 'No se enviaron datos'
+            }
+        }
+        const idTarea = data.IdTarea;
+        validarIdTarea(idTarea);
+
+        const cuestionario = await Cuestionario.findOne({
+            idTarea: idTarea
+        });
+        const preguntas = cuestionario.preguntas.map( pregunta => ({
+            Texto: pregunta.texto
+        }));
+
+        return {
+            Success: true,
+            Preguntas: preguntas
         };
     } catch (err) {
         console.log("Error: " + err.message);
@@ -293,5 +333,6 @@ module.exports = {
     obtenerRespuestaCuestionarioHttpAsync,
     obtenerRespuestaCuestionarioAsync,
     obtenerRespuestas,
-    obtenerRespuestasDeTareaAsync
+    obtenerRespuestasDeTareaAsync,
+    obtenerPreguntasDeTareaAsync
 };

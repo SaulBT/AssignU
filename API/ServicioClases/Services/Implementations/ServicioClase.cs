@@ -66,7 +66,7 @@ public class ServicioClase : IServicioClase
         if (!tieneRegistros)
         {
             var clase = await buscarClasePorIdAsync(idClase);
-            await _claseDAO.EliminarClaseAsync(clase);
+            await BorrarDatosDeClaseAsync(clase);
         }
         else
         {
@@ -159,13 +159,20 @@ public class ServicioClase : IServicioClase
         
         var estaTerminada = verificarClaseTerminada(clase.IdDocente);
         Console.WriteLine("¿El docente es 0? " + estaTerminada);
-        
+
         if (!tieneRegistros && estaTerminada)
         {
             Console.WriteLine("Borra la clase.");
-            await _claseDAO.EliminarClaseAsync(clase);
+            await BorrarDatosDeClaseAsync(clase);
         }
         
+    }
+
+    public async Task BorrarDatosDeClaseAsync(Clase clase)
+    {
+        await _claseDAO.EliminarClaseAsync(clase);
+        string mensajeEliminarTareas = crearMensajeRPC("eliminarTareasDeClase", new List<int>(), clase.IdClase);
+        await enviarMensajeRPCAsync(mensajeEliminarTareas, "cola_tareas");
     }
 
     public async Task<Registro> ObtenerRegistroAlumno(int idAlumno, int idClase, HttpContext httpContext)

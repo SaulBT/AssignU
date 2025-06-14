@@ -30,8 +30,10 @@ const validarExistenciaRespuestaYGuardarAsync = async (respuesta) => {
 };
 
 const buscarRespuestasCuestionarioAsync = async (idTarea) => {
-    const respuestas = await Rspuesta.find({idTarea});
+    console.log("Se buscan las respuestas")
+    const respuestas = await Respuesta.find({idTarea});
     if (respuestas != null) {
+        console.log("Se borran");
         respuestas.forEach(async respuesta => {
             await respuesta.deleteOne();
         });

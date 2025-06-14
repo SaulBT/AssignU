@@ -25,8 +25,8 @@ const crearCuestionarioAsync = async (data) => {
                 Message: 'No se enviaron datos'
             }
         }
-        idTarea = data.idTarea;
-        preguntas = data.cuestionario.preguntas;
+        idTarea = data.IdTarea;
+        preguntas = data.Cuestionario.Preguntas;
 
         validarCuestionario(idTarea, preguntas);
 
@@ -52,8 +52,8 @@ const editarCuestionarioAsync = async (data) => {
                 Message: 'No se enviaron datos'
             }
         }
-        idTarea = data.idTarea;
-        preguntas = data.cuestionario.preguntas;
+        idTarea = data.IdTarea;
+        preguntas = data.Cuestionario.Preguntas;
 
         validarCuestionario(idTarea, preguntas);
         const cuestionario = await validarExistenciaCuestionarioAsync(idTarea);
@@ -77,13 +77,17 @@ const eliminarCuestionarioAsync = async (data) => {
                 Message: 'No se enviaron datos'
             }
         }
-        const idTarea = data.idTarea;
+        const idTarea = data.IdTarea;
 
+        console.log("Validar la idTarea");
         validarIdTarea(idTarea);
+        console.log("buscar el cuestionario");
         const cuestionario = await validarExistenciaCuestionarioAsync(idTarea);
+        console.log("buscar y borras la existencia de respuestas");
         await buscarRespuestasCuestionarioAsync(idTarea);
-
+        console.log("se borra todo");
         await cuestionario.deleteOne();
+        console.log("se retorna")
         return {
             Success: true
         }

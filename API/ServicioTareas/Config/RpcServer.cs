@@ -85,6 +85,8 @@ namespace ServicioTareas.Config
             {
                 case "obtenerTareasYRespuestasDeClase":
                     return await _servicioTarea.ObtenerTareasYRespuestasAsync(mensaje.IdClase);
+                case "eliminarTareasDeClase":
+                    return await _servicioTarea.EliminarTareasDeClaseAsync(mensaje.IdClase); 
                 default:
                     return new RespuestaRPCDTO
                     {

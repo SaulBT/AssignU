@@ -10,8 +10,11 @@ dotenv.config();
 import {
   cargarArchivo,
   descargarArchivo,
-  eliminarArchivo
-} from "./controllers/ArchivosControllers.js";
+  eliminarArchivoAsync
+} from "./controllers/archivos-controladores.js";
+
+import {
+  iniciarServidorRpc } from './rpc-server.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROTO_PATH = path.join(__dirname, "proto", "archivos.proto");
@@ -25,10 +28,12 @@ const server = new grpc.Server();
 server.addService(archivosProto.ArchivosService.service, {
 CargarArchivo: cargarArchivo,
 DescargarArchivo: descargarArchivo,
-EliminarArchivo: eliminarArchivo
+EliminarArchivo: eliminarArchivoAsync
 });
 
 const PORT = "50051";
 server.bindAsync(`0.0.0.0:${PORT}`, grpc.ServerCredentials.createInsecure(), () => {
 console.log(`Servidor gRPC corriendo en puerto ${PORT}`);
 });
+
+iniciarServidorRpc();

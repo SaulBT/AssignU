@@ -62,15 +62,13 @@ export const descargarArchivo = async (call) => {
   }
 };
 
-export const eliminarArchivo = async (call, callback) => {
+export const eliminarArchivoAsync = async (call, callback) => {
   const { idTarea } = call.request;
 
   try {
-    const archivo = await db.collection("archivos.files").findOne({
-      "metadata.idTarea": idTarea
-    });
+    const resultado = await eliminarArchivoBaseAsync(idTarea);
 
-    if (!archivo) {
+    if (!resultado) {
       return callback(new Error(`No se encontró un archivo con la idTarea ${idTarea}`));
     }
 
@@ -83,3 +81,46 @@ export const eliminarArchivo = async (call, callback) => {
     callback(error);
   }
 };
+
+const eliminarArchivoViaRPCAsync = async (data) => {
+  try {
+    if (!data) {
+      return {
+          Success: false,
+          Message: 'No se enviaron datos'
+      }
+    }
+    const idTarea = data.IdTarea;
+    console.log("Se recibe la petición de eliminar para: " + idTarea);
+
+    const resultado = await eliminarArchivoBaseAsync(idTarea);
+
+    if (!resultado) {
+      return {
+        Success: false
+      }
+    }
+    console.log ("Se retorna exitoso");
+    return {
+      Success: true
+    }
+  } catch (err) {
+      console.log("Error: " + err.message);
+      return manejadorTipoErrores(err, err.message);
+  }
+};
+
+const eliminarArchivoBaseAsync = async (idTarea) => {
+  const archivo = await db.collection("archivos.files").findOne({
+    "metadata.idTarea": idTarea
+  });
+
+  if (!archivo) {
+    return false;
+  }
+
+  await bucket.delete(archivo._id);
+  return true;
+};
+
+export {eliminarArchivoViaRPCAsync};

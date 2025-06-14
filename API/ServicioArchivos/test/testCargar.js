@@ -19,9 +19,9 @@ const call = client.CargarArchivo((err, response) => {
 
 stream.on('data', chunk => {
   call.write({
-    nombre: 'testfile.txt',
-    idTarea: 123456,
-    tipo: 'text/plain',
+    nombre: 'tarea6.pdf',
+    idTarea: 6,
+    tipo: 'app/pdf',
     chunk: chunk,
     fin: false
   });

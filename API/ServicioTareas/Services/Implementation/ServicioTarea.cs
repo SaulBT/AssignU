@@ -28,7 +28,7 @@ public class ServicioTarea : IServicioTarea
         var tarea = await _tareaDAO.CrearTareaAsync(crearTareaDTO);
         var cuestionario = crearTareaDTO.Cuestionario;
         string mensajeJson = crearMensajeRPCConCuestionario("crearCuestionario", tarea.IdTarea, cuestionario);
-        await enviarMensajeRPCAsync(mensajeJson);
+        await enviarMensajeRPCAsync(mensajeJson, "cola_cuestionario");
 
         return tarea;
     }
@@ -43,7 +43,7 @@ public class ServicioTarea : IServicioTarea
         var tarea = await _tareaDAO.EditarTareaAsync(editarTareaDTO);
         var cuestionario = editarTareaDTO.Cuestionario;
         string mensajeJson = crearMensajeRPCConCuestionario("editarCuestionario", tarea.IdTarea, cuestionario);
-        await enviarMensajeRPCAsync(mensajeJson);
+        await enviarMensajeRPCAsync(mensajeJson, "cola_cuestionario");
 
         return tarea;
     }
@@ -57,7 +57,7 @@ public class ServicioTarea : IServicioTarea
         var tarea = await _tareaDAO.ObtenerTareaPorIdAsync(idTarea);
         await _tareaDAO.EliminarTareaAsync(tarea);
         string mensajeJson = crearMensajeRPCConIdTarea("eliminarCuestionario", idTarea);
-        await enviarMensajeRPCAsync(mensajeJson);
+        await enviarMensajeRPCAsync(mensajeJson, "cola_cuestionario");
     }
 
     public async Task<List<Tarea>?> ObtenerTareasDeClaseAsync(int idClase)
@@ -147,6 +147,29 @@ public class ServicioTarea : IServicioTarea
         return estadistica;
     }
 
+    public async Task<RespuestaRPCDTO> EliminarTareasDeClaseAsync(int idClase)
+    {
+        validarIdClase(idClase);
+
+        var tareas = await _tareaDAO.ObtenerTareasPorIdClaseAsync(idClase);
+        foreach (var tarea in tareas)
+        {
+            await _tareaDAO.EliminarTareaAsync(tarea);
+            string mensajeCuestionario = crearMensajeRPCConIdTarea("eliminarCuestionario", tarea.IdTarea);
+            await enviarMensajeRPCAsync(mensajeCuestionario, "cola_cuestionarios");
+            Console.WriteLine("Se crea el mensaje para archivos");
+            string mensajeArchivo = crearMensajeRPCConIdTarea("eliminarArchivo", tarea.IdTarea);
+            Console.WriteLine("Se envía la petición");
+            await enviarMensajeRPCAsync(mensajeArchivo, "cola_archivos");
+            Console.WriteLine("Se recibe exitosamente");
+        }
+
+        return new RespuestaRPCDTO
+        {
+            Success = true
+        };
+    }
+
     private void validarAutorizacion(HttpContext httpContext)
     {
         var tieneAutorizacion = httpContext.User.Identity?.IsAuthenticated ?? true;
@@ -196,8 +219,8 @@ public class ServicioTarea : IServicioTarea
             Accion = accion,
             data = new
             {
-                idTarea = idTarea,
-                cuestionario = cuestionario
+                IdTarea = idTarea,
+                Cuestionario = cuestionario
             }
         };
         return System.Text.Json.JsonSerializer.Serialize(mensaje);
@@ -239,9 +262,9 @@ public class ServicioTarea : IServicioTarea
         return System.Text.Json.JsonSerializer.Serialize(mensaje);
     }
 
-    private async Task enviarMensajeRPCAsync(string mensajeJson)
+    private async Task enviarMensajeRPCAsync(string mensajeJson, string cola)
     {
-        string respuestaJson = await _rpcClient.CallAsync("cola_cuestionarios", mensajeJson);
+        string respuestaJson = await _rpcClient.CallAsync(cola, mensajeJson);
         var respuesta = System.Text.Json.JsonSerializer.Deserialize<RespuestaCuestionarioDTO>(respuestaJson);
         if (respuesta == null)
         {

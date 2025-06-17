@@ -1,5 +1,3 @@
-using ServicioUsuarios.Exceptions;
-
 namespace ServicioUsuarios.Validations;
 
 public static class LanzarExcepciones

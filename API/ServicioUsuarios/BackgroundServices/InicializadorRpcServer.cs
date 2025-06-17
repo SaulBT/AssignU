@@ -1,8 +1,5 @@
-using Microsoft.Extensions.Hosting;
 using ServicioUsuarios.Config;
 using ServicioUsuarios.Services.Interfaces;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ServicioUsuarios.BackgroundServices
 {

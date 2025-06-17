@@ -1,82 +1,52 @@
-using ServicioUsuarios.DAOs.Interfaces;
-using ServicioUsuarios.DTOs;
-using ServicioUsuarios.Entities;
+
+using ServicioUsuarios.Data.DTOs;
 using ServicioUsuarios.Middlewares;
 using ServicioUsuarios.Services.Interfaces;
+using ServicioUsuarios.Validations;
 
 namespace ServicioUsuarios.Services.Implementation;
 
-public class LoginService : IServicioLogin
+public class ServicioLogin : IServicioLogin
 {
-    private readonly usuarios_bd_assignuContext _context;
-    private IAlumnoDAO _alumnoDAO;
-    private IDocenteDAO _docenteDAO;
     private readonly GeneradorToken _generadorToken;
+    private readonly LoginValidaciones _validaciones;
+    private readonly ILogger _logger;
 
-    public LoginService(usuarios_bd_assignuContext context, IAlumnoDAO alumnoDAO, IDocenteDAO docenteDAO, GeneradorToken generadorToken)
+    public ServicioLogin(GeneradorToken generadorToken, LoginValidaciones validaciones, ILogger logger)
     {
-        _context = context;
-        _alumnoDAO = alumnoDAO;
-        _docenteDAO = docenteDAO;
         _generadorToken = generadorToken;
+        _validaciones = validaciones;
+        _logger = logger;
     }
 
     public async Task<Object> IniciarSesion(IniciarSesionDTO usuarioDto)
     {
-        verificarParametrosUsuarioDto(usuarioDto);
+        _logger.LogInformation("Iniciando la sesión");
+        _validaciones.VerificarParametrosUsuarioDto(usuarioDto);
         var idUsuario = 0;
         var nombreUsuario = "";
-        if (usuarioDto.tipoUsuario == "alumno")
+        if (usuarioDto.TipoUsuario == "alumno")
         {
-            var usuario = await verificarCredencialesAlumnoAsync(usuarioDto);
-            idUsuario = usuario.idAlumno;
-            nombreUsuario = usuario.nombreUsuario;
+            var usuario = await _validaciones.verificarCredencialesAlumnoAsync(usuarioDto);
+            idUsuario = usuario.IdAlumno;
+            nombreUsuario = usuario.NombreUsuario;
         }
-        else if (usuarioDto.tipoUsuario == "docente")
+        else if (usuarioDto.TipoUsuario == "docente")
         {
-            var usuario = await verificarCredencialesDocenteAsync(usuarioDto);
-            idUsuario = usuario.idDocente;
-            nombreUsuario = usuario.nombreUsuario;
+            var usuario = await _validaciones.verificarCredencialesDocenteAsync(usuarioDto);
+            idUsuario = usuario.IdDocente;
+            nombreUsuario = usuario.NombreUsuario;
         }
 
-        string token = _generadorToken.GenerarToken(nombreUsuario, usuarioDto.tipoUsuario, idUsuario);
+        string token = _generadorToken.GenerarToken(nombreUsuario, usuarioDto.TipoUsuario, idUsuario);
 
+        _logger.LogInformation($"Se inició sesión al usuario con la id {idUsuario}");
         return new
         {
-            usuario = usuarioDto,
-            token = token
+            IdUsuario = idUsuario,
+            Token = token
         };
     }
 
-    private void verificarParametrosUsuarioDto(IniciarSesionDTO usuarioDto)
-    {
-        if (string.IsNullOrEmpty(usuarioDto.tipoUsuario) ||
-            string.IsNullOrEmpty(usuarioDto.nombreUsuarioOCorreo) ||
-            string.IsNullOrEmpty(usuarioDto.contrasena))
-        {
-            throw new ArgumentNullException("Los parámetros del usuario no pueden ser nulos.");
-        }
-    }
-
-    private async Task<AlumnoDTO> verificarCredencialesAlumnoAsync(IniciarSesionDTO usuarioDto)
-    {
-        var alumnoDto = await _alumnoDAO.ObtenerPorNombreUsuarioOCorreoAsync(usuarioDto.nombreUsuarioOCorreo);
-        if (alumnoDto == null)
-        {
-            throw new UnauthorizedAccessException("Credenciales incorrectas para el alumno.");
-        }
-
-        return alumnoDto;
-    }
-
-    private async Task<DocenteDTO> verificarCredencialesDocenteAsync(IniciarSesionDTO usuarioDto)
-    {
-        var docenteDto = await _docenteDAO.ObtenerPorNombreUsuarioOCorreoAsync(usuarioDto.nombreUsuarioOCorreo);
-        if (docenteDto == null)
-        {
-            throw new UnauthorizedAccessException("Credenciales incorrectas para el docente.");
-        }
-
-        return docenteDto;
-    }
+    
 }

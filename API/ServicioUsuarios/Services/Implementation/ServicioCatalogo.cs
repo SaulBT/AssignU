@@ -1,7 +1,7 @@
-using ServicioUsuarios.Entities;
+using ServicioUsuarios.Models;
 using ServicioUsuarios.Services.Interfaces;
 using ServicioUsuarios.Exceptions;
-using ServicioUsuarios.DAOs.Interfaces;
+using ServicioUsuarios.Data.DAOs.Interfaces;
 
 namespace ServicioUsuarios.Services.Implementation;
 
@@ -9,46 +9,56 @@ public class ServicioCatalogo : IServicioCatalogo
 {
     private readonly IGradoEstudiosDAO _gradoEstudiosDAO;
     private readonly IGradoProfesionalDAO _gradoProfesionalDAO;
+    private readonly ILogger _logger;
 
-    public ServicioCatalogo(IGradoEstudiosDAO gradoEstudiosDAO, IGradoProfesionalDAO gradoProfesionalDAO)
+    public ServicioCatalogo(IGradoEstudiosDAO gradoEstudiosDAO, IGradoProfesionalDAO gradoProfesionalDAO, ILogger logger)
     {
         _gradoEstudiosDAO = gradoEstudiosDAO;
         _gradoProfesionalDAO = gradoProfesionalDAO;
+        _logger = logger;
     }
 
-    public async Task<List<grado_estudio>> ObtenerGradosEstudiosAsync()
+    public async Task<List<GradoEstudios>> ObtenerGradosEstudiosAsync()
     {
+        _logger.LogInformation("Obteniendo todos los Grados de Estudio");
         var lista = await _gradoEstudiosDAO.ObtenerTodosAsync();
         verificarCatalogoGradoEstudio(lista);
 
+        _logger.LogInformation("Se obtuvieron todos los Grados de Estudio");
         return lista;
     }
 
-    public async Task<List<grado_profesional>> ObtenerGradosProfesionalesAsync()
+    public async Task<List<GradoProfesional>> ObtenerGradosProfesionalesAsync()
     {
+        _logger.LogInformation("Obteniendo todos los Grados Profesionales");
         var lista = await _gradoProfesionalDAO.ObtenerTodosAsync();
         verificarCatalogoGradoProfesional(lista);
 
+        _logger.LogInformation("Se obtuvieron todos los Grados Profesionales");
         return lista;
     }
 
-    public async Task<grado_estudio> ObtenerGradoEstudioPorIdAsync(int id)
+    public async Task<GradoEstudios> ObtenerGradoEstudioPorIdAsync(int idGradoEstudios)
     {
-        var gradoEstudio = await _gradoEstudiosDAO.ObtenerPorIdAsync(id);
+        _logger.LogInformation("Buscando un Grado de Estudios");
+        var gradoEstudio = await _gradoEstudiosDAO.ObtenerPorIdAsync(idGradoEstudios);
         verificarGradoEstudioNulo(gradoEstudio);
 
+        _logger.LogInformation($"Grado de Estudio encontrado con la id {gradoEstudio.IdGradoEstudios}");
         return gradoEstudio;
     }
 
-    public async Task<grado_profesional> ObtenerGradoProfesionalPorIdAsync(int id)
+    public async Task<GradoProfesional> ObtenerGradoProfesionalPorIdAsync(int id)
     {
+        _logger.LogInformation("Buscando un Grado Profesional");
         var gradoProfesional = await _gradoProfesionalDAO.ObtenerPorIdAsync(id);
         verificarGradoProfesionalNulo(gradoProfesional);
 
+        _logger.LogInformation($"Grado Profesional encontrado con la id {gradoProfesional.IdGradoProfesional}");
         return gradoProfesional;
     }
 
-    private void verificarCatalogoGradoEstudio(List<grado_estudio> catalogo)
+    private void verificarCatalogoGradoEstudio(List<GradoEstudios> catalogo)
     {
         if (catalogo == null || catalogo.Count == 0)
         {
@@ -56,7 +66,7 @@ public class ServicioCatalogo : IServicioCatalogo
         }
     }
 
-    private void verificarCatalogoGradoProfesional(List<grado_profesional> catalogo)
+    private void verificarCatalogoGradoProfesional(List<GradoProfesional> catalogo)
     {
         if (catalogo == null || catalogo.Count == 0)
         {
@@ -64,7 +74,7 @@ public class ServicioCatalogo : IServicioCatalogo
         }
     }
 
-    private void verificarGradoEstudioNulo(grado_estudio gradoEstudio)
+    private void verificarGradoEstudioNulo(GradoEstudios gradoEstudio)
     {
         if (gradoEstudio == null)
         {
@@ -72,7 +82,7 @@ public class ServicioCatalogo : IServicioCatalogo
         }
     }
 
-    private void verificarGradoProfesionalNulo(grado_profesional gradoProfesional)
+    private void verificarGradoProfesionalNulo(GradoProfesional gradoProfesional)
     {
         if (gradoProfesional == null)
         {

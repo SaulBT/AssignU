@@ -1,14 +1,15 @@
 using ServicioClases.Data.DTOs;
+using ServicioClases.Data.DTOs.RPC;
 using ServicioClases.Models;
 
 namespace ServicioClases.Services.Interfaces;
 
 public interface IServicioClase
 {
-    Task<Clase> CrearClaseAsync(CrearClaseDTO crearClaseDto, HttpContext httpContext);
-    Task<Clase> EditarClaseAsync(ActualizarClaseDTO actualizarClaseDto, HttpContext httpContext);
+    Task<ClaseDTO> CrearClaseAsync(CrearClaseDTO crearClaseDto, HttpContext httpContext);
+    Task<ClaseDTO> EditarClaseAsync(ActualizarClaseDTO actualizarClaseDto, HttpContext httpContext);
     Task EliminarClaseAsync(int idClase, HttpContext httpContext);
-    Task<Clase?> ObtenerClasePorIdAsync(int idClase);
+    Task<ClaseDTO?> ObtenerClasePorIdAsync(int idClase);
     Task<List<Clase>?> ObtenerClasesDeAlumnoAsync(HttpContext httpContext);
     Task<List<Clase>?> ObtenerClasesDeDocenteAsync(HttpContext httpContext);
     Task EnviarFechaVisualizacionAsync(int idClase, DateTime fechaVisualizacion, HttpContext httpContext);

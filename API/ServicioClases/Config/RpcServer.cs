@@ -1,11 +1,11 @@
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using ServicioClases.Data.DTOs;
 using System.Text;
 using System.Text.Json;
 using ServicioClases.Services.Interfaces;
+using ServicioClases.Data.DTOs.RPC;
 
-namespace ServicioUsuarios.Config
+namespace ServicioClases.Config
 {
     public class RpcServerRabbitMQ
     {

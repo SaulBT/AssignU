@@ -11,8 +11,9 @@ using ServicioClases.Data.DAOs.Implementations;
 using ServicioClases.Data.DTOs;
 using ServicioClases.Config;
 using ServicioClases.BackgroundService;
-using ServicioUsuarios.Config;
 using ServicioUsuarios.BackgroundServices;
+using ServicioClases.Models;
+using ServicioClases.Validations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,7 @@ builder.Services.AddDbContext<ClasesDbContext>(options =>
 builder.Services.AddScoped<IServicioClase, ServicioClase>();
 builder.Services.AddScoped<IClaseDAO, ClaseDAO>();
 builder.Services.AddScoped<IRegistroDAO, RegistroDAO>();
+builder.Services.AddScoped<ClaseValidaciones>();
 
 builder.Services.AddSingleton<RpcServerRabbitMQ>();
 builder.Services.AddHostedService<InicializadorRpcServer>();
@@ -63,102 +65,198 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 //ServicioClase
-app.MapPost("/clase", async (IServicioClase servicio, CrearClaseDTO crearClaseDto, HttpContext httpContext) =>
+app.MapPost("/clases", async (IServicioClase servicio, CrearClaseDTO crearClaseDto, HttpContext httpContext) =>
 {
     var clase = await servicio.CrearClaseAsync(crearClaseDto, httpContext);
-    return Results.Created($"/clase/{clase.IdClase}", clase);
+    return Results.Created($"/clase/{clase.CodigoClase}", clase);
 })
-.WithName("CrearClase")
+.WithName("Crear Clase")
+.WithTags("Clases")
+.WithSummary("Crear una nueva Clase en el sistema")
+.WithDescription(
+    "Crea una Clase con los datos: " +
+    "\n - Nombre de la Clase." +
+    "\n - Id del Docente obtenido del JWT.")
+.Accepts<CrearClaseDTO>("application/json")
+.Produces<ClaseDTO>(201)
+.Produces(400)
+.Produces(401)
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapPut("/clase", async (IServicioClase servicio, ActualizarClaseDTO actualizarClaseDto, HttpContext httpContext) =>
+app.MapPut("/clases/{codigo-clase}", async (IServicioClase servicio, ActualizarClaseDTO actualizarClaseDto, HttpContext httpContext) =>
 {
     var clase = await servicio.EditarClaseAsync(actualizarClaseDto, httpContext);
     return Results.Ok(clase);
 })
-.WithName("ActualizarClase")
+.WithName("Actualizar Clase")
+.WithTags("Clases")
+.WithSummary("Actualizar una Clase")
+.WithDescription(
+    "Actualiza una Clase con los datos:" +
+    "\n - Id de la Clase" +
+    "\n - Nombre de la Clase" +
+    "\n - Id del Docente obtenido del JWT.")
+.Accepts<ActualizarClaseDTO>("application/json")
+.Produces<ClaseDTO>(200)
+.Produces(400)
+.Produces(401)
+.Produces(404)
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapDelete("/clase/{id:int}", async (IServicioClase servicio, int idClase, HttpContext httpContext) =>
+app.MapDelete("/clases/{codigo-clase}", async (IServicioClase servicio, int idClase, HttpContext httpContext) =>
 {
     await servicio.EliminarClaseAsync(idClase, httpContext);
-    return Results.Ok();
+    return Results.Ok(202);
 })
-.WithName("EliminarClase")
+.WithName("Eliminar Clase")
+.WithTags("Clases")
+.WithSummary("Eliminar una Clase")
+.WithDescription("Eliminar una Clase con su id")
+.Produces(202)
+.Produces(400)
+.Produces(401)
+.Produces(404)
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapPut("/clase/fecha-visualizacion", async (IServicioClase servicio, int idClase, DateTime fechaVisualizacion, HttpContext httpContext) =>
+app.MapPut("/clases/{codigo-clase}/ultima-conexion", async (IServicioClase servicio, int idClase, DateTime fechaVisualizacion, HttpContext httpContext) =>
 {
     await servicio.EnviarFechaVisualizacionAsync(idClase, fechaVisualizacion, httpContext);
-    return Results.Ok();
+    return Results.Ok(202);
 })
-.WithName("EnviarFechaVisualizacion")
+.WithName("Enviar fecha ultima conexion")
+.WithTags("Clases")
+.WithSummary("Actualizar la última conexión")
+.WithDescription(
+    "Se actualiza la última conexión a una Clase con los siguientes datos:" +
+    "\n - Id de la Clase" +
+    "\n - Fecha de última conexión" +
+    "\n - Id del Docente obtenido del JWT")
+.Produces(202)
+.Produces(400)
+.Produces(401)
+.Produces(404)
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapGet("/clase/{id:int}", async (IServicioClase servicio, int idClase) =>
+app.MapGet("/clases/{codigo-clase}", async (IServicioClase servicio, int idClase) =>
 {
     var clase = await servicio.ObtenerClasePorIdAsync(idClase);
     return Results.Ok(clase);
 })
-.WithName("ObtenerClase")
+.WithName("Obtener Clase")
+.WithTags("Clases")
+.WithSummary("Obtener una Clase")
+.WithDescription("Se obtiene una Clase con su id")
+.Produces<ClaseDTO>(200)
+.Produces(400)
+.Produces(404)
 .WithOpenApi();
 
-app.MapGet("/alumno/{id:int}/clases", async (IServicioClase servicio, HttpContext httpContext) =>
+app.MapGet("/alumnos/{nombre-usuario}/clases", async (IServicioClase servicio, HttpContext httpContext) =>
 {
     var clases = await servicio.ObtenerClasesDeAlumnoAsync(httpContext);
     return Results.Ok(clases);
 })
-.WithName("ObtenerClasesDeAlumno")
+.WithName("Obtener Clases de Alumno")
+.WithTags("Clases")
+.WithSummary("Obtener las Clases de un Alumno")
+.WithDescription("Se obtiene todas las Clases a las que un Alumno está inscrito por medio de su id obtenida del JWT")
+.Produces<List<Clase>>(200)
+.Produces(400)
+.Produces(401)
+.Produces(404)
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapGet("/docente/{id:int}/clases", async (IServicioClase servicio, HttpContext httpContext) =>
+app.MapGet("/docentes/{nombre-usuario}/clases", async (IServicioClase servicio, HttpContext httpContext) =>
 {
     var clases = await servicio.ObtenerClasesDeDocenteAsync(httpContext);
     return Results.Ok(clases);
 })
-.WithName("ObtenerClasesDeDocente")
+.WithName("Obtener Clases de Docente")
+.WithTags("Clases")
+.WithSummary("Obtener las Clases de un Docente")
+.WithDescription("Se obtiene todas las Clases en las que un Docente enseña por medio de su id obtenida del JWT")
+.Produces<List<Clase>>(200)
+.Produces(400)
+.Produces(401)
+.Produces(404)
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapPost("/clase/unirme", async (IServicioClase servicio, string codigoClase, HttpContext httpContext) =>
+app.MapPost("/clases/{codigo-clase}/unirse", async (IServicioClase servicio, string codigoClase, HttpContext httpContext) =>
 {
     var clase = await servicio.UnirseAClaseAsync(codigoClase, httpContext);
     return Results.Created($"/clase/{clase.IdClase}", clase);
 })
-.WithName("UnirseAClase")
+.WithName("Unirse a Clase")
+.WithTags("Clases")
+.WithSummary("Unirse a una Clase")
+.WithDescription(
+    "Un Alumno se une a una Clase con los siguientes datos:" +
+    "\n - Id del Alumno obtenido por el JWT" +
+    "\n - Código de la Clase")
+.Produces(202)
+.Produces(400)
+.Produces(401)
+.Produces(404)
+.Produces(409)
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapDelete("/clase/{id:int}/salir", async (IServicioClase servicio, int idClase, HttpContext httpContext) =>
+app.MapDelete("/alumnos/{nombre-usuario}/clases/{codigo-clase}/salir", async (IServicioClase servicio, int idClase, HttpContext httpContext) =>
 {
     await servicio.SalirDeClaseAsync(idClase, httpContext);
     return Results.Ok();
 })
-.WithName("SalirseClase")
+.WithName("Salirse de Clase")
+.WithTags("Clases")
+.WithSummary("Salirse de una Clase")
+.WithDescription(
+    "Un Alumno se sale de una Clase con los siguientes datos:" +
+    "\n - Id del Alumno obtenido por el JWT" +
+    "\n - Id de la Clase")
+.Produces(202)
+.Produces(400)
+.Produces(401)
+.Produces(404)
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapGet("/clase/alumnos/{id:int}", async (IServicioClase servicio, int idAlumno, int idClase, HttpContext httpContext) =>
+app.MapGet("/alumnos/{nombre-usuario}/clases/{codigo-clase}", async (IServicioClase servicio, int idAlumno, int idClase, HttpContext httpContext) =>
 {
     var registro = await servicio.ObtenerRegistroAlumno(idAlumno, idClase, httpContext);
     return Results.Ok(registro);
 })
-.WithName("ObtenerRegistroDeAlumno")
+.WithName("Obtener Registro de Alumno")
+.WithTags("Clases")
+.WithSummary("Obtener el Registro de un Alumno en una Clase")
+.WithDescription(
+    "Obtener el Registro de un Aalumno en una Clase con los siguientes datos:" +
+    "\n - Id del Alumno" +
+    "\n - Id de la Clase")
+.Produces<Registro>(200)
+.Produces(400)
+.Produces(401)
+.Produces(404)
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapGet("/clase/estadisticas", async (IServicioClase servicio, int idClase) =>
+app.MapGet("/clases/{codigo-clase}/estadisticas", async (IServicioClase servicio, int idClase) =>
 {
     var estadísticas = await servicio.ObtenerEstadisticasDeLaClase(idClase);
     return Results.Ok(estadísticas);
 })
 .WithName("ObtenerEstadistica")
-//.RequireAuthorization()
+.WithTags("Clases")
+.WithSummary("Obtener las estadísticas de una Clase")
+.WithDescription("Se obtiene las estadísticas de una Clases por medio de su id")
+.Produces<EstadisticasClaseDTO>(200)
+.Produces(400)
+.Produces(404)
 .WithOpenApi();
 
 if (app.Environment.IsDevelopment())

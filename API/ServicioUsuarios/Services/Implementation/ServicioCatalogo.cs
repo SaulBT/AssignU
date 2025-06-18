@@ -9,9 +9,9 @@ public class ServicioCatalogo : IServicioCatalogo
 {
     private readonly IGradoEstudiosDAO _gradoEstudiosDAO;
     private readonly IGradoProfesionalDAO _gradoProfesionalDAO;
-    private readonly ILogger _logger;
+    private readonly ILogger<ServicioCatalogo> _logger;
 
-    public ServicioCatalogo(IGradoEstudiosDAO gradoEstudiosDAO, IGradoProfesionalDAO gradoProfesionalDAO, ILogger logger)
+    public ServicioCatalogo(IGradoEstudiosDAO gradoEstudiosDAO, IGradoProfesionalDAO gradoProfesionalDAO, ILogger<ServicioCatalogo> logger)
     {
         _gradoEstudiosDAO = gradoEstudiosDAO;
         _gradoProfesionalDAO = gradoProfesionalDAO;

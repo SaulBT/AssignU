@@ -92,9 +92,9 @@ app.MapPost("/alumnos", async (RegistrarAlumnoDTO alumnoNuevoDto, IServicioAlumn
 .Produces(409)
 .WithOpenApi();
 
-app.MapGet("/alumnos/{id-alumno}", async (int id, IServicioAlumno servicio) =>
+app.MapGet("/alumnos/{idAlumno}", async (int idAlumno, IServicioAlumno servicio) =>
 {
-    var alumno = await servicio.ObtenerAlumnoPorIdAsync(id);
+    var alumno = await servicio.ObtenerAlumnoPorIdAsync(idAlumno);
     return Results.Ok(alumno);
 })
 .WithName("Obtener Alumno por id")
@@ -114,10 +114,10 @@ app.MapGet("/alumnos/{id-alumno}", async (int id, IServicioAlumno servicio) =>
 .Produces(409)
 .WithOpenApi();
 
-app.MapPut("/alumnos/{id-alumno}", async (HttpContext context, ActualizarAlumnoDTO alumnoActualizadoDTO, IServicioAlumno servicio) =>
+app.MapPut("/alumnos/{idAlumno}", async (HttpContext context, int idAlumno, ActualizarAlumnoDTO alumnoActualizadoDTO, IServicioAlumno servicio) =>
 {
-    await servicio.ActualizarAsync(context, alumnoActualizadoDTO);
-    return Results.Ok();
+    await servicio.ActualizarAsync(context, idAlumno, alumnoActualizadoDTO);
+    return Results.Accepted();
 })
 .WithName("Actualizar Alumno")
 .WithTags("Alumnos")
@@ -143,10 +143,10 @@ app.MapPut("/alumnos/{id-alumno}", async (HttpContext context, ActualizarAlumnoD
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapDelete("/alumnos", async (HttpContext context, IServicioAlumno servicio) =>
+app.MapDelete("/alumnos/{idAlumno}", async (HttpContext context, int idAlumno, IServicioAlumno servicio) =>
 {
-    await servicio.EliminarAsync(context);
-    return Results.Ok();
+    await servicio.EliminarAsync(context, idAlumno);
+    return Results.Accepted();
 })
 .WithName("Eliminar Alumno")
 .WithTags("Alumnos")
@@ -159,10 +159,10 @@ app.MapDelete("/alumnos", async (HttpContext context, IServicioAlumno servicio) 
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapPut("/alumnos/{id-alumno}/contrasenia", async (CambiarContraseniaDTO cambiarContraseniaDto, IServicioAlumno servicio, HttpContext context) =>
+app.MapPut("/alumnos/{idAlumno}/contrasenia", async (CambiarContraseniaDTO cambiarContraseniaDto, int idAlumno, IServicioAlumno servicio, HttpContext context) =>
 {
-    await servicio.CambiarContraseniaAsync(cambiarContraseniaDto, context);
-    return Results.Ok();
+    await servicio.CambiarContraseniaAsync(cambiarContraseniaDto, idAlumno, context);
+    return Results.Accepted();
 })
 .WithName("Cambiar contrasenia de Alumno")
 .WithTags("Alumnos")
@@ -176,9 +176,9 @@ app.MapPut("/alumnos/{id-alumno}/contrasenia", async (CambiarContraseniaDTO camb
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapGet("/alumnos/{id-alumno}/estadisticas", async (HttpContext context, IServicioAlumno servicio) =>
+app.MapGet("/alumnos/{idAlumno}/estadisticas", async (HttpContext context, int idAlumno, IServicioAlumno servicio) =>
 {
-    var estadisticas = await servicio.ObtenerEstadisticasPerfilAlumnoAsync(context);
+    var estadisticas = await servicio.ObtenerEstadisticasPerfilAlumnoAsync(context, idAlumno);
     return Results.Ok(estadisticas);
 })
 .WithName("Obtener perfil de Alumno")
@@ -219,7 +219,7 @@ app.MapPost("/docentes", async (RegistrarDocenteDTO docenteNuevoDto, IServicioDo
 .Produces(409)
 .WithOpenApi();
 
-app.MapGet("/docentes/{id-docente}", async (int idDocente, IServicioDocente servicio) =>
+app.MapGet("/docentes/{idDocente}", async (int idDocente, IServicioDocente servicio) =>
 {
     var docente = await servicio.ObtenerDocentePorIdAsync(idDocente);
     return Results.Ok(docente);
@@ -241,10 +241,10 @@ app.MapGet("/docentes/{id-docente}", async (int idDocente, IServicioDocente serv
 .Produces(409)
 .WithOpenApi();
 
-app.MapPut("/docentes/{id-docente}", async (HttpContext context, ActualizarDocenteDTO docenteActualizadoDTO, IServicioDocente servicio) =>
+app.MapPut("/docentes/{idDocente}", async (HttpContext context, int idDocente, ActualizarDocenteDTO docenteActualizadoDTO, IServicioDocente servicio) =>
 {
-    await servicio.ActualizarAsync(context, docenteActualizadoDTO);
-    return Results.Ok();
+    await servicio.ActualizarAsync(context, idDocente, docenteActualizadoDTO);
+    return Results.Accepted();
 })
 .WithName("Actualizar Docente")
 .WithTags("Docentes")
@@ -270,10 +270,10 @@ app.MapPut("/docentes/{id-docente}", async (HttpContext context, ActualizarDocen
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapDelete("/docentes/{id-docente}", async (HttpContext context, IServicioDocente servicio) =>
+app.MapDelete("/docentes/{idDocente}", async (HttpContext context, int idDocente, IServicioDocente servicio) =>
 {
-    await servicio.EliminarAsync(context);
-    return Results.Ok();
+    await servicio.EliminarAsync(context, idDocente);
+    return Results.Accepted();
 })
 .WithName("EliminarDocente")
 .WithTags("Docentes")
@@ -286,10 +286,10 @@ app.MapDelete("/docentes/{id-docente}", async (HttpContext context, IServicioDoc
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapPut("/docentes/{id-docente}/contrasenia", async (CambiarContraseniaDTO cambiarContraseniaDto, IServicioDocente servicio, HttpContext context) =>
+app.MapPut("/docentes/{idDocente}/contrasenia", async (CambiarContraseniaDTO cambiarContraseniaDto, int idDocente, IServicioDocente servicio, HttpContext context) =>
 {
-    await servicio.CambiarContraseniaAsync(cambiarContraseniaDto, context);
-    return Results.Ok();
+    await servicio.CambiarContraseniaAsync(cambiarContraseniaDto, idDocente, context);
+    return Results.Accepted();
 })
 .WithName("Cambiar contraseña de Docente")
 .WithTags("Docentes")
@@ -342,9 +342,9 @@ app.MapGet("/catalogos/grados-profesionales", async (ServicioCatalogo servicio) 
 .Produces(404)
 .WithOpenApi();
 
-app.MapGet("/catalogos/grado-estudio/{id-grado-estudios}", async (int id, ServicioCatalogo servicio) =>
+app.MapGet("/catalogos/grado-estudio/{idGradoEstudios}", async (int idGradoEstudios, ServicioCatalogo servicio) =>
 {
-    var gradoEstudio = await servicio.ObtenerGradoEstudioPorIdAsync(id);
+    var gradoEstudio = await servicio.ObtenerGradoEstudioPorIdAsync(idGradoEstudios);
     return Results.Ok(gradoEstudio);
 })
 .WithName("Obtener un Grado de Estudio por id")
@@ -355,9 +355,9 @@ app.MapGet("/catalogos/grado-estudio/{id-grado-estudios}", async (int id, Servic
 .Produces(404)
 .WithOpenApi();
 
-app.MapGet("/catalogos/grado-profesional/{id-grado-profesional}", async (int id, ServicioCatalogo servicio) =>
+app.MapGet("/catalogos/grado-profesional/{idGradoProfesional}", async (int idGradoProfesional, ServicioCatalogo servicio) =>
 {
-    var gradoProfesional = await servicio.ObtenerGradoProfesionalPorIdAsync(id);
+    var gradoProfesional = await servicio.ObtenerGradoProfesionalPorIdAsync(idGradoProfesional);
     return Results.Ok(gradoProfesional);
 })
 .WithName("Obtener un Grado Profesional por id")

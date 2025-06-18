@@ -22,22 +22,24 @@ public class DocenteValidaciones
         await verificarDocenteCorreoAsync(registrarDocenteDto.CorreoElectronico);
     }
 
-    public async Task<Docente> VerificarActualizacionDeDocenteAsync(HttpContext httpContext, ActualizarDocenteDTO docenteDto)
+    public async Task<Docente> VerificarActualizacionDeDocenteAsync(HttpContext httpContext, int idDocente, ActualizarDocenteDTO docenteDto)
     {
         verificarAutorizacion(httpContext);
-        var idDocente = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
-        verificarIgualdadId(idDocente, docenteDto.IdDocente);
+        var idDocenteContexto = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
+        verificarIgualdadId(idDocente, idDocenteContexto);
         verificarParametrosDocenteActualizacion(docenteDto);
         await verificarDocenteNombreActualizacionAsync(docenteDto.NombreUsuario, idDocente);
 
-        return await verificarExistenciaDocenteAsync(docenteDto.IdDocente);
+        return await verificarExistenciaDocenteAsync(idDocente);
     }
 
-    public async Task<Docente> VerificarEliminacionDeDocenteAsync(HttpContext httpContext)
+    public async Task<Docente> VerificarEliminacionDeDocenteAsync(HttpContext httpContext, int idDocente)
     {
         verificarAutorizacion(httpContext);
-        var idDocente = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
+        var idDocenteContexto = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
         verificarIdValida(idDocente);
+        verificarIdValida(idDocenteContexto);
+        verificarIgualdadId(idDocente, idDocenteContexto);
         return await verificarExistenciaDocenteAsync(idDocente);
     }
 
@@ -47,11 +49,14 @@ public class DocenteValidaciones
         return await verificarExistenciaDocenteAsync(idDocente);
     }
 
-    public async Task<Docente> VerificarCambioDeContraseniaAsync(CambiarContraseniaDTO cambiarContraseniaDTO, HttpContext httpContext)
+    public async Task<Docente> VerificarCambioDeContraseniaAsync(CambiarContraseniaDTO cambiarContraseniaDTO, int idDocente, HttpContext httpContext)
     {
         verificarParametrosCambiarContrasenia(cambiarContraseniaDTO);
         verificarAutorizacion(httpContext);
-        var idDocente = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
+        var idDocenteContexto = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
+        verificarIdValida(idDocenteContexto);
+        verificarIdValida(idDocente);
+        verificarIgualdadId(idDocente, idDocenteContexto);
         var docente = await verificarExistenciaDocenteAsync(idDocente);
         verificarContraseniaActual(docente, cambiarContraseniaDTO.ContraseniaActual);
 

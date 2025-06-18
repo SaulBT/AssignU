@@ -43,10 +43,10 @@ public class ServicioClase : IServicioClase
         return claseDto;
     }
 
-    public async Task<ClaseDTO> EditarClaseAsync(ActualizarClaseDTO actualizarClaseDto, HttpContext httpContext)
+    public async Task<ClaseDTO> EditarClaseAsync(int idClase, ActualizarClaseDTO actualizarClaseDto, HttpContext httpContext)
     {
         _logger.LogInformation("Editando una Clase");
-        var claseActualizada = await _validacion.VerificarEdicionDeClaseAsync(actualizarClaseDto, httpContext);
+        var claseActualizada = await _validacion.VerificarEdicionDeClaseAsync(idClase, actualizarClaseDto, httpContext);
         await _claseDAO.ActualizarClaseAsync(claseActualizada);
 
         var claseDto = new ClaseDTO
@@ -104,10 +104,10 @@ public class ServicioClase : IServicioClase
         return claseDto;
     }
 
-    public async Task<List<Clase>?> ObtenerClasesDeAlumnoAsync(HttpContext httpContext)
+    public async Task<List<Clase>?> ObtenerClasesDeAlumnoAsync(int idAlumno)
     {
         _logger.LogInformation("Obteniendo Clases de Alumno");
-        int idAlumno = _validacion.VerificarObtencionClasesAsync(httpContext);
+        _validacion.VerificarIdUsuario(idAlumno);
 
         var registros = await _registroDAO.ObtenerRegistrosPorAlumnoAsync(idAlumno);
         var clases = await _claseDAO.ObtenerClasesDeAlumnoAsync(registros);
@@ -116,10 +116,10 @@ public class ServicioClase : IServicioClase
         return clases;
     }
 
-    public Task<List<Clase>?> ObtenerClasesDeDocenteAsync(HttpContext httpContext)
+    public Task<List<Clase>?> ObtenerClasesDeDocenteAsync(int idDocente)
     {
         _logger.LogInformation("Obteniendo Clases de Docente");
-        int idDocente = _validacion.VerificarObtencionClasesAsync(httpContext);
+        _validacion.VerificarIdUsuario(idDocente);
 
         var clases = _claseDAO.ObtenerClasesDeDocenteAsync(idDocente);
 
@@ -144,11 +144,11 @@ public class ServicioClase : IServicioClase
         return claseExistente;
     }
 
-    public async Task SalirDeClaseAsync(int idClase, HttpContext httpContext)
+    public async Task SalirDeClaseAsync(int idAlumno, int idClase, HttpContext httpContext)
     {
         _logger.LogInformation("Saliendose de una Clase");
-        var registro = await _validacion.VerificarSalirseClaseAsync(idClase, httpContext);
-        _logger.LogInformation($"Se borró el registro del Alumno con id {registro.IdAlumno} en la Clase con id {registro.IdClase}");
+        var registro = await _validacion.VerificarSalirseClaseAsync(idAlumno, idClase, httpContext);
+        _logger.LogInformation($"Se borró el registro del Alumno con id {idAlumno} en la Clase con id {idClase}");
         await _registroDAO.EliminarRegistroAsync(registro);
 
         var tieneRegistros = await _validacion.VerificarRegistrosClaseAsync(idClase);

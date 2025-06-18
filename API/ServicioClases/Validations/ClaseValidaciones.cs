@@ -32,14 +32,14 @@ public class ClaseValidaciones
         };
     }
 
-    public async Task<Clase> VerificarEdicionDeClaseAsync(ActualizarClaseDTO actualizarClaseDto, HttpContext httpContext)
+    public async Task<Clase> VerificarEdicionDeClaseAsync(int idClase, ActualizarClaseDTO actualizarClaseDto, HttpContext httpContext)
     {
         verificarAutorizacion(httpContext);
         var idDocente = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
         VerificarIdUsuario(idDocente);
-        VerificarIdClase(actualizarClaseDto.IdClase);
+        VerificarIdClase(idClase);
         verificarCamposActualizarClase(actualizarClaseDto);
-        var claseExistente = await BuscarClasePorIdAsync(actualizarClaseDto.IdClase);
+        var claseExistente = await BuscarClasePorIdAsync(idClase);
         claseExistente.Nombre = actualizarClaseDto.Nombre;
 
         return claseExistente;
@@ -91,10 +91,9 @@ public class ClaseValidaciones
         return claseExistente;
     }
 
-    public async Task<Registro> VerificarSalirseClaseAsync(int idClase, HttpContext httpContext)
+    public async Task<Registro> VerificarSalirseClaseAsync(int idAlumno, int idClase, HttpContext httpContext)
     {
         verificarAutorizacion(httpContext);
-        var idAlumno = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
         VerificarIdUsuario(idAlumno);
         VerificarIdClase(idClase);
         return await buscarRegistroPorIdAlumnoYClaseAsync(idAlumno, idClase);

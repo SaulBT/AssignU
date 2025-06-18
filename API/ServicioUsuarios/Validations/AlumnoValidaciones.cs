@@ -23,21 +23,22 @@ public class AlumnoValidaciones
         await verificarAlumnoCorreoAsync(registrarAlumnoDto.CorreoElectronico);
     }
 
-    public async Task<Alumno> VerificarActualizacionDeAlumnoAsync(HttpContext httpContext, ActualizarAlumnoDTO alumnoDto)
+    public async Task<Alumno> VerificarActualizacionDeAlumnoAsync(HttpContext httpContext, int idAlumno, ActualizarAlumnoDTO alumnoDto)
     {
         VerificarAutorizacion(httpContext);
-        var idAlumno = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
         verificarIdUsuario(idAlumno);
-        verificarIgualdadId(idAlumno, alumnoDto.IdAlumno);
+        var idAlumnoContext = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
+        verificarIgualdadId(idAlumno, idAlumnoContext);
         verificarParametrosAlumnoActualizacion(alumnoDto);
         await verificarAlumnoNombreActualizacionAsync(alumnoDto.NombreUsuario, idAlumno);
         return await VerificarExistenciaAlumno(idAlumno);
     }
 
-    public async Task<Alumno> VerificarEliminarAlumnoAsync(HttpContext httpContext)
+    public async Task<Alumno> VerificarEliminarAlumnoAsync(HttpContext httpContext, int idAlumno)
     {
         VerificarAutorizacion(httpContext);
-        var idAlumno = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
+        var idAlumnoContext = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
+        verificarIgualdadId(idAlumnoContext, idAlumno);
         verificarIdUsuario(idAlumno);
 
         return await VerificarExistenciaAlumno(idAlumno);
@@ -49,16 +50,24 @@ public class AlumnoValidaciones
         return await VerificarExistenciaAlumno(idAlumno);
     }
 
-    public async Task<Alumno> VerificarCambioContraseniaAsync(CambiarContraseniaDTO cambiarContraseniaDto, HttpContext httpContext)
+    public async Task<Alumno> VerificarCambioContraseniaAsync(CambiarContraseniaDTO cambiarContraseniaDto, int idAlumno, HttpContext httpContext)
     {
         verificarParametrosCambiarContrasenia(cambiarContraseniaDto);
         VerificarAutorizacion(httpContext);
-        var idAlumno = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
+        var idAlumnoContext = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
+        verificarIgualdadId(idAlumnoContext, idAlumno);
         verificarIdUsuario(idAlumno);
         var alumno = await VerificarExistenciaAlumno(idAlumno);
         verificarContraseniaActual(alumno, cambiarContraseniaDto.ContraseniaActual);
 
         return alumno;
+    }
+
+    public void VerificarObtencionDeEstadisticasDeAlumno(HttpContext httpContext, int idAlumno)
+    {
+        VerificarAutorizacion(httpContext);
+        var idAlumnoContexto = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
+        verificarIgualdadId(idAlumnoContexto, idAlumno);
     }
 
     public async Task<Alumno> VerificarExistenciaAlumno(int idAlumno)

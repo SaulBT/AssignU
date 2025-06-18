@@ -10,9 +10,9 @@ public class ServicioLogin : IServicioLogin
 {
     private readonly GeneradorToken _generadorToken;
     private readonly LoginValidaciones _validaciones;
-    private readonly ILogger _logger;
+    private readonly ILogger<ServicioLogin> _logger;
 
-    public ServicioLogin(GeneradorToken generadorToken, LoginValidaciones validaciones, ILogger logger)
+    public ServicioLogin(GeneradorToken generadorToken, LoginValidaciones validaciones, ILogger<ServicioLogin> logger)
     {
         _generadorToken = generadorToken;
         _validaciones = validaciones;

@@ -51,10 +51,10 @@ public class ServicioAlumno : IServicioAlumno
         return retornoAlumno;
     }
 
-    public async Task<AlumnoDTO> ActualizarAsync(HttpContext httpContext, ActualizarAlumnoDTO actualizarAlumnoDto)
+    public async Task<AlumnoDTO> ActualizarAsync(HttpContext httpContext, int idAlumno, ActualizarAlumnoDTO actualizarAlumnoDto)
     {
         _logger.LogInformation("Actualizando a alumno");
-        var alumno = await _validaciones.VerificarActualizacionDeAlumnoAsync(httpContext, actualizarAlumnoDto);
+        var alumno = await _validaciones.VerificarActualizacionDeAlumnoAsync(httpContext, idAlumno, actualizarAlumnoDto);
 
         alumno.NombreCompleto = actualizarAlumnoDto.NombreCompleto;
         alumno.NombreUsuario = actualizarAlumnoDto.NombreUsuario;
@@ -72,10 +72,10 @@ public class ServicioAlumno : IServicioAlumno
         return retornoAlumno;
     }
 
-    public async Task EliminarAsync(HttpContext httpContext)
+    public async Task EliminarAsync(HttpContext httpContext, int idAlumno)
     {
         _logger.LogInformation("Eliminando a Alumno");
-        var alumno = await _validaciones.VerificarEliminarAlumnoAsync(httpContext);
+        var alumno = await _validaciones.VerificarEliminarAlumnoAsync(httpContext, idAlumno);
 
         await _alumnoDAO.EliminarAsync(alumno);
         _logger.LogInformation($"Alumno eliminado con la id {alumno.IdAlumno}");
@@ -99,10 +99,10 @@ public class ServicioAlumno : IServicioAlumno
         return retornoAlumno;
     }
 
-    public async Task CambiarContraseniaAsync(CambiarContraseniaDTO cambiarContraseniaDto, HttpContext httpContext)
+    public async Task CambiarContraseniaAsync(CambiarContraseniaDTO cambiarContraseniaDto, int idAlumno, HttpContext httpContext)
     {
         _logger.LogInformation("Cambiando contraseña de Alumno");
-        var alumno = await _validaciones.VerificarCambioContraseniaAsync(cambiarContraseniaDto, httpContext);
+        var alumno = await _validaciones.VerificarCambioContraseniaAsync(cambiarContraseniaDto, idAlumno, httpContext);
 
         alumno.Contrasenia = cambiarContraseniaDto.ContraseniaNueva;
         await _alumnoDAO.ActualizarAsync(alumno);
@@ -120,12 +120,11 @@ public class ServicioAlumno : IServicioAlumno
         return respuesta;
     }
 
-    public async Task<EstadisticasPerfilDTO> ObtenerEstadisticasPerfilAlumnoAsync(HttpContext httpContext)
+    public async Task<EstadisticasPerfilDTO> ObtenerEstadisticasPerfilAlumnoAsync(HttpContext httpContext, int idAlumno)
     {
         _logger.LogInformation("Recopilando datos para estadísticas del perfil de Alumno");
-        _validaciones.VerificarAutorizacion(httpContext);
+        _validaciones.VerificarObtencionDeEstadisticasDeAlumno(httpContext, idAlumno);
 
-        var idAlumno = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
         var datosPerfil = await ObtenerAlumnoPorIdAsync(idAlumno);
         
         string mensajeJson = crearMensajeRPC("obtenerClasesTareasYRespuesta", idAlumno);

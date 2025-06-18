@@ -11,9 +11,9 @@ public class SerivicioDocente : IServicioDocente
 {
     private readonly IDocenteDAO _docenteDAO;
     private readonly DocenteValidaciones _validaciones;
-    private readonly ILogger _logger;
+    private readonly ILogger<SerivicioDocente> _logger;
 
-    public SerivicioDocente(IDocenteDAO docenteDAO, DocenteValidaciones validaciones, ILogger logger)
+    public SerivicioDocente(IDocenteDAO docenteDAO, DocenteValidaciones validaciones, ILogger<SerivicioDocente> logger)
     {
         _docenteDAO = docenteDAO;
         _validaciones = validaciones;
@@ -48,10 +48,10 @@ public class SerivicioDocente : IServicioDocente
         return retornoDocente;
     }
 
-    public async Task<DocenteDTO> ActualizarAsync(HttpContext httpContext, ActualizarDocenteDTO actualizarDocenteDto)
+    public async Task<DocenteDTO> ActualizarAsync(HttpContext httpContext, int idDocente, ActualizarDocenteDTO actualizarDocenteDto)
     {
         _logger.LogInformation("Se actualiza un Docente");
-        var docente = await _validaciones.VerificarActualizacionDeDocenteAsync(httpContext, actualizarDocenteDto);
+        var docente = await _validaciones.VerificarActualizacionDeDocenteAsync(httpContext, idDocente, actualizarDocenteDto);
 
         docente.NombreCompleto = actualizarDocenteDto.NombreCompleto;
         docente.NombreUsuario = actualizarDocenteDto.NombreUsuario;
@@ -70,10 +70,10 @@ public class SerivicioDocente : IServicioDocente
         return retornoDocente;
     }
 
-    public async Task EliminarAsync(HttpContext httpContexto)
+    public async Task EliminarAsync(HttpContext httpContexto, int idDocente)
     {
         _logger.LogInformation("Eliminando a un Docente");
-        var docente = await _validaciones.VerificarEliminacionDeDocenteAsync(httpContexto);
+        var docente = await _validaciones.VerificarEliminacionDeDocenteAsync(httpContexto, idDocente);
         await _docenteDAO.EliminarAsync(docente);
         _logger.LogInformation($"Se eliminó al Docente con la id {docente.IdDocente}");
     }
@@ -95,10 +95,10 @@ public class SerivicioDocente : IServicioDocente
         return retornoDocente;
     }
 
-    public async Task CambiarContraseniaAsync(CambiarContraseniaDTO cambiarContraseniaDto, HttpContext httpContext)
+    public async Task CambiarContraseniaAsync(CambiarContraseniaDTO cambiarContraseniaDto, int idDocente, HttpContext httpContext)
     {
         _logger.LogInformation("Cambiando la contraseña de un Docente");
-        var docente = await _validaciones.VerificarCambioDeContraseniaAsync(cambiarContraseniaDto, httpContext);
+        var docente = await _validaciones.VerificarCambioDeContraseniaAsync(cambiarContraseniaDto, idDocente, httpContext);
 
         docente.Contrasenia = cambiarContraseniaDto.ContraseniaNueva;
         _logger.LogInformation($"Contraseña de un Docente cambiada con la id {docente.IdDocente}");

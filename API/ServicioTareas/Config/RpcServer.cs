@@ -4,6 +4,7 @@ using ServicioTareas.Data.DTOs;
 using System.Text;
 using System.Text.Json;
 using ServicioTareas.Services.Interfaces;
+using ServicioTareas.Data.DTOs.RPC;
 
 namespace ServicioTareas.Config
 {

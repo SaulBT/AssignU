@@ -1,4 +1,4 @@
-namespace ServicioTareas.Data.DTOs;
+namespace ServicioTareas.Data.DTOs.RPC;
 
 public class SolicitudRPCDTO
 {

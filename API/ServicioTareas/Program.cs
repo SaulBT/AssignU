@@ -9,10 +9,10 @@ using System.Text;
 using ServicioTareas.Data.DAOs.Interfaces;
 using ServicioTareas.Data.DAOs.Implementations;
 using ServicioTareas.Data.DTOs;
-using RabbitMQ.Client;
-using ServicioTareas.Services;
 using ServicioTareas.Config;
 using ServicioTareas.BackgroundServices;
+using ServicioTareas.Validations;
+using ServicioTareas.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +22,8 @@ builder.Services.AddDbContext<TareasDbContext>(options =>
 
 builder.Services.AddScoped<IServicioTarea, ServicioTarea>();
 builder.Services.AddScoped<ITareaDAO, TareaDAO>();
+builder.Services.AddScoped<TareasValidaciones>();
+
 builder.Services.AddSingleton<RpcClientRabbitMQ>();
 builder.Services.AddHostedService<RabbitMqInitializer>();
 
@@ -59,47 +61,95 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 //ServicioTarea
-app.MapPost("/clase/{codigo}", async (IServicioTarea servicio, CrearTareaDTO crearTareaDto, HttpContext httpContext) =>
+app.MapPost("/tareas", async (IServicioTarea servicio, CrearTareaDTO crearTareaDto, HttpContext httpContext) =>
 {
     var tarea = await servicio.CrearTareaAsync(crearTareaDto, httpContext);
     return Results.Created($"/clase/{tarea.IdClase}/{tarea.IdTarea}", tarea);
 })
-.WithName("CrearTarea")
+.WithName("Crear Tarea")
+.WithTags("Tareas")
+.WithSummary("Crear una nueva Tarea en el sistema.")
+.WithDescription(
+    "Crear una nueva Tarea con los siguientes datos:" +
+    "\n - Id de la Clase" +
+    "\n - Nombre de la Clase" +
+    "\n - Fecha límite" +
+    "\n - Cuestionario"
+)
+.Accepts<CrearTareaDTO>("application/json")
+.Produces<TareaDTO>(201)
+.Produces(400)
+.Produces(401)
+.Produces(409)
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapPut("/clase/{codigo}/{idTarea:int}", async (IServicioTarea servicio, EditarTareaDTO editarTareaDTO, HttpContext httpContext) =>
+app.MapPut("/tareas/{idTarea}", async (IServicioTarea servicio, EditarTareaDTO editarTareaDTO, int idTarea, HttpContext httpContext) =>
 {
-    var tarea = await servicio.EditarTareaAsync(editarTareaDTO, httpContext);
+    var tarea = await servicio.EditarTareaAsync(editarTareaDTO, idTarea, httpContext);
     return Results.Ok(tarea);
 })
-.WithName("EditarTarea")
+.WithName("Editar Tarea")
+.WithTags("Tareas")
+.WithSummary("Editar una Tarea.")
+.WithDescription(
+    "Editar una Tarea con los siguientes datos:" +
+    "\n - Id de la Tarea" +
+    "\n - Nombre de la Clase" +
+    "\n - Fecha límite" +
+    "\n - Cuestionario"
+)
+.Accepts<CrearTareaDTO>("application/json")
+.Produces<TareaDTO>(200)
+.Produces(400)
+.Produces(401)
+.Produces(404)
+.Produces(409)
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapDelete("/clase/{codigo}/", async (IServicioTarea servicio, int idTarea, HttpContext httpContext) =>
+app.MapDelete("/tareas/{idTarea}/", async (IServicioTarea servicio, int idTarea, HttpContext httpContext) =>
 {
     await servicio.EliminarTareaAsync(idTarea, httpContext);
-    return Results.Ok();
+    return Results.Accepted();
 })
-.WithName("EliminarTarea")
+.WithName("Eliminar Tarea")
+.WithTags("Tareas")
+.WithSummary("Eliminar una Tarea.")
+.WithDescription("Eliminar una Tarea por medio de la id.")
+.Produces(202)
+.Produces(400)
+.Produces(401)
+.Produces(404)
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapGet("/clase/{codigo}/tareas", async (IServicioTarea servicio, int idClase) =>
+app.MapGet("/clases/{idClase}/tareas", async (IServicioTarea servicio, int idClase) =>
 {
     var tareas = await servicio.ObtenerTareasDeClaseAsync(idClase);
     return Results.Ok(tareas);
 })
-.WithName("ObtenerTareasDeClase")
+.WithName("Obtener Tareas de Clase")
+.WithTags("Tareas")
+.WithSummary("Obtener todas las Tareas de una Clase.")
+.WithDescription("Obtener todas las Tareas de una Clase por medio de la id de la Clase")
+.Produces<List<Tarea>>(200)
+.Produces(400)
+.Produces(404)
 .WithOpenApi();
 
-app.MapGet("/tarea/estadisticas/", async (IServicioTarea servicio, int idTarea) =>
+app.MapGet("/tarea/{idTarea}/estadisticas/", async (IServicioTarea servicio, int idTarea) =>
 {
     var estadisticas = await servicio.ObtenerEstadisticasTareaAsync(idTarea);
     return Results.Ok(estadisticas);
 })
-.WithName("ObtenerEstadisticasTarea")
+.WithName("Obtener estadisticas de Tarea")
+.WithTags("Tareas")
+.WithSummary("Obtener las estadísticas de una Tarea.")
+.WithDescription("Se obtienen todas las estadísticas de una Tarea por medio de su id")
+.Produces<EstadisticasTareaDTO>(200)
+.Produces(400)
+.Produces(404)
 .WithOpenApi();
 
 if (app.Environment.IsDevelopment())

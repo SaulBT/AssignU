@@ -32,30 +32,43 @@ public class ManejoExcepcionesMiddleware
 
         switch (ex)
         {
+            //BadRequest
+            case CampoObligatorioException badRequestEx:
+                _logger.LogWarning(ex, "Campo obligatorio.");
+                contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                await contexto.Response.WriteAsJsonAsync(new { error = badRequestEx.Message });
+                break;
+            case IdInvalidaException badRequestEx:
+                _logger.LogWarning(ex, "Id inválida.");
+                contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                await contexto.Response.WriteAsJsonAsync(new { error = badRequestEx.Message });
+                break;
+            case CuestionarioInvalidoException badRequestEx:
+                _logger.LogWarning(ex, "Cuestionario Invalido");
+                contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                await contexto.Response.WriteAsJsonAsync(new { error = badRequestEx.Message });
+                break;
+            case PreguntaInvalidaException badRequest:
+                _logger.LogWarning(ex, "Pregunta Invalida");
+                contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                await contexto.Response.WriteAsJsonAsync(new { error = badRequest.Message });
+                break;
+            case ValorInvalidoException badRequest:
+                _logger.LogWarning(ex, "Valor Invalido");
+                contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                await contexto.Response.WriteAsJsonAsync(new { error = badRequest.Message });
+                break;
+            //NotFound
             case RecursoNoEncontradoException notFoundEx:
                 _logger.LogWarning(ex, "Recurso no encontrado.");
                 contexto.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 await contexto.Response.WriteAsJsonAsync(new { error = notFoundEx.Message });
                 break;
-            case RecursoYaExistenteException exception:
+            //Conflict
+            case RecursoYaExistenteException conflicEx:
                 _logger.LogWarning(ex, "Recurso existente");
                 contexto.Response.StatusCode = (int)HttpStatusCode.Conflict;
-                await contexto.Response.WriteAsJsonAsync(new { error = exception.Message });
-                break;
-            case CuestionarioInvalidoException exception:
-                _logger.LogWarning(ex, "Cuestionario Invalido");
-                contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                await contexto.Response.WriteAsJsonAsync(new { error = exception.Message });
-                break;
-            case PreguntaInvalidaException exception:
-                _logger.LogWarning(ex, "Pregunta Invalida");
-                contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                await contexto.Response.WriteAsJsonAsync(new { error = exception.Message });
-                break;
-            case ValorInvalidoException exception:
-                _logger.LogWarning(ex, "Valor Invalido");
-                contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                await contexto.Response.WriteAsJsonAsync(new { error = exception.Message });
+                await contexto.Response.WriteAsJsonAsync(new { error = conflicEx.Message });
                 break;
             default:
                 _logger.LogError(ex, "Ocurrió un error inesperado.");

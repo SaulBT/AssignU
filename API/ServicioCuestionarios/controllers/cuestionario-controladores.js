@@ -15,23 +15,23 @@ const {
     validarIdAlumno,
     buscarYEliminarRespuestasCuestionarioAsync
  } = require('../validations/respuesta-validaciones');
+ const {
+    validarData,
+    validarParametros,
+    validarBody
+ } = require('../validations/validaciones-generales');
 
 const crearCuestionarioAsync = async (data) => {
     try{
-        if (!data) {
-            return {
-                Success: false,
-                Message: 'No se enviaron datos'
-            }
-        }
+        validarData(data);
         idTarea = data.IdTarea;
         preguntas = data.Cuestionario.Preguntas;
 
         validarCuestionario(idTarea, preguntas);
 
         const cuestionario = new Cuestionario({
-            idTarea: idTarea,
-            preguntas: preguntas
+            IdTarea: idTarea,
+            Preguntas: preguntas
         });
         await cuestionario.save();
 
@@ -46,12 +46,7 @@ const crearCuestionarioAsync = async (data) => {
 
 const editarCuestionarioAsync = async (data) => {
     try {
-        if (!data) {
-            return {
-                Success: false,
-                Message: 'No se enviaron datos'
-            }
-        }
+        validarData(data);
         idTarea = data.IdTarea;
         preguntas = data.Cuestionario.Preguntas;
 
@@ -72,12 +67,7 @@ const editarCuestionarioAsync = async (data) => {
 
 const eliminarCuestionarioAsync = async (data) => {
     try {
-        if (!data) {
-            return {
-                Success: false,
-                Message: 'No se enviaron datos'
-            }
-        }
+        validarData(data);
         const idTarea = data.IdTarea;
 
         validarIdTarea(idTarea);
@@ -97,9 +87,7 @@ const eliminarCuestionarioAsync = async (data) => {
 
 const obtenerCuestionarioAsync = async (req, res = response, next) => {
     try {
-        if (!req.params) {
-            throw { statusCode: 400, mensaje: 'No se enviaron parámetros.' };
-        }
+        validarParametros(req);
         const {idTarea} = req.params;
 
         validarIdTarea(idTarea);
@@ -113,15 +101,11 @@ const obtenerCuestionarioAsync = async (req, res = response, next) => {
 
 const resolverCuestionarioAsync = async (req, res = response, next) => {
     try {
-        if (!req.params) {
-            throw { statusCode: 400, mensaje: 'No se enviaron parámetros.' };
-        }
-        if (!req.body) {
-            throw { statusCode: 400, mensaje: 'No se envió un cuerpo.' };
-        }
+        validarParametros(req);
+        validarBody(req);
         const { idTarea, idAlumno } = req.params;
-        const preguntas = req.body;
-
+        const preguntas = req.body.preguntas;
+        
         validarRespuesta(idTarea, idAlumno, preguntas);
 
         calificacion = await calificarRespuestaAsync(preguntas, idTarea);
@@ -130,7 +114,8 @@ const resolverCuestionarioAsync = async (req, res = response, next) => {
             IdAlumno: idAlumno,
             IdTarea: idTarea,
             Calificacion: calificacion,
-            Preguntas: preguntas
+            Preguntas: preguntas,
+            Estado: "resuelta"
         })
         validarExistenciaRespuestaYGuardarAsync(respuestaNueva);
         return res.status(202).send();
@@ -141,14 +126,10 @@ const resolverCuestionarioAsync = async (req, res = response, next) => {
 
 const guardarRespuestaCuestionarioAsync = async (req, res = response, next) => {
     try {
-        if (!req.params) {
-            throw { statusCode: 400, mensaje: 'No se enviaron parámetros.' };
-        }
-        if (!req.body) {
-            throw { statusCode: 400, mensaje: 'No se envió un cuerpo.' };
-        }
+        validarParametros(req);
+        validarBody(req);
         const { idTarea, idAlumno } = req.params;
-        const preguntas = req.body;
+        const preguntas = req.body.preguntas;
         const calificacion = 0.0;
 
         validarRespuesta(idTarea, idAlumno, preguntas);
@@ -157,7 +138,8 @@ const guardarRespuestaCuestionarioAsync = async (req, res = response, next) => {
             IdAlumno: idAlumno,
             IdTarea: idTarea,
             Calificacion: calificacion,
-            Preguntas: preguntas
+            Preguntas: preguntas,
+            Estado: "pendiente"
         })
         validarExistenciaRespuestaYGuardarAsync(respuestaNueva);
         return res.status(202).send();
@@ -169,9 +151,7 @@ const guardarRespuestaCuestionarioAsync = async (req, res = response, next) => {
 //Petición HTTP
 const obtenerRespuestaCuestionarioHttpAsync = async (req, res = response, next) => {
     try {
-        if (!req.params) {
-            throw { statusCode: 400, mensaje: 'No se enviaron parámetros.' };
-        }
+        validarParametros(req);
         const { idTarea, idAlumno } = req.params;
         
         const mensaje = await obtenerRespuestaCuestionarioAsync({
@@ -192,12 +172,7 @@ const obtenerRespuestaCuestionarioHttpAsync = async (req, res = response, next) 
 //Método para RabbitMQ
 const obtenerRespuestaCuestionarioAsync = async (data) => {
     try {
-        if (!data) {
-            return {
-                Success: false,
-                Message: 'No se enviaron datos'
-            }
-        }
+        validarData(data);
         const idTarea = data.idTarea;
         const idAlumno = data.idAlumno;
         validarIdTarea(idTarea);
@@ -217,17 +192,13 @@ const obtenerRespuestaCuestionarioAsync = async (data) => {
     }
 }
 
-const obtenerRespuestas = async (data) => {
+const obtenerRespuestasAsync = async (data) => {
     try {
-        if (!data) {
-            return {
-                Success: false,
-                Message: 'No se enviaron datos'
-            }
-        }
+        validarData(data);
         const idTareas = data.IdTareas;
         const respuestas = await Respuesta.find({
-            IdTarea: { $in: idTareas }
+            IdTarea: { $in: idTareas },
+            Estado: "resuelta"
         }).exec();
 
         const respuestasDto = respuestas.map( respuesta => ({
@@ -248,14 +219,8 @@ const obtenerRespuestas = async (data) => {
 
 const obtenerRespuestasDeTareaAsync = async (data) =>{
     try{
-        if (!data) {
-            return {
-                Success: false,
-                Message: 'No se enviaron datos'
-            }
-        }
+        validarData(data);
         const idTarea = data.IdTarea;
-        validarIdTarea(idTarea);
 
         const respuestas = await Respuesta.find({
             IdTarea: idTarea
@@ -285,19 +250,13 @@ const obtenerRespuestasDeTareaAsync = async (data) =>{
 
 const obtenerPreguntasDeTareaAsync = async (data) => {
     try{
-        if (!data) {
-            return {
-                Success: false,
-                Message: 'No se enviaron datos'
-            }
-        }
+        validarData(data);
         const idTarea = data.IdTarea;
-        validarIdTarea(idTarea);
 
-        const listaPreguntas = generarListaPreguntasAsync(idTarea);
+        const listaPreguntas = await generarListaPreguntasAsync(idTarea);
         return {
             Success: true,
-            Preguntas: preguntas
+            Preguntas: listaPreguntas
         };
     } catch (err) {
         console.log("Error: " + err.message);
@@ -315,8 +274,8 @@ const calificarRespuestaAsync = async (preguntasResueltas, idTarea) => {
 
     for (i = 0; i < cantidadPreguntas; i++){
         for (x = 0; x < cantidadPreguntasResueltas; x++){
-            if (preguntas[i].texto == preguntasResueltas[x].texto){
-                if (preguntasResueltas[x].correcta == true){
+            if (preguntas[i].Texto == preguntasResueltas[x].Texto){
+                if (preguntasResueltas[x].Correcta == true){
                     cantidadPreguntasCorrectas++;
                 }
             }
@@ -331,11 +290,9 @@ const generarListaPreguntasAsync = async (idTarea) => {
     const cuestionario = await Cuestionario.findOne({
         IdTarea: idTarea
     });
-    const listaPreguntas = cuestionario.Preguntas.map( pregunta => ({
-        Texto: pregunta.Texto
-    }));
+    const listaPreguntas = cuestionario.Preguntas;
 
-    return preguntas;
+    return listaPreguntas;
 }
 
 module.exports = {
@@ -347,7 +304,7 @@ module.exports = {
     guardarRespuestaCuestionarioAsync,
     obtenerRespuestaCuestionarioHttpAsync,
     obtenerRespuestaCuestionarioAsync,
-    obtenerRespuestas,
+    obtenerRespuestasAsync,
     obtenerRespuestasDeTareaAsync,
     obtenerPreguntasDeTareaAsync
 };

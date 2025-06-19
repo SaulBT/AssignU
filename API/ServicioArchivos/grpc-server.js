@@ -31,7 +31,7 @@ DescargarArchivo: descargarArchivo,
 EliminarArchivo: eliminarArchivoAsync
 });
 
-const PORT = "50051";
+const PORT = process.env.PORT;
 server.bindAsync(`0.0.0.0:${PORT}`, grpc.ServerCredentials.createInsecure(), () => {
 console.log(`Servidor gRPC corriendo en puerto ${PORT}`);
 });

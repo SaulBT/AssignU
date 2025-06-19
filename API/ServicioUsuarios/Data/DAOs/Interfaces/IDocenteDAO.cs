@@ -12,5 +12,5 @@ public interface IDocenteDAO
     Task<Docente?> ObtenerDocentePorNombreUsuarioEIdAsync(string nombreUsuario, int id);
     Task<Docente?> ObtenerDocentePorCorreoAsync(string correo);
     Task AgregarDocenteAsync(Docente docente);
-    Task<DocenteDTO?> ObtenerDocentePorNombreUsuarioOCorreoAsync(string nombreUsuarioOCorreo);
+    Task<Docente> ObtenerDocentePorNombreUsuarioOCorreoAsync(string nombreUsuarioOCorreo);
 }

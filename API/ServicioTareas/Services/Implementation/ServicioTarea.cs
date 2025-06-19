@@ -32,7 +32,7 @@ public class ServicioTarea : IServicioTarea
 
         var cuestionario = crearTareaDto.Cuestionario;
         string mensajeJson = crearMensajeRPCConCuestionario("crearCuestionario", tarea.IdTarea, cuestionario);
-        await enviarMensajeRPCAsync(mensajeJson, "cola_cuestionario");
+        await enviarMensajeRPCAsync(mensajeJson, "cola_cuestionarios");
 
         _logger.LogInformation($"Tarea creada con la id {tarea.IdTarea}");
         return new TareaDTO
@@ -92,23 +92,29 @@ public class ServicioTarea : IServicioTarea
 
     public async Task<RespuestaRPCDTO> ObtenerTareasYRespuestasAsync(int idClase)
     {
-        _logger.LogInformation("Recuperndo Tareas y Respuestas de una Clase");
-        var tareas = await ObtenerTareasDeClaseAsync(idClase);
-        var listaIdTareas = generarListaIdTareas(tareas);
-        var listaTareas = generarListaTareas(tareas);
-
-        string mensajeJson = crearMensajeRPCConIdTareas("obtenerRespuestas", listaIdTareas);
-        var respuestas = await enviarMensajeRPCConRespuestaAsync(mensajeJson, "cola_cuestionarios");
-
-        RespuestaRPCDTO respuestaRpc = new RespuestaRPCDTO
+        try
         {
-            Success = respuestas.Success,
-            Tareas = listaTareas,
-            Respuestas = respuestas.Respuestas,
-            Error = respuestas.Error
-        };
-        
-        return respuestaRpc;
+            _logger.LogInformation("Recuperndo Tareas y Respuestas de una Clase");
+            var tareas = await ObtenerTareasDeClaseAsync(idClase);
+            var listaIdTareas = generarListaIdTareas(tareas);
+            var listaTareas = generarListaTareas(tareas);
+
+            string mensajeJson = crearMensajeRPCConIdTareas("obtenerRespuestasDeListaTareas", listaIdTareas);
+            var respuestas = await enviarMensajeRPCConRespuestaAsync(mensajeJson, "cola_cuestionarios");
+
+            RespuestaRPCDTO respuestaRpc = new RespuestaRPCDTO
+            {
+                Success = respuestas.Success,
+                Tareas = listaTareas,
+                Respuestas = respuestas.Respuestas,
+            };
+
+            return respuestaRpc;
+        }
+        catch (Exception ex)
+        {
+            return DetectorExcepciones.detectarExcepcion(ex);
+        }
     }
 
     public async Task<EstadisticasTareaDTO> ObtenerEstadisticasTareaAsync(int idTarea)
@@ -192,7 +198,7 @@ public class ServicioTarea : IServicioTarea
         List<int> listaIdAlumnos = [];
         foreach (var respuesta in respuestas)
         {
-            listaIdAlumnos.Add(respuesta.idAlumno);
+            listaIdAlumnos.Add(respuesta.IdAlumno);
         }
 
         return listaIdAlumnos;
@@ -220,7 +226,6 @@ public class ServicioTarea : IServicioTarea
         foreach (var pregunta in preguntas)
         {
             string texto = pregunta.Texto;
-            Console.WriteLine(pregunta.Texto);
             listaPreguntas.Add(texto);
         }
 
@@ -299,6 +304,18 @@ public class ServicioTarea : IServicioTarea
     {
         string respuestaJson = await _rpcClient.CallAsync(cola, mensajeJson);
         var respuesta = System.Text.Json.JsonSerializer.Deserialize<RespuestaRPCDTO>(respuestaJson);
+        if (respuesta == null)
+        {
+            throw new Exception("No hay respuesta");
+        }
+        else if (!respuesta.Success)
+        {
+            if (respuesta.Error == null)
+            {
+                throw new InvalidOperationException("No hay error");
+            }
+            throw LanzarExcepciones.lanzarExcepcion(respuesta.Error.Tipo, respuesta.Error.Mensaje);
+        }
 
         return respuesta;
     }

@@ -5,7 +5,7 @@ const {
     editarCuestionarioAsync,
     eliminarCuestionarioAsync,
     obtenerRespuestaCuestionarioAsync,
-    obtenerRespuestas,
+    obtenerRespuestasAsync,
     obtenerRespuestasDeTareaAsync,
     obtenerPreguntasDeTareaAsync
 } = require('./controllers/cuestionario-controladores');
@@ -41,8 +41,8 @@ async function iniciarServidorRpc() {
         case 'obtenerRespuesta':
           response = await obtenerRespuestaCuestionarioAsync(request.data);
           break;
-        case 'obtenerRespuestas':
-          response = await obtenerRespuestas(request.data);
+        case 'obtenerRespuestasDeListaTareas':
+          response = await obtenerRespuestasAsync(request.data);
           break;
         case 'obtenerPreguntasDeTarea':
           response = await obtenerPreguntasDeTareaAsync(request.data);

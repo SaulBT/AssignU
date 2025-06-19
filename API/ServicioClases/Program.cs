@@ -108,7 +108,7 @@ app.MapPut("/clases/{idClase}", async (IServicioClase servicio, int idClase, Act
 app.MapDelete("/clases/{idClase}", async (IServicioClase servicio, int idClase, HttpContext httpContext) =>
 {
     await servicio.EliminarClaseAsync(idClase, httpContext);
-    return Results.Ok(202);
+    return Results.Accepted();
 })
 .WithName("Eliminar Clase")
 .WithTags("Clases")
@@ -124,7 +124,7 @@ app.MapDelete("/clases/{idClase}", async (IServicioClase servicio, int idClase, 
 app.MapPut("/clases/{idClase}/ultima-conexion", async (IServicioClase servicio, int idClase, DateTime fechaVisualizacion, HttpContext httpContext) =>
 {
     await servicio.EnviarFechaVisualizacionAsync(idClase, fechaVisualizacion, httpContext);
-    return Results.Ok(202);
+    return Results.Accepted();
 })
 .WithName("Enviar fecha ultima conexion")
 .WithTags("Clases")
@@ -210,7 +210,7 @@ app.MapPost("/clases/{codigoClase}/unirse", async (IServicioClase servicio, stri
 app.MapDelete("/alumnos/{idAlumno}/clases/{idClase}/salir", async (IServicioClase servicio, int idAlumno, int idClase, HttpContext httpContext) =>
 {
     await servicio.SalirDeClaseAsync(idAlumno, idClase, httpContext);
-    return Results.Ok();
+    return Results.Accepted();
 })
 .WithName("Salirse de Clase")
 .WithTags("Clases")

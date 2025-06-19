@@ -112,20 +112,12 @@ public class DocenteDAO : IDocenteDAO
         }
     }
 
-    public async Task<DocenteDTO?> ObtenerDocentePorNombreUsuarioOCorreoAsync(string nombreUsuarioOCorreo)
+    public async Task<Docente> ObtenerDocentePorNombreUsuarioOCorreoAsync(string nombreUsuarioOCorreo)
     {
         try
         {
             return await _context.Docente
                 .Where(d => d.NombreUsuario == nombreUsuarioOCorreo || d.Correo == nombreUsuarioOCorreo)
-                .Select(d => new DocenteDTO
-                {
-                    IdDocente = d.IdDocente,
-                    NombreCompleto = d.NombreCompleto,
-                    NombreUsuario = d.NombreUsuario,
-                    Correo = d.Correo,
-                    IdGradoProfesional = (int)d.IdGradoProfesional
-                })
                 .FirstOrDefaultAsync();
         }
         catch (Exception ex)

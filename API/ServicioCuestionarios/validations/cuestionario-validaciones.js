@@ -61,7 +61,7 @@ const validarCantidadPreguntas = (preguntas) => {
 
 const validarTipoPregunta = (pregunta, index) => {
     const tiposValidos = ['opcion_multiple', 'verdadero_falso'];
-    const tipo = pregunta.tipo;
+    const tipo = pregunta.Tipo;
 
     if(!tipo) {
         throw new CampoObligatorioError(`El tipo de la pregunta ${index + 1} es inválido: Valor nulo`);
@@ -75,7 +75,7 @@ const validarTipoPregunta = (pregunta, index) => {
 }
 
 const validarTextoPregunta = (pregunta, index) => {
-    const texto = pregunta.texto;
+    const texto = pregunta.Texto;
 
     if(!texto) {
         throw new CampoObligatorioError(`El texto de la pregunta ${index + 1} es inválido: Valor nulo`);
@@ -87,7 +87,7 @@ const validarTextoPregunta = (pregunta, index) => {
 }
 
 const validarCantidadOpciones = (pregunta, index) => {
-    const numeroOpciones = pregunta.opciones.length;
+    const numeroOpciones = pregunta.Opciones.length;
 
     if (numeroOpciones < 2) {
         throw new PreguntaInvalidaError(`La pregunta ${index + 1} debe tener mínimo dos opciones`);

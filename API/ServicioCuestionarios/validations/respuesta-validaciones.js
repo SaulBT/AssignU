@@ -15,14 +15,15 @@ function validarRespuesta(idTarea, idAlumno, preguntas) {
 function validarPregunta(pregunta, index) {
     validarTextoPregunta(pregunta, index);
     validarDatoCorrecta(pregunta, index);
-    validarTextoOpcion(pregunta.opcion, index);
+    validarTextoOpcion(pregunta.Opcion, index);
 }
 
 const validarExistenciaRespuestaYGuardarAsync = async (respuesta) => {
-    const respuestaExistente = await Respuesta.findOne({IdTarea: respuesta.idTarea, IdAlumno: respuesta.idAlumno});
+    const respuestaExistente = await Respuesta.findOne({IdTarea: respuesta.IdTarea, IdAlumno: respuesta.IdAlumno});
     if (respuestaExistente != null) {
-        respuestaExistente.Calificacion = respuesta.calificacion;
-        respuestaExistente.Preguntas = respuesta.preguntas;
+        respuestaExistente.Calificacion = respuesta.Calificacion;
+        respuestaExistente.Preguntas = respuesta.Preguntas;
+        respuestaExistente.Estado = respuesta.Estado;
         await respuestaExistente.save();
     } else {
         await respuesta.save();
@@ -63,7 +64,7 @@ const validarDatosPreguntas = (preguntas) => {
 
 //Validar pregunta
 const validarTextoPregunta = (pregunta, index) => {
-    const texto = pregunta.texto;
+    const texto = pregunta.Texto;
     
     if(!texto) {
         throw new CampoObligatorioError(`El tipo de la pregunta ${index + 1} es inválido: Valor nulo`);
@@ -75,7 +76,7 @@ const validarTextoPregunta = (pregunta, index) => {
 }
 
 const validarDatoCorrecta = (respuesta, index) => {
-    const correcta = respuesta.correcta;
+    const correcta = respuesta.Correcta;
 
     if (correcta == null) {
         throw new CampoObligatorioError(`El valor 'correcta' de la pregunta ${index + 1} es inválido: Valor nulo`);
@@ -85,7 +86,7 @@ const validarDatoCorrecta = (respuesta, index) => {
 }
 
 const validarTextoOpcion = (opcion, index) => {
-    const texto = opcion.texto;
+    const texto = opcion.Texto;
     
     if(!texto) {
         throw new CampoObligatorioError(`El texto de la opción ${index + 1} es inválido: Valor nulo`);

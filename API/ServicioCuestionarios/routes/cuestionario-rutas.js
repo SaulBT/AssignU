@@ -14,7 +14,7 @@ const {
 
 /**
  * @swagger
- * /{idTarea}:
+ * /cuestionarios/{idTarea}:
  *   get:
  *     summary: Obtener un Cuestionario
  *     tags:
@@ -37,7 +37,7 @@ const {
 router.get('/:idTarea', obtenerCuestionarioAsync);
 /**
  * @swagger
- * /{idTarea}/calificar:
+ * /cuestionarios/{idTarea}/calificar/{idAlumno}:
  *   post:
  *     summary: Enviar una Respuesta para ser calificada
  *     tags:
@@ -49,6 +49,12 @@ router.get('/:idTarea', obtenerCuestionarioAsync);
  *         schema:
  *           type: int
  *         description: ID de la Tarea
+ *       - in: path
+ *         name: idAlumno
+ *         required: true
+ *         schema:
+ *           type: int
+ *         description: ID del Alumno
  *     requestBody:
  *       required: true
  *       content:
@@ -82,10 +88,10 @@ router.get('/:idTarea', obtenerCuestionarioAsync);
  *       404:
  *         description: No se encontró al Cuestionario
  */
-router.post('/:idTarea/calificar', verificarToken, verificarRol('alumno'), resolverCuestionarioAsync);
+router.post('/:idTarea/calificar/:idAlumno', verificarToken, verificarRol('alumno'), resolverCuestionarioAsync);
 /**
  * @swagger
- * /{idTarea}/guardar-estado:
+ * /cuestionarios/{idTarea}/guardar-resultado/{idAlumno}:
  *   post:
  *     summary: Enviar una Respuesta para ser guardada
  *     tags:
@@ -97,6 +103,12 @@ router.post('/:idTarea/calificar', verificarToken, verificarRol('alumno'), resol
  *         schema:
  *           type: int
  *         description: ID de la Tarea
+ *       - in: path
+ *         name: idAlumno
+ *         required: true
+ *         schema:
+ *           type: int
+ *         description: ID del Alumno
  *     requestBody:
  *       required: true
  *       content:
@@ -130,10 +142,10 @@ router.post('/:idTarea/calificar', verificarToken, verificarRol('alumno'), resol
  *       404:
  *         description: No se encontró al Cuestionario
  */
-router.post('/:idTarea/guardar-resultado', verificarToken, verificarRol('alumno'), guardarRespuestaCuestionarioAsync);
+router.post('/:idTarea/guardar-resultado/:idAlumno', verificarToken, verificarRol('alumno'), guardarRespuestaCuestionarioAsync);
 /**
  * @swagger
- * /{idTarea}/{idAlumno}:
+ * /cuestionarios/{idTarea}/{idAlumno}:
  *   get:
  *     summary: Obtener la Respuesta de un Alumno a un Cuestionario
  *     tags:

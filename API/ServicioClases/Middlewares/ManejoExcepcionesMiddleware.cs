@@ -60,6 +60,11 @@ public class ManejoExcepcionesMiddleware
                 contexto.Response.StatusCode = (int)HttpStatusCode.Conflict;
                 await contexto.Response.WriteAsJsonAsync(new { error = conflictEx.Message });
                 break;
+            case RecursoYaExistenteException conflictEx:
+                _logger.LogWarning(ex, "Registro ya existente");
+                contexto.Response.StatusCode = (int)HttpStatusCode.Conflict;
+                await contexto.Response.WriteAsJsonAsync(new { error = conflictEx.Message });
+                break;
             default:
                 _logger.LogError(ex, "Ocurrió un error inesperado.");
                 contexto.Response.StatusCode = StatusCodes.Status500InternalServerError;

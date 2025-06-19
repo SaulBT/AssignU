@@ -2,6 +2,7 @@ using ServicioUsuarios.Data.DAOs.Interfaces;
 using ServicioUsuarios.Data.DTOs;
 using ServicioUsuarios.Data.DTOs.Alumno;
 using ServicioUsuarios.Exceptions;
+using ServicioUsuarios.Models;
 
 namespace ServicioUsuarios.Validations;
 
@@ -43,25 +44,33 @@ public class LoginValidaciones
         }
     }
 
-    public async Task<AlumnoDTO> verificarCredencialesAlumnoAsync(IniciarSesionDTO usuarioDto)
+    public async Task<Alumno> verificarCredencialesAlumnoAsync(IniciarSesionDTO usuarioDto)
     {
-        var alumnoDto = await _alumnoDAO.ObtenerPorNombreUsuarioOCorreoAsync(usuarioDto.NombreUsuarioOCorreo);
-        if (alumnoDto == null)
+        var alumno = await _alumnoDAO.ObtenerPorNombreUsuarioOCorreoAsync(usuarioDto.NombreUsuarioOCorreo);
+        if (alumno == null)
         {
             throw new UnauthorizedAccessException("Credenciales incorrectas para el alumno.");
         }
+        else if (alumno.Contrasenia != usuarioDto.Contrasena)
+        {
+            throw new UnauthorizedAccessException("Credenciales incorrectas para el alumno: contraseña incorrecta");
+        }
 
-        return alumnoDto;
+        return alumno;
     }
 
-    public async Task<Data.DTOs.Docente.DocenteDTO> verificarCredencialesDocenteAsync(IniciarSesionDTO usuarioDto)
+    public async Task<Docente> verificarCredencialesDocenteAsync(IniciarSesionDTO usuarioDto)
     {
-        var docenteDto = await _docenteDAO.ObtenerDocentePorNombreUsuarioOCorreoAsync(usuarioDto.NombreUsuarioOCorreo);
-        if (docenteDto == null)
+        var docente = await _docenteDAO.ObtenerDocentePorNombreUsuarioOCorreoAsync(usuarioDto.NombreUsuarioOCorreo);
+        if (docente == null)
         {
             throw new UnauthorizedAccessException("Credenciales incorrectas para el docente.");
         }
+        else if (docente.Contrasenia != usuarioDto.Contrasena)
+        {
+            throw new UnauthorizedAccessException("Credenciales incorrectas para el docente: contraseña incorrecta");
+        }
 
-        return docenteDto;
+        return docente;
     }
 }

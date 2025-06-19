@@ -15,7 +15,7 @@ public static class DetectorExcepciones
                 Error = new ErrorDTO
                 {
                     Tipo = "IdInvalidaException",
-                    Mensaje = ex.Message
+                    Mensaje = $"Excepción en ServicioUsuarios: {ex.Message}"
                 }
             };
         }
@@ -26,7 +26,7 @@ public static class DetectorExcepciones
             Error = new ErrorDTO
             {
                 Tipo = "Desconocida",
-                Mensaje = ex.Message
+                Mensaje = $"Excepción en ServicioUsuarios: {ex.Message}"
             }
         };
     }

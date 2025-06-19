@@ -11,6 +11,12 @@ public class RespuestaRPCDTO
     public ErrorDTO Error { get; set; }
 }
 
+public class ErrorDTO
+{
+    public string Tipo { get; set; }
+    public string Mensaje { get; set; }
+}
+
 public class AlumnoEstadisticasDTO
 {
     public int IdAlumno { get; set; } = 0;
@@ -21,7 +27,7 @@ public class RespuestasEstadisticaClaseDTO
 {
     public int IdAlumno { get; set; } = 0;
     public int IdTarea { get; set; } = 0;
-    public int Calificacion { get; set; } = 0;
+    public float Calificacion { get; set; } = 0;
 }
 
 public class TareaEstadisticasClaseDTO

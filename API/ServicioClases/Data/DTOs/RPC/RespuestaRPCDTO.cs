@@ -28,7 +28,7 @@ public class TareaEstadisticaPerfilDTO
 {
     public int IdTarea { get; set; } = 0;
     public string Nombre { get; set; } = string.Empty;
-    public int Calificacion { get; set; } = 0;
+    public float Calificacion { get; set; } = 0;
 }
 
 public class ErrorDTO

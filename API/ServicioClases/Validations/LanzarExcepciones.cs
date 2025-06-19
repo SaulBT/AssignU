@@ -1,3 +1,5 @@
+using ServicioClases.Exceptions;
+
 namespace ServicioClases.Validations;
 
 public static class LanzarExcepciones
@@ -6,6 +8,12 @@ public static class LanzarExcepciones
     {
         switch (tipo)
         {
+            case "IdInvalidaException":
+                return new IdInvalidaException(mensaje);
+            case "CampoObligatorioException":
+                return new CampoObligatorioException(mensaje);
+            case "DataException":
+                return new DataPeticionException(mensaje);
             default:
                 return new Exception(mensaje);
         }

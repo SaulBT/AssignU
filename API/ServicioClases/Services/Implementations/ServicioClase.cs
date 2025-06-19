@@ -212,7 +212,6 @@ public class ServicioClase : IServicioClase
     {
         try
         {
-            _validacion.VerificarIdUsuario(idAlumno);
             var registros = await _registroDAO.ObtenerRegistrosPorAlumnoAsync(idAlumno);
             var clases = await _claseDAO.ObtenerClasesDeAlumnoAsync(registros);
 

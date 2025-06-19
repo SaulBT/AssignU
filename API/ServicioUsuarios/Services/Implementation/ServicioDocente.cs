@@ -20,7 +20,7 @@ public class SerivicioDocente : IServicioDocente
         _logger = logger;
     }
 
-    public async Task<DocenteDTO> RegistrarAsync(RegistrarDocenteDTO registrarDocenteDto)
+    public async Task RegistrarAsync(RegistrarDocenteDTO registrarDocenteDto)
     {
         _logger.LogInformation("Registrando a Docente");
         await _validaciones.VerificarRegistroDocenteAsync(registrarDocenteDto);
@@ -35,17 +35,7 @@ public class SerivicioDocente : IServicioDocente
         };
         await _docenteDAO.AgregarDocenteAsync(nuevoDocente);
 
-        var retornoDocente = new DocenteDTO
-        {
-            IdDocente = nuevoDocente.IdDocente,
-            NombreCompleto = nuevoDocente.NombreCompleto,
-            NombreUsuario = nuevoDocente.NombreUsuario,
-            Correo = nuevoDocente.Correo,
-            IdGradoProfesional = (int)nuevoDocente.IdGradoProfesional
-        };
-
-        _logger.LogInformation($"Se registró al Docente con la id asignada {retornoDocente.IdDocente}");
-        return retornoDocente;
+        _logger.LogInformation($"Se registró al Docente corectamente");
     }
 
     public async Task<DocenteDTO> ActualizarAsync(HttpContext httpContext, int idDocente, ActualizarDocenteDTO actualizarDocenteDto)

@@ -73,8 +73,8 @@ app.UseAuthorization();
 //ServicioAlumno
 app.MapPost("/alumnos", async (RegistrarAlumnoDTO alumnoNuevoDto, IServicioAlumno servicio) =>
 {
-    AlumnoDTO alumno = await servicio.RegistrarAsync(alumnoNuevoDto);
-    return Results.Created($"/alumno/{alumno.NombreUsuario}", alumno);
+    await servicio.RegistrarAsync(alumnoNuevoDto);
+    return Results.Created();
 })
 .WithName("Registrar Alumno")
 .WithTags("Alumnos")
@@ -87,7 +87,7 @@ app.MapPost("/alumnos", async (RegistrarAlumnoDTO alumnoNuevoDto, IServicioAlumn
     "\n - Contraseña." +
     "\n - Id del último grado de estudios cursado.")
 .Accepts<RegistrarAlumnoDTO>("application/json")
-.Produces<AlumnoDTO>(201)
+.Produces(201)
 .Produces(400)
 .Produces(409)
 .WithOpenApi();
@@ -200,8 +200,8 @@ app.MapGet("/alumnos/{idAlumno}/estadisticas", async (HttpContext context, int i
 //DocenteService
 app.MapPost("/docentes", async (RegistrarDocenteDTO docenteNuevoDto, IServicioDocente servicio) =>
 {
-    var docente = await servicio.RegistrarAsync(docenteNuevoDto);
-    return Results.Created($"/docentes/{docente.IdDocente}", docente);
+    await servicio.RegistrarAsync(docenteNuevoDto);
+    return Results.Created();
 })
 .WithName("Registrar Docente")
 .WithTags("Docentes")
@@ -214,7 +214,7 @@ app.MapPost("/docentes", async (RegistrarDocenteDTO docenteNuevoDto, IServicioDo
     "\n - Contraseña." +
     "\n - Id del último grado profesional obtenido.")
 .Accepts<RegistrarDocenteDTO>("application/json")
-.Produces<DocenteDTO>(201)
+.Produces(201)
 .Produces(400)
 .Produces(409)
 .WithOpenApi();

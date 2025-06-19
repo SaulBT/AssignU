@@ -19,7 +19,7 @@ public class RespuestasEstadisticaClaseDTO
 {
     public int IdAlumno { get; set; } = 0;
     public int IdTarea { get; set; } = 0;
-    public int Calificacion { get; set; } = 0;
+    public float Calificacion { get; set; } = 0;
 }
 
 public class TareaEstadisticasClaseDTO

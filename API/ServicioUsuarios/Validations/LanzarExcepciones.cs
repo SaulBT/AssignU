@@ -6,6 +6,8 @@ public static class LanzarExcepciones
     {
         switch (tipo)
         {
+            case "ExceptionInServicioClases":
+                return new Exception($"Error en ServicioClases: {mensaje}");
             default:
                 return new Exception(mensaje);
         }

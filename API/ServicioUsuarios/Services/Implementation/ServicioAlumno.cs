@@ -24,7 +24,7 @@ public class ServicioAlumno : IServicioAlumno
         _validaciones = validaciones;
     }
 
-    public async Task<AlumnoDTO> RegistrarAsync(RegistrarAlumnoDTO registrarAlumnoDto)
+    public async Task RegistrarAsync(RegistrarAlumnoDTO registrarAlumnoDto)
     {
         _logger.LogInformation("Registrando a Alumno");
         await _validaciones.VerificarRegistroDeAlumnoAsync(registrarAlumnoDto);
@@ -39,16 +39,7 @@ public class ServicioAlumno : IServicioAlumno
         };
         await _alumnoDAO.AgregarAlumnoAsync(alumnoNuevo);
 
-        var retornoAlumno = new AlumnoDTO
-        {
-            NombreCompleto = registrarAlumnoDto.NombreCompleto,
-            NombreUsuario = registrarAlumnoDto.NombreUsuario,
-            Correo = registrarAlumnoDto.CorreoElectronico,
-            IdGradoEstudios = registrarAlumnoDto.IdGradoEstudios
-        };
-
-        _logger.LogInformation($"Alumno registrado con éxito, id asignada: {retornoAlumno.IdAlumno}");
-        return retornoAlumno;
+        _logger.LogInformation($"Alumno registrado con éxito");
     }
 
     public async Task<AlumnoDTO> ActualizarAsync(HttpContext httpContext, int idAlumno, ActualizarAlumnoDTO actualizarAlumnoDto)
@@ -113,6 +104,11 @@ public class ServicioAlumno : IServicioAlumno
     {
         _logger.LogInformation("Buscando alumnos de lista con ids");
         var respuesta = _validaciones.VerificarListaIdAlumnos(idAlumnos);
+        if (!respuesta.Success)
+        {
+            return respuesta;
+        }
+        
         var listaAlumnos = await generarListaDeAlumnosAsync(idAlumnos);
 
         respuesta.Alumnos = listaAlumnos;

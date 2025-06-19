@@ -66,8 +66,7 @@ public class AlumnoValidaciones
     public void VerificarObtencionDeEstadisticasDeAlumno(HttpContext httpContext, int idAlumno)
     {
         VerificarAutorizacion(httpContext);
-        var idAlumnoContexto = int.Parse(httpContext.User.FindFirst("idUsuario")!.Value);
-        verificarIgualdadId(idAlumnoContexto, idAlumno);
+        verificarIdUsuario(idAlumno);
     }
 
     public async Task<Alumno> VerificarExistenciaAlumno(int idAlumno)
@@ -171,7 +170,7 @@ public class AlumnoValidaciones
             resultado.Error = new ErrorDTO
             {
                 Tipo = "CampoObligatorioException",
-                Mensaje = "La lista de idAlumnos es nula"
+                Mensaje = "Excepción en ServicioUsuarios: La lista de idAlumnos es nula"
             };
         }
 

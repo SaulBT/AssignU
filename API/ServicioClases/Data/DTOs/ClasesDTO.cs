@@ -2,8 +2,8 @@ namespace ServicioClases.Data.DTOs;
 
 public class ClaseDTO
 {
-    public int IdClase = 0;
-    public string NombreClase = string.Empty;
-    public string CodigoClase = string.Empty;
-    public int IdDocente = 0;
+    public int IdClase { get; set; } = 0;
+    public string NombreClase { get; set; } = string.Empty;
+    public string CodigoClase  { get; set; } = string.Empty;
+    public int IdDocente { get; set; } = 0;
 }

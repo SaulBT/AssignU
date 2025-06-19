@@ -31,6 +31,9 @@ const RespuestaSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    Estado: {
+        type: String,
+    },
     Calificacion: {
         type: Number
     },

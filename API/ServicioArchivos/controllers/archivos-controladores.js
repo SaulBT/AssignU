@@ -58,6 +58,7 @@ export const descargarArchivo = async (call) => {
     downloadStream.on("end", () => call.end());
     downloadStream.on("error", (err) => call.destroy(err));
   } catch (error) {
+    console.log("Error: " + error.message);
     call.destroy(error);
   }
 };
@@ -78,6 +79,7 @@ export const eliminarArchivoAsync = async (call, callback) => {
       mensaje: "Archivo eliminado correctamente"
     });
   } catch (error) {
+    console.log("Error: " + error.message);
     callback(error);
   }
 };
@@ -91,7 +93,6 @@ const eliminarArchivoViaRPCAsync = async (data) => {
       }
     }
     const idTarea = data.IdTarea;
-    console.log("Se recibe la petición de eliminar para: " + idTarea);
 
     const resultado = await eliminarArchivoBaseAsync(idTarea);
 
@@ -100,12 +101,11 @@ const eliminarArchivoViaRPCAsync = async (data) => {
         Success: false
       }
     }
-    console.log ("Se retorna exitoso");
     return {
       Success: true
     }
   } catch (err) {
-      console.log("Error: " + err.message);
+      console.log("Error: " + error.message);
       return manejadorTipoErrores(err, err.message);
   }
 };

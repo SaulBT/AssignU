@@ -87,8 +87,17 @@ public class ClaseValidaciones
         verificarCodigoClase(codigoClase);
         var claseExistente = await buscarClaseConCodigoAsync(codigoClase);
         verificarClaseConDocente((int)(claseExistente?.IdDocente));
+        var registro = new Registro();
+        try
+        {
+            registro = await buscarRegistroPorIdAlumnoYClaseAsync(idAlumno, claseExistente.IdClase);
+        }
+        catch
+        {
+            return claseExistente;
+        }
 
-        return claseExistente;
+        throw new RecursoYaExistenteException("Ya te uniste a esa clase.");
     }
 
     public async Task<Registro> VerificarSalirseClaseAsync(int idAlumno, int idClase, HttpContext httpContext)

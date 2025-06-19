@@ -1,40 +1,43 @@
 const mongoose = require('mongoose');
 
 const OpicionElegidaSchema = new mongoose.Schema({
-    texto: {
+    Texto: {
         type: String,
         required: true
     }
 })
 
 const PreguntasResueltasSchema = new mongoose.Schema({
-    texto: {
+    Texto: {
         type: String,
         required: true
     },
-    opcion: {
+    Opcion: {
         type: OpicionElegidaSchema,
         required: true
     },
-    correcta:{
+    Correcta:{
         type: Boolean,
         required: true
     }
 })
 
 const RespuestaSchema = new mongoose.Schema({
-    idAlumno: {
+    IdAlumno: {
         type: Number,
         required: true
     },
-    idTarea: {
+    IdTarea: {
         type: Number,
         required: true
     },
-    calificacion: {
+    Estado: {
+        type: String,
+    },
+    Calificacion: {
         type: Number
     },
-    preguntas: {
+    Preguntas: {
         type: [PreguntasResueltasSchema],
         required: true
     }

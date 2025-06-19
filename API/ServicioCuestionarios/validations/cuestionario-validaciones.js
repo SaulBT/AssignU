@@ -1,7 +1,9 @@
 const ValorInvalidoError = require('../errors/valor-invalido-error');
 const CuestionarioInvalidoError = require('../errors/cuestionario-invalido-error');
 const PreguntaInvalidaError = require('../errors/pregunta-invalida-error');
-const Cuestionario = require('../models/Cuestionario');
+const Cuestionario = require('../models/cuestionario');
+const IdInvalidaError = require('../errors/id-invalida-error');
+const CampoObligatorioError = require('../errors/campo-obligatorio-error');
 
 function validarCuestionario(idTarea, preguntas) {
     validarIdTarea(idTarea);
@@ -20,7 +22,7 @@ function validarPregunta(pregunta, index) {
 }
 
 const validarExistenciaCuestionarioAsync = async (idTarea) => {
-    const cuestionario = await Cuestionario.findOne({idTarea: idTarea});
+    const cuestionario = await Cuestionario.findOne({IdTarea: idTarea});
     if (cuestionario == null) {
         throw { statusCode: 404, mensaje: `No se encontró un Cuestionario con la IdTarea ${idTarea}` };
     } else {
@@ -32,15 +34,15 @@ const validarExistenciaCuestionarioAsync = async (idTarea) => {
 
 const validarIdTarea = (idTarea) => {
     if (idTarea <= 0) {
-        throw new ValorInvalidoError("La idTarea es inválida: No puede ser 0 o menor");
+        throw new IdInvalidaError("La idTarea es inválida: No puede ser 0 o menor");
     } else if (!idTarea) {
-        throw new ValorInvalidoError("La idTarea es inválida: Valor nulo")
+        throw new IdInvalidaError("La idTarea es inválida: Valor nulo")
     }
 }
 
 const validarDatosPreguntas = (preguntas) => {
     if (preguntas == null) {
-        throw new ValorInvalidoError("Las preguntas son inválidas: Valor nulo");
+        throw new CampoObligatorioError("Las preguntas son inválidas: Valor nulo");
     } else if (!Array.isArray(preguntas)) {
         throw new ValorInvalidoError("Las preguntas son inválidas: No es array");
     }
@@ -59,33 +61,33 @@ const validarCantidadPreguntas = (preguntas) => {
 
 const validarTipoPregunta = (pregunta, index) => {
     const tiposValidos = ['opcion_multiple', 'verdadero_falso'];
-    const tipo = pregunta.tipo;
+    const tipo = pregunta.Tipo;
 
     if(!tipo) {
-        throw new PreguntaInvalidaError(`El tipo de la pregunta ${index + 1} es inválido: Valor nulo`);
+        throw new CampoObligatorioError(`El tipo de la pregunta ${index + 1} es inválido: Valor nulo`);
     } else if (typeof tipo !== 'string') {
-        throw new PreguntaInvalidaError(`El tipo de la pregunta ${index + 1} es inválido: No es string`);
+        throw new ValorInvalidoError(`El tipo de la pregunta ${index + 1} es inválido: No es string`);
     } else if (tipo.trim() === '') {
-        throw new PreguntaInvalidaError(`El tipo de la pregunta ${index + 1} es inválido: Cadena vacía`);
+        throw new CampoObligatorioError(`El tipo de la pregunta ${index + 1} es inválido: Cadena vacía`);
     } else if (!tiposValidos.includes(tipo)) {
         throw new PreguntaInvalidaError(`El tipo de la pregunta ${index + 1} es inválido: Tipo desconocido`);
     }
 }
 
 const validarTextoPregunta = (pregunta, index) => {
-    const texto = pregunta.texto;
+    const texto = pregunta.Texto;
 
     if(!texto) {
-        throw new PreguntaInvalidaError(`El texto de la pregunta ${index + 1} es inválido: Valor nulo`);
+        throw new CampoObligatorioError(`El texto de la pregunta ${index + 1} es inválido: Valor nulo`);
     } else if (typeof texto !== 'string') {
-        throw new PreguntaInvalidaError(`El texto de la pregunta ${index + 1} es inválido: No es string`);
+        throw new ValorInvalidoError(`El texto de la pregunta ${index + 1} es inválido: No es string`);
     } else if (texto.trim() === '') {
-        throw new PreguntaInvalidaError(`El texto de la pregunta ${index + 1} es inválido: Cadena vacía`);
+        throw new CampoObligatorioError(`El texto de la pregunta ${index + 1} es inválido: Cadena vacía`);
     }
 }
 
 const validarCantidadOpciones = (pregunta, index) => {
-    const numeroOpciones = pregunta.opciones.length;
+    const numeroOpciones = pregunta.Opciones.length;
 
     if (numeroOpciones < 2) {
         throw new PreguntaInvalidaError(`La pregunta ${index + 1} debe tener mínimo dos opciones`);

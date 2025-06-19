@@ -1,8 +1,7 @@
 const {response} = require('express');
 
-const Cuestionario = require('../models/Cuestionario');
+const Cuestionario = require('../models/cuestionario');
 const Respuesta = require('../models/respuesta-cuestionario');
-//const Pregunta = require('../models/respuesta-cuestionario');
 const { manejadorTipoErrores } = require('../validations/manejador-tipo-errores');
 
 const {
@@ -14,27 +13,28 @@ const {
     validarRespuesta,
     validarExistenciaRespuestaYGuardarAsync,
     validarIdAlumno,
-    buscarRespuestasCuestionarioAsync
+    buscarYEliminarRespuestasCuestionarioAsync
  } = require('../validations/respuesta-validaciones');
+ const {
+    validarData,
+    validarParametros,
+    validarBody
+ } = require('../validations/validaciones-generales');
 
 const crearCuestionarioAsync = async (data) => {
     try{
-        if (!data) {
-            return {
-                Success: false,
-                Message: 'No se enviaron datos'
-            }
-        }
+        validarData(data);
         idTarea = data.IdTarea;
         preguntas = data.Cuestionario.Preguntas;
 
         validarCuestionario(idTarea, preguntas);
 
         const cuestionario = new Cuestionario({
-            idTarea: idTarea,
-            preguntas: preguntas
+            IdTarea: idTarea,
+            Preguntas: preguntas
         });
         await cuestionario.save();
+
         return {
             Success: true
         }
@@ -46,20 +46,16 @@ const crearCuestionarioAsync = async (data) => {
 
 const editarCuestionarioAsync = async (data) => {
     try {
-        if (!data) {
-            return {
-                Success: false,
-                Message: 'No se enviaron datos'
-            }
-        }
+        validarData(data);
         idTarea = data.IdTarea;
         preguntas = data.Cuestionario.Preguntas;
 
         validarCuestionario(idTarea, preguntas);
         const cuestionario = await validarExistenciaCuestionarioAsync(idTarea);
 
-        cuestionario.preguntas = preguntas;
+        cuestionario.Preguntas = preguntas;
         await cuestionario.save();
+
         return {
             Success: true
         }
@@ -71,23 +67,15 @@ const editarCuestionarioAsync = async (data) => {
 
 const eliminarCuestionarioAsync = async (data) => {
     try {
-        if (!data) {
-            return {
-                Success: false,
-                Message: 'No se enviaron datos'
-            }
-        }
+        validarData(data);
         const idTarea = data.IdTarea;
 
-        console.log("Validar la idTarea");
         validarIdTarea(idTarea);
-        console.log("buscar el cuestionario");
         const cuestionario = await validarExistenciaCuestionarioAsync(idTarea);
-        console.log("buscar y borras la existencia de respuestas");
-        await buscarRespuestasCuestionarioAsync(idTarea);
-        console.log("se borra todo");
+        
+        await buscarYEliminarRespuestasCuestionarioAsync(idTarea);
         await cuestionario.deleteOne();
-        console.log("se retorna")
+        
         return {
             Success: true
         }
@@ -97,12 +85,10 @@ const eliminarCuestionarioAsync = async (data) => {
     }
 }
 
-const obtenerCuestionarioAsync = async (req, res = repsonse, next) => {
+const obtenerCuestionarioAsync = async (req, res = response, next) => {
     try {
-        if (!req.body) {
-            throw { statusCode: 400, mensaje: 'Cuerpo de la solicitud vacío o mal formado' };
-        }
-        const {idTarea} = req.body;
+        validarParametros(req);
+        const {idTarea} = req.params;
 
         validarIdTarea(idTarea);
         const cuestionario = await validarExistenciaCuestionarioAsync(idTarea);
@@ -115,23 +101,24 @@ const obtenerCuestionarioAsync = async (req, res = repsonse, next) => {
 
 const resolverCuestionarioAsync = async (req, res = response, next) => {
     try {
-        if (!req.body) {
-            throw { statusCode: 400, mensaje: 'Cuerpo de la solicitud vacío o mal formado' };
-        }
-        const { idTarea, idAlumno, preguntas } = req.body;
-
+        validarParametros(req);
+        validarBody(req);
+        const { idTarea, idAlumno } = req.params;
+        const preguntas = req.body.preguntas;
+        
         validarRespuesta(idTarea, idAlumno, preguntas);
 
         calificacion = await calificarRespuestaAsync(preguntas, idTarea);
 
         const respuestaNueva = new Respuesta({
-            idAlumno: idAlumno,
-            idTarea: idTarea,
-            calificacion: calificacion,
-            preguntas: preguntas
+            IdAlumno: idAlumno,
+            IdTarea: idTarea,
+            Calificacion: calificacion,
+            Preguntas: preguntas,
+            Estado: "resuelta"
         })
         validarExistenciaRespuestaYGuardarAsync(respuestaNueva);
-        return res.status(204).send();
+        return res.status(202).send();
     } catch (err) {
         next(err);
     }
@@ -139,22 +126,23 @@ const resolverCuestionarioAsync = async (req, res = response, next) => {
 
 const guardarRespuestaCuestionarioAsync = async (req, res = response, next) => {
     try {
-        if (!req.body) {
-            throw { statusCode: 400, mensaje: 'Cuerpo de la solicitud vacío o mal formado' };
-        }
-        const { idTarea, idAlumno, preguntas } = req.body;
+        validarParametros(req);
+        validarBody(req);
+        const { idTarea, idAlumno } = req.params;
+        const preguntas = req.body.preguntas;
         const calificacion = 0.0;
 
         validarRespuesta(idTarea, idAlumno, preguntas);
 
         const respuestaNueva = new Respuesta({
-            idAlumno: idAlumno,
-            idTarea: idTarea,
-            calificacion: calificacion,
-            preguntas: preguntas
+            IdAlumno: idAlumno,
+            IdTarea: idTarea,
+            Calificacion: calificacion,
+            Preguntas: preguntas,
+            Estado: "pendiente"
         })
         validarExistenciaRespuestaYGuardarAsync(respuestaNueva);
-        return res.status(204).send();
+        return res.status(202).send();
     } catch (err) {
         next(err);
     }
@@ -163,10 +151,8 @@ const guardarRespuestaCuestionarioAsync = async (req, res = response, next) => {
 //Petición HTTP
 const obtenerRespuestaCuestionarioHttpAsync = async (req, res = response, next) => {
     try {
-        if (!req.body) {
-            throw { statusCode: 400, mensaje: 'Cuerpo de la solicitud vacío o mal formado' };
-        }
-        const { idTarea, idAlumno } = req.body;
+        validarParametros(req);
+        const { idTarea, idAlumno } = req.params;
         
         const mensaje = await obtenerRespuestaCuestionarioAsync({
             idTarea: idTarea,
@@ -186,20 +172,15 @@ const obtenerRespuestaCuestionarioHttpAsync = async (req, res = response, next) 
 //Método para RabbitMQ
 const obtenerRespuestaCuestionarioAsync = async (data) => {
     try {
-        if (!data) {
-            return {
-                Success: false,
-                Message: 'No se enviaron datos'
-            }
-        }
+        validarData(data);
         const idTarea = data.idTarea;
         const idAlumno = data.idAlumno;
         validarIdTarea(idTarea);
         validarIdAlumno(idAlumno);
 
         const respuesta = await Respuesta.findOne({
-            idTarea: idTarea,
-            idAlumno: idAlumno
+            IdTarea: idTarea,
+            IdAlumno: idAlumno
         });
         return {
             Success: true,
@@ -211,23 +192,19 @@ const obtenerRespuestaCuestionarioAsync = async (data) => {
     }
 }
 
-const obtenerRespuestas = async (data) => {
+const obtenerRespuestasAsync = async (data) => {
     try {
-        if (!data) {
-            return {
-                Success: false,
-                Message: 'No se enviaron datos'
-            }
-        }
+        validarData(data);
         const idTareas = data.IdTareas;
         const respuestas = await Respuesta.find({
-            idTarea: { $in: idTareas }
+            IdTarea: { $in: idTareas },
+            Estado: "resuelta"
         }).exec();
 
         const respuestasDto = respuestas.map( respuesta => ({
-            IdAlumno: respuesta.idAlumno,
-            IdTarea: respuesta.idTarea,
-            Calificacion: respuesta.calificacion
+            IdAlumno: respuesta.IdAlumno,
+            IdTarea: respuesta.IdTarea,
+            Calificacion: respuesta.Calificacion
         }));
         return {
             Success: true,
@@ -242,34 +219,28 @@ const obtenerRespuestas = async (data) => {
 
 const obtenerRespuestasDeTareaAsync = async (data) =>{
     try{
-        if (!data) {
-            return {
-                Success: false,
-                Message: 'No se enviaron datos'
-            }
-        }
+        validarData(data);
         const idTarea = data.IdTarea;
-        validarIdTarea(idTarea);
 
         const respuestas = await Respuesta.find({
-            idTarea: idTarea
+            IdTarea: idTarea
         });
-        const respuestasEnviadas = respuestas.map( respuesta => ({
-            idAlumno: respuesta.idAlumno,
-            idTarea: respuesta.idTarea,
-            Calificacion: respuesta.calificacion,
-            Preguntas: respuesta.preguntas.map( pregunta => ({
-                Texto: pregunta.texto,
+        /*const respuestasEnviadas = respuestas.map( respuesta => ({
+            idAlumno: respuesta.IdAlumno,
+            idTarea: respuesta.IdTarea,
+            Calificacion: respuesta.Calificacion,
+            Preguntas: respuesta.Preguntas.map( pregunta => ({
+                Texto: pregunta.Texto,
                 Opcion: {
-                    Texto: pregunta.opcion.texto
+                    Texto: pregunta.Opcion.Texto
                 },
-                Correcta: pregunta.correcta
+                Correcta: pregunta.Correcta
             }))
-        }));
+        }));*/
 
         return {
             Success: true,
-            RespuestasDeTarea: respuestasEnviadas
+            RespuestasDeTarea: respuestas
         };
     } catch (err) {
         console.log("Error: " + err.message);
@@ -279,25 +250,13 @@ const obtenerRespuestasDeTareaAsync = async (data) =>{
 
 const obtenerPreguntasDeTareaAsync = async (data) => {
     try{
-        if (!data) {
-            return {
-                Success: false,
-                Message: 'No se enviaron datos'
-            }
-        }
+        validarData(data);
         const idTarea = data.IdTarea;
-        validarIdTarea(idTarea);
 
-        const cuestionario = await Cuestionario.findOne({
-            idTarea: idTarea
-        });
-        const preguntas = cuestionario.preguntas.map( pregunta => ({
-            Texto: pregunta.texto
-        }));
-
+        const listaPreguntas = await generarListaPreguntasAsync(idTarea);
         return {
             Success: true,
-            Preguntas: preguntas
+            Preguntas: listaPreguntas
         };
     } catch (err) {
         console.log("Error: " + err.message);
@@ -307,7 +266,7 @@ const obtenerPreguntasDeTareaAsync = async (data) => {
 
 const calificarRespuestaAsync = async (preguntasResueltas, idTarea) => {
     const cuestionario = await validarExistenciaCuestionarioAsync(idTarea);
-    preguntas = cuestionario.preguntas;
+    preguntas = cuestionario.Preguntas;
     const cantidadPreguntas = preguntas.length;
     const cantidadPreguntasResueltas = preguntasResueltas.length;
     var cantidadPreguntasCorrectas = 0;
@@ -315,8 +274,8 @@ const calificarRespuestaAsync = async (preguntasResueltas, idTarea) => {
 
     for (i = 0; i < cantidadPreguntas; i++){
         for (x = 0; x < cantidadPreguntasResueltas; x++){
-            if (preguntas[i].texto == preguntasResueltas[x].texto){
-                if (preguntasResueltas[x].correcta == true){
+            if (preguntas[i].Texto == preguntasResueltas[x].Texto){
+                if (preguntasResueltas[x].Correcta == true){
                     cantidadPreguntasCorrectas++;
                 }
             }
@@ -325,6 +284,15 @@ const calificarRespuestaAsync = async (preguntasResueltas, idTarea) => {
 
     calificacion = cantidadPreguntasCorrectas > 0 ? (cantidadPreguntasCorrectas * 10) / cantidadPreguntas : 0;
     return calificacion;
+}
+
+const generarListaPreguntasAsync = async (idTarea) => {
+    const cuestionario = await Cuestionario.findOne({
+        IdTarea: idTarea
+    });
+    const listaPreguntas = cuestionario.Preguntas;
+
+    return listaPreguntas;
 }
 
 module.exports = {
@@ -336,7 +304,7 @@ module.exports = {
     guardarRespuestaCuestionarioAsync,
     obtenerRespuestaCuestionarioHttpAsync,
     obtenerRespuestaCuestionarioAsync,
-    obtenerRespuestas,
+    obtenerRespuestasAsync,
     obtenerRespuestasDeTareaAsync,
     obtenerPreguntasDeTareaAsync
 };

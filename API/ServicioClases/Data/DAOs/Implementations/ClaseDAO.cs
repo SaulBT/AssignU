@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using ServicioClases.Data.DAOs.Interfaces;
-using ServicioClases.Data.DTOs;
 using ServicioClases.Models;
 
 namespace ServicioClases.Data.DAOs.Implementations;
@@ -38,13 +37,13 @@ public class ClaseDAO : IClaseDAO
         }
     }
 
-    public async Task ActualizarClaseAsync(Clase clase)
+    public async Task ActualizarClaseAsync(Clase claseActualizada)
     {
         try
         {
             var claseExistente = await _context.Clase
-                .FirstOrDefaultAsync(c => c.IdClase == clase.IdClase);
-            claseExistente.Nombre = clase.Nombre;
+                .FirstOrDefaultAsync(c => c.IdClase == claseActualizada.IdClase);
+            claseExistente.Nombre = claseActualizada.Nombre;
             _context.Clase.Update(claseExistente);
             await _context.SaveChangesAsync();
         }
@@ -54,11 +53,11 @@ public class ClaseDAO : IClaseDAO
         }
     }
 
-    public async Task EliminarClaseAsync(Clase clase)
+    public async Task EliminarClaseAsync(Clase claseEliminar)
     {
         try
         {
-            _context.Clase.Remove(clase);
+            _context.Clase.Remove(claseEliminar);
             await _context.SaveChangesAsync();
         }
         catch (Exception ex)

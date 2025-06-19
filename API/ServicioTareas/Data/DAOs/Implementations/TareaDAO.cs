@@ -22,9 +22,7 @@ public class TareaDAO : ITareaDAO
             {
                 IdClase = crearTareaDTO.IdClase,
                 Nombre = crearTareaDTO.Nombre,
-                IdArchivo = crearTareaDTO.IdArchivo,
                 FechaLimite = crearTareaDTO.FechaLimite,
-                Estado = "activa"
             };
             _contexto.Tarea.Add(tarea);
             await _contexto.SaveChangesAsync();
@@ -44,9 +42,7 @@ public class TareaDAO : ITareaDAO
         {
             var tarea = await ObtenerTareaPorIdAsync(editarTareaDTO.IdTarea);
             tarea.Nombre = editarTareaDTO.Nombre;
-            tarea.IdArchivo = editarTareaDTO.IdArchivo;
             tarea.FechaLimite = editarTareaDTO.FechaLimite;
-            tarea.Estado = "activa";
             _contexto.Tarea.Update(tarea);
             await _contexto.SaveChangesAsync();
 

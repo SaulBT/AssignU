@@ -1,10 +1,10 @@
 using ServicioTareas.Data.DAOs.Interfaces;
 using ServicioTareas.Data.DTOs;
-using ServicioTareas.Exceptions;
 using ServicioTareas.Models;
 using ServicioTareas.Config;
 using ServicioTareas.Services.Interfaces;
 using ServicioTareas.Validations;
+using ServicioTareas.Data.DTOs.RPC;
 
 namespace ServicioTareas.Services.Implementations;
 
@@ -12,67 +12,174 @@ public class ServicioTarea : IServicioTarea
 {
     private readonly ITareaDAO _tareaDAO;
     private readonly RpcClientRabbitMQ _rpcClient;
+    private readonly TareasValidaciones _validaciones;
+    private readonly ILogger<ServicioTarea> _logger;
 
-    public ServicioTarea(ITareaDAO tareaDAO, RpcClientRabbitMQ rpcClient)
+    public ServicioTarea(ITareaDAO tareaDAO, RpcClientRabbitMQ rpcClient, TareasValidaciones validaciones, ILogger<ServicioTarea> logger)
     {
         _tareaDAO = tareaDAO;
         _rpcClient = rpcClient;
+        _validaciones = validaciones;
+        _logger = logger;
     }
 
-    public async Task<Tarea> CrearTareaAsync(CrearTareaDTO crearTareaDTO, HttpContext httpContext)
+    public async Task<TareaDTO> CrearTareaAsync(CrearTareaDTO crearTareaDto, HttpContext httpContext)
     {
-        validarAutorizacion(httpContext);
-        validarCampos(crearTareaDTO.IdClase, crearTareaDTO.Nombre, crearTareaDTO.IdArchivo);
-        await verificarNombreTareaCreacionAsync(crearTareaDTO.IdClase, crearTareaDTO.Nombre);
+        _logger.LogInformation("Crear Tarea");
+        await _validaciones.VerificarCrearTareaAsync(crearTareaDto, httpContext);
 
-        var tarea = await _tareaDAO.CrearTareaAsync(crearTareaDTO);
-        var cuestionario = crearTareaDTO.Cuestionario;
+        var tarea = await _tareaDAO.CrearTareaAsync(crearTareaDto);
+
+        var cuestionario = crearTareaDto.Cuestionario;
         string mensajeJson = crearMensajeRPCConCuestionario("crearCuestionario", tarea.IdTarea, cuestionario);
-        await enviarMensajeRPCAsync(mensajeJson, "cola_cuestionario");
+        await enviarMensajeRPCAsync(mensajeJson, "cola_cuestionarios");
 
-        return tarea;
+        _logger.LogInformation($"Tarea creada con la id {tarea.IdTarea}");
+        return new TareaDTO
+        {
+            IdTarea = tarea.IdTarea,
+            IdClase = tarea.IdClase,
+            Nombre = tarea.Nombre,
+            FechaLimite = tarea.FechaLimite
+        };
     }
 
-    public async Task<Tarea> EditarTareaAsync(EditarTareaDTO editarTareaDTO, HttpContext httpContext)
+    public async Task<TareaDTO> EditarTareaAsync(EditarTareaDTO editarTareaDTO, int idTarea, HttpContext httpContext)
     {
-        validarAutorizacion(httpContext);
-        validarCampos(editarTareaDTO.IdTarea, editarTareaDTO.Nombre, editarTareaDTO.IdArchivo);
-        await verificarNombreTareaEdicionAsync(editarTareaDTO.IdTarea, editarTareaDTO.Nombre);
-        await verificarTareaExisteAsync(editarTareaDTO.IdTarea);
+        _logger.LogInformation("Editando una Tarea");
+        await _validaciones.VerificarEdicionDeTareaAsync(editarTareaDTO, idTarea, httpContext);
 
         var tarea = await _tareaDAO.EditarTareaAsync(editarTareaDTO);
+
         var cuestionario = editarTareaDTO.Cuestionario;
         string mensajeJson = crearMensajeRPCConCuestionario("editarCuestionario", tarea.IdTarea, cuestionario);
         await enviarMensajeRPCAsync(mensajeJson, "cola_cuestionario");
 
-        return tarea;
+        _logger.LogInformation($"Tarea con id {tarea.IdTarea} editada");
+        return new TareaDTO
+        {
+            IdTarea = tarea.IdTarea,
+            IdClase = tarea.IdClase,
+            Nombre = tarea.Nombre,
+            FechaLimite = tarea.FechaLimite
+        };
     }
 
     public async Task EliminarTareaAsync(int idTarea, HttpContext httpContext)
     {
-        validarAutorizacion(httpContext);
-        validarIdTarea(idTarea);
-        await verificarTareaExisteAsync(idTarea);
+        _logger.LogInformation("Eliminando una Tarea");
+        await _validaciones.VerificarEliminacionDeTareaAsync(idTarea, httpContext);
 
         var tarea = await _tareaDAO.ObtenerTareaPorIdAsync(idTarea);
         await _tareaDAO.EliminarTareaAsync(tarea);
+
         string mensajeJson = crearMensajeRPCConIdTarea("eliminarCuestionario", idTarea);
         await enviarMensajeRPCAsync(mensajeJson, "cola_cuestionario");
+
+        _logger.LogInformation($"Se eliminó la Tarea con la id {idTarea}");
     }
 
     public async Task<List<Tarea>?> ObtenerTareasDeClaseAsync(int idClase)
     {
-        validarIdClase(idClase);
+        _logger.LogInformation("Buscando una Tarea");
+        _validaciones.ValidarIdClase(idClase);
 
         var tareas = await _tareaDAO.ObtenerTareasPorIdClaseAsync(idClase);
+        _logger.LogInformation($"Tareas recuperadas de la Clase con id {idClase}");
+        
         return tareas;
     }
 
     public async Task<RespuestaRPCDTO> ObtenerTareasYRespuestasAsync(int idClase)
     {
-        var tareas = await ObtenerTareasDeClaseAsync(idClase);
-        List<int> idTareas = new List<int>();
-        List<TareaEstadisticasClaseDTO> tareasDto = new List<TareaEstadisticasClaseDTO>();
+        try
+        {
+            _logger.LogInformation("Recuperndo Tareas y Respuestas de una Clase");
+            var tareas = await ObtenerTareasDeClaseAsync(idClase);
+            var listaIdTareas = generarListaIdTareas(tareas);
+            var listaTareas = generarListaTareas(tareas);
+
+            string mensajeJson = crearMensajeRPCConIdTareas("obtenerRespuestasDeListaTareas", listaIdTareas);
+            var respuestas = await enviarMensajeRPCConRespuestaAsync(mensajeJson, "cola_cuestionarios");
+
+            RespuestaRPCDTO respuestaRpc = new RespuestaRPCDTO
+            {
+                Success = respuestas.Success,
+                Tareas = listaTareas,
+                Respuestas = respuestas.Respuestas,
+            };
+
+            return respuestaRpc;
+        }
+        catch (Exception ex)
+        {
+            return DetectorExcepciones.detectarExcepcion(ex);
+        }
+    }
+
+    public async Task<EstadisticasTareaDTO> ObtenerEstadisticasTareaAsync(int idTarea)
+    {
+        _validaciones.ValidarIdTarea(idTarea);
+
+        string mensajePreguntas = crearMensajeRPCConIdTarea("obtenerPreguntasDeTarea", idTarea);
+        var preguntas = (await enviarMensajeRPCConRespuestaAsync(mensajePreguntas, "cola_cuestionarios")).Preguntas;
+        
+        string mensajeJsonRespuestas = crearMensajeRPCConIdTarea("obtenerRespuestasDeClase", idTarea);
+        var respuestas = (await enviarMensajeRPCConRespuestaAsync(mensajeJsonRespuestas, "cola_cuestionarios")).RespuestasDeTarea;
+        
+        var listaIdAlumnos = generarListaIdAlumnos(respuestas);
+        string mensajeAlumnos = crearMensajeRPCConIdAlumnos("obtenerListaAlumnos", listaIdAlumnos);
+        var alumnos = (await enviarMensajeRPCConRespuestaAsync(mensajeAlumnos, "cola_usuarios")).Alumnos;
+
+        var listaAlumnos = generarListaAlumnos(alumnos);
+        var listaPreguntas = generarListaPreguntas(preguntas);
+        
+        var estadistica = new EstadisticasTareaDTO
+        {
+            TextoPreguntas = listaPreguntas,
+            Respuestas = respuestas,
+            Alumnos = listaAlumnos
+        };
+
+        return estadistica;
+    }
+
+    public async Task<RespuestaRPCDTO> EliminarTareasDeClaseAsync(int idClase)
+    {
+        _validaciones.ValidarIdClase(idClase);
+
+        var tareas = await _tareaDAO.ObtenerTareasPorIdClaseAsync(idClase);
+        foreach (var tarea in tareas)
+        {
+            await _tareaDAO.EliminarTareaAsync(tarea);
+            string mensajeCuestionario = crearMensajeRPCConIdTarea("eliminarCuestionario", tarea.IdTarea);
+            await enviarMensajeRPCAsync(mensajeCuestionario, "cola_cuestionarios");
+            
+            string mensajeArchivo = crearMensajeRPCConIdTarea("eliminarArchivo", tarea.IdTarea);
+            await enviarMensajeRPCAsync(mensajeArchivo, "cola_archivos");
+        }
+
+        return new RespuestaRPCDTO
+        {
+            Success = true
+        };
+    }
+
+    private List<int> generarListaIdTareas(List<Tarea> tareas)
+    {
+        List<int> listaIdTareas = new List<int>();
+        foreach (Tarea tarea in tareas)
+        {
+            int idTarea = tarea.IdTarea;
+            listaIdTareas.Add(idTarea);
+        }
+
+        return listaIdTareas;
+    }
+
+    private List<TareaEstadisticasClaseDTO> generarListaTareas(List<Tarea> tareas)
+    {
+        List<TareaEstadisticasClaseDTO> listaTareas = new List<TareaEstadisticasClaseDTO>();
         foreach (Tarea tarea in tareas)
         {
             var tareaDto = new TareaEstadisticasClaseDTO
@@ -80,44 +187,25 @@ public class ServicioTarea : IServicioTarea
                 IdTarea = tarea.IdTarea,
                 Nombre = tarea.Nombre
             };
-            int idTarea = tarea.IdTarea;
-            idTareas.Add(idTarea);
-            tareasDto.Add(tareaDto);
+            listaTareas.Add(tareaDto);
         }
-        string mensajeJson = crearMensajeRPCConIdTareas("obtenerRespuestas", idTareas);
-        var respuestas = await enviarMensajeRPCConRespuestaAsync(mensajeJson, "cola_cuestionarios");
 
-        RespuestaRPCDTO respuestaRpc = new RespuestaRPCDTO
-        {
-            Success = respuestas.Success,
-            Tareas = tareasDto,
-            Respuestas = respuestas.Respuestas,
-            Error = respuestas.Error
-        };
-        
-        return respuestaRpc;
+        return listaTareas;
     }
 
-    public async Task<EstadisticasTareaDTO> ObtenerEstadisticasTareaAsync(int idTarea)
+    private List<int> generarListaIdAlumnos(List<RespuestaDTO> respuestas)
     {
-        validarIdTarea(idTarea);
-        string mensajePreguntas = crearMensajeRPCConIdTarea("obtenerPreguntasDeTarea", idTarea);
-        var preguntas = (await enviarMensajeRPCConRespuestaAsync(mensajePreguntas, "cola_cuestionarios")).Preguntas;
-        Console.WriteLine("Número preguntas: " + preguntas.Count);
-        Console.WriteLine("Texto de la pregunta: " + preguntas[0].Texto);
-        //Obtener las respuestas relacionadas a la tarea
-        string mensajeJsonRespuestas = crearMensajeRPCConIdTarea("obtenerRespuestasDeClase", idTarea);
-        var respuestas = (await enviarMensajeRPCConRespuestaAsync(mensajeJsonRespuestas, "cola_cuestionarios")).RespuestasDeTarea;
-        Console.WriteLine("Número respuestas: " + respuestas.Count);
-        //Obtener los datos de los alumnos
         List<int> listaIdAlumnos = [];
         foreach (var respuesta in respuestas)
         {
-            listaIdAlumnos.Add(respuesta.idAlumno);
+            listaIdAlumnos.Add(respuesta.IdAlumno);
         }
-        string mensajeAlumnos = crearMensajeRPCConIdAlumnos("obtenerListaAlumnos", listaIdAlumnos);
-        var alumnos = (await enviarMensajeRPCConRespuestaAsync(mensajeAlumnos, "cola_usuarios")).Alumnos;
-        Console.WriteLine("Número alumnos: " + alumnos.Count);
+
+        return listaIdAlumnos;
+    }
+
+    private List<AlumnoEstadisticaTareaDTO> generarListaAlumnos(List<AlumnoEstadisticasDTO> alumnos)
+    {
         List<AlumnoEstadisticaTareaDTO> listaAlumnos = [];
         foreach (var alumno in alumnos)
         {
@@ -129,87 +217,19 @@ public class ServicioTarea : IServicioTarea
             listaAlumnos.Add(alumnoEnLista);
         }
 
-        List<string> ListaPreguntas = [];
+        return listaAlumnos;
+    }
+
+    private List<string> generarListaPreguntas(List<PreguntaDTO> preguntas)
+    {
+        List<string> listaPreguntas = [];
         foreach (var pregunta in preguntas)
         {
             string texto = pregunta.Texto;
-            Console.WriteLine(pregunta.Texto);
-            ListaPreguntas.Add(texto);
-        }
-        Console.WriteLine("Preguntas: " + ListaPreguntas.Count + ", Respuestas: " + respuestas.Count + ", Alumnos: " + alumnos.Count);
-        var estadistica = new EstadisticasTareaDTO
-        {
-            TextoPreguntas = ListaPreguntas,
-            Respuestas = respuestas,
-            Alumnos = listaAlumnos
-        };
-
-        return estadistica;
-    }
-
-    public async Task<RespuestaRPCDTO> EliminarTareasDeClaseAsync(int idClase)
-    {
-        validarIdClase(idClase);
-
-        var tareas = await _tareaDAO.ObtenerTareasPorIdClaseAsync(idClase);
-        foreach (var tarea in tareas)
-        {
-            await _tareaDAO.EliminarTareaAsync(tarea);
-            string mensajeCuestionario = crearMensajeRPCConIdTarea("eliminarCuestionario", tarea.IdTarea);
-            await enviarMensajeRPCAsync(mensajeCuestionario, "cola_cuestionarios");
-            Console.WriteLine("Se crea el mensaje para archivos");
-            string mensajeArchivo = crearMensajeRPCConIdTarea("eliminarArchivo", tarea.IdTarea);
-            Console.WriteLine("Se envía la petición");
-            await enviarMensajeRPCAsync(mensajeArchivo, "cola_archivos");
-            Console.WriteLine("Se recibe exitosamente");
+            listaPreguntas.Add(texto);
         }
 
-        return new RespuestaRPCDTO
-        {
-            Success = true
-        };
-    }
-
-    private void validarAutorizacion(HttpContext httpContext)
-    {
-        var tieneAutorizacion = httpContext.User.Identity?.IsAuthenticated ?? true;
-        var claim = httpContext.User.FindFirst("idUsuario");
-        var idUsuario = claim != null ? int.Parse(claim.Value) : 0;
-        var tieneRolCorrecto = httpContext.User.IsInRole("docente");
-
-        if (!tieneAutorizacion || idUsuario <= 0 || !tieneRolCorrecto)
-        {
-            throw new UnauthorizedAccessException("Sin autorización para continuar");
-        }
-    }
-
-    private void validarCampos(int id, string nombre, int idArchivo)
-    {
-        if
-        (
-            id <= 0 ||
-            String.IsNullOrEmpty(nombre) ||
-            idArchivo < 0
-        )
-        {
-            throw new ArgumentException("Hay campos inválidos");
-        }
-    }
-
-    private void validarIdTarea(int idTarea)
-    {
-        if (idTarea <= 0)
-        {
-            throw new ArgumentException("La id de la tarea es inválida");
-        }
-    }
-
-    private void validarIdClase(int idClase)
-    {
-        if (idClase <= 0)
-        {
-            throw new ArgumentException("La id de la clase es inválida");
-        }
+        return listaPreguntas;
     }
 
     private string crearMensajeRPCConCuestionario(string accion, int idTarea, CuestionarioDTO cuestionario)
@@ -284,34 +304,19 @@ public class ServicioTarea : IServicioTarea
     {
         string respuestaJson = await _rpcClient.CallAsync(cola, mensajeJson);
         var respuesta = System.Text.Json.JsonSerializer.Deserialize<RespuestaRPCDTO>(respuestaJson);
+        if (respuesta == null)
+        {
+            throw new Exception("No hay respuesta");
+        }
+        else if (!respuesta.Success)
+        {
+            if (respuesta.Error == null)
+            {
+                throw new InvalidOperationException("No hay error");
+            }
+            throw LanzarExcepciones.lanzarExcepcion(respuesta.Error.Tipo, respuesta.Error.Mensaje);
+        }
 
         return respuesta;
-    }
-
-    private async Task verificarNombreTareaCreacionAsync(int idClase, string nombre)
-    {
-        var tarea = await _tareaDAO.ObtenerTareaPorIdClaseYNombreAsync(idClase, nombre);
-        if (tarea != null)
-        {
-            throw new RecursoYaExistenteException("Nombre repetido");
-        }
-    }
-
-    private async Task verificarNombreTareaEdicionAsync(int idTarea, string nombre)
-    {
-        var tarea = await _tareaDAO.ObtenerTareaPorIdTareaYNombreAsync(idTarea, nombre);
-        if (tarea != null)
-        {
-            throw new RecursoYaExistenteException("Nombre repetido");
-        }
-    }
-
-    private async Task verificarTareaExisteAsync(int idTarea)
-    {
-        var tarea = await _tareaDAO.ObtenerTareaPorIdAsync(idTarea);
-        if (tarea == null)
-        {
-            throw new RecursoNoEncontradoException($"No se encontró una tarea con la id {idTarea}");
-        }
     }
 }

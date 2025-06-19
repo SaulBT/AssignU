@@ -1,4 +1,4 @@
-using ServicioUsuarios.DTOs;
+using ServicioUsuarios.Data.DTOs;
 
 namespace ServicioUsuarios.Services.Interfaces;
 

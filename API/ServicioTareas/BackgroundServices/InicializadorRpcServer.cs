@@ -1,8 +1,5 @@
-using Microsoft.Extensions.Hosting;
 using ServicioTareas.Config;
 using ServicioTareas.Services.Interfaces;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ServicioTareas.BackgroundServices
 {

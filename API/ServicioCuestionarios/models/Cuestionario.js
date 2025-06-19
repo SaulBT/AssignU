@@ -1,28 +1,28 @@
 const mongoose = require('mongoose');
 
 const OpcionSchema = new mongoose.Schema({
-    texto: String,
-    esCorrecta: Boolean
+    Texto: String,
+    EsCorrecta: Boolean
 });
 
 const PreguntaSchema = new mongoose.Schema({
-    texto: {
+    Texto: {
         type: String,
         required: true
     },
-    tipo: {
+    Tipo: {
         type: String,
         enum: ['opcion_multiple', 'verdadero_falso'],
         required: true
     },
-    opciones: {
+    Opciones: {
         type: [OpcionSchema]
     }
 });
 
 const CuestionarioSchema = new mongoose.Schema({
-    idTarea: { type: Number },
-    preguntas: {
+    IdTarea: { type: Number },
+    Preguntas: {
         type: [PreguntaSchema]
     }
 });

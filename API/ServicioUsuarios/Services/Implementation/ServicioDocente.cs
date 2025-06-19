@@ -1,192 +1,97 @@
-using ServicioUsuarios.DAOs.Interfaces;
-using ServicioUsuarios.DTOs;
-using ServicioUsuarios.Entities;
-using ServicioUsuarios.Exceptions;
+using ServicioUsuarios.Data.DAOs.Interfaces;
+using ServicioUsuarios.Data.DTOs;
+using ServicioUsuarios.Models;
 using ServicioUsuarios.Services.Interfaces;
+using ServicioUsuarios.Data.DTOs.Docente;
+using ServicioUsuarios.Validations;
 
 namespace ServicioUsuarios.Services.Implementation;
 
 public class SerivicioDocente : IServicioDocente
 {
     private readonly IDocenteDAO _docenteDAO;
+    private readonly DocenteValidaciones _validaciones;
+    private readonly ILogger<SerivicioDocente> _logger;
 
-    public SerivicioDocente(IDocenteDAO docenteDAO)
+    public SerivicioDocente(IDocenteDAO docenteDAO, DocenteValidaciones validaciones, ILogger<SerivicioDocente> logger)
     {
         _docenteDAO = docenteDAO;
+        _validaciones = validaciones;
+        _logger = logger;
     }
 
-    public async Task<DocenteDTO> ObtenerPorIdAsync(int id)
+    public async Task RegistrarAsync(RegistrarDocenteDTO registrarDocenteDto)
     {
-        verificarIdValida(id);
-        var docente = await _docenteDAO.ObtenerPorIdDtoAsync(id);
-        verificarExistenciaDocente(docente);
-        return docente;
-    }
+        _logger.LogInformation("Registrando a Docente");
+        await _validaciones.VerificarRegistroDocenteAsync(registrarDocenteDto);
 
-    public async Task<docente> RegistrarAsync(RegistrarDocenteDTO docenteDto)
-    {
-        verificarParametrosDocenteRegistro(docenteDto);
-        await verificarDocenteNombreRegistroAsync(docenteDto.nombreUsuario);
-        await verificarDocenteCorreoAsync(docenteDto.correoElectronico);
-
-        var nuevoDocente = new docente
+        var nuevoDocente = new Docente
         {
-            nombreCompleto = docenteDto.nombreCompleto,
-            nombreUsuario = docenteDto.nombreUsuario,
-            contrasenia = docenteDto.contrasenia,
-            correo = docenteDto.correoElectronico,
-            idGradoProfesional = docenteDto.idGradoProfesional
+            NombreCompleto = registrarDocenteDto.NombreCompleto,
+            NombreUsuario = registrarDocenteDto.NombreUsuario,
+            Contrasenia = registrarDocenteDto.Contrasenia,
+            Correo = registrarDocenteDto.CorreoElectronico,
+            IdGradoProfesional = registrarDocenteDto.IdGradoProfesional
         };
-
         await _docenteDAO.AgregarDocenteAsync(nuevoDocente);
 
-        return nuevoDocente;
+        _logger.LogInformation($"Se registró al Docente corectamente");
     }
 
-    public async Task ActualizarAsync(HttpContext contexto, ActualizarDocenteDTO docenteDto)
+    public async Task<DocenteDTO> ActualizarAsync(HttpContext httpContext, int idDocente, ActualizarDocenteDTO actualizarDocenteDto)
     {
-        verificarAutorizacion(contexto);
-        var idDocente = int.Parse(contexto.User.FindFirst("idUsuario")!.Value);
-        verificarIgualdadId(idDocente, docenteDto.idDocente);
-        verificarParametrosDocenteActualizacion(docenteDto);
-        await verificarDocenteNombreActualizacionAsync(docenteDto.nombreUsuario, idDocente);
+        _logger.LogInformation("Se actualiza un Docente");
+        var docente = await _validaciones.VerificarActualizacionDeDocenteAsync(httpContext, idDocente, actualizarDocenteDto);
 
-        var docente = await _docenteDAO.ObtenerPorIdNormalAsync(idDocente);
-        docente.nombreCompleto = docenteDto.nombreCompleto;
-        docente.nombreUsuario = docenteDto.nombreUsuario;
-        docente.idGradoProfesional = docenteDto.idGradoProfesional;
-
+        docente.NombreCompleto = actualizarDocenteDto.NombreCompleto;
+        docente.NombreUsuario = actualizarDocenteDto.NombreUsuario;
+        docente.IdGradoProfesional = actualizarDocenteDto.IdGradoProfesional;
         await _docenteDAO.ActualizarAsync(docente);
+
+        var retornoDocente = new DocenteDTO
+        {
+            IdDocente = docente.IdDocente,
+            NombreCompleto = docente.NombreCompleto,
+            NombreUsuario = docente.NombreUsuario,
+            Correo = docente.Correo,
+            IdGradoProfesional = (int)docente.IdGradoProfesional
+        };
+        _logger.LogInformation($"Se actualizó al Docente con la id {retornoDocente.IdDocente}");
+        return retornoDocente;
     }
 
-    public async Task EliminarAsync(HttpContext contexto)
+    public async Task EliminarAsync(HttpContext httpContexto, int idDocente)
     {
-        verificarAutorizacion(contexto);
-        var idDocente = int.Parse(contexto.User.FindFirst("idUsuario")!.Value);
-        verificarIdValida(idDocente);
-        var docente = await _docenteDAO.ObtenerPorIdDtoAsync(idDocente);
-        verificarExistenciaDocente(docente);
-        await _docenteDAO.EliminarAsync(idDocente);
+        _logger.LogInformation("Eliminando a un Docente");
+        var docente = await _validaciones.VerificarEliminacionDeDocenteAsync(httpContexto, idDocente);
+        await _docenteDAO.EliminarAsync(docente);
+        _logger.LogInformation($"Se eliminó al Docente con la id {docente.IdDocente}");
     }
 
-    public async Task CambiarContraseniaAsync(CambiarContraseniaDTO cambiarContraseniaDTO, HttpContext context)
+    public async Task<DocenteDTO> ObtenerDocentePorIdAsync(int idDocente)
     {
-        verificarParametrosCambiarContrasenia(cambiarContraseniaDTO);
-        verificarAutorizacion(context);
+        _logger.LogInformation("Buscando a un Docente");
+        var docente = await _validaciones.VerificarObtencionDeDocenteAsync(idDocente);
 
-        var idDocente = int.Parse(context.User.FindFirst("idUsuario")!.Value);
-        var docente = await ObtenerDocentePorIdAsync(idDocente);
-        verificarContraseniaActual(docente, cambiarContraseniaDTO.contraseniaActual);
+        var retornoDocente = new DocenteDTO
+        {
+            IdDocente = docente.IdDocente,
+            NombreCompleto = docente.NombreCompleto,
+            NombreUsuario = docente.NombreUsuario,
+            Correo = docente.Correo,
+            IdGradoProfesional = (int)docente.IdGradoProfesional
+        };
+        _logger.LogInformation($"Docente encontrado con la id: {retornoDocente.IdDocente}");
+        return retornoDocente;
+    }
 
-        docente.contrasenia = cambiarContraseniaDTO.contraseniaNueva;
+    public async Task CambiarContraseniaAsync(CambiarContraseniaDTO cambiarContraseniaDto, int idDocente, HttpContext httpContext)
+    {
+        _logger.LogInformation("Cambiando la contraseña de un Docente");
+        var docente = await _validaciones.VerificarCambioDeContraseniaAsync(cambiarContraseniaDto, idDocente, httpContext);
+
+        docente.Contrasenia = cambiarContraseniaDto.ContraseniaNueva;
+        _logger.LogInformation($"Contraseña de un Docente cambiada con la id {docente.IdDocente}");
         await _docenteDAO.ActualizarAsync(docente);
-    }
-
-    private void verificarIdValida(int id)
-    {
-        if (id <= 0)
-        {
-            throw new ArgumentException("El ID del docente debe ser mayor que cero.", nameof(id));
-        }
-    }
-
-    private void verificarExistenciaDocente(DocenteDTO docente)
-    {
-        if (docente == null)
-        {
-            throw new RecursoNoEncontradoException("El docente no existe.");
-        }
-    }
-
-    private void verificarParametrosDocenteRegistro(RegistrarDocenteDTO docenteDto)
-    {
-        if (docenteDto.nombreUsuario == "" ||
-            docenteDto.nombreCompleto == "" ||
-            docenteDto.contrasenia == "" ||
-            docenteDto.correoElectronico == "" ||
-            docenteDto.idGradoProfesional <= 0)
-        {
-            throw new ArgumentException("Los parámetros del docente son inválidos.");
-        }
-    }
-
-    private void verificarParametrosDocenteActualizacion(ActualizarDocenteDTO docenteDto)
-    {
-        if (docenteDto.nombreUsuario == "" ||
-            docenteDto.nombreCompleto == "" ||
-            docenteDto.idGradoProfesional <= 0)
-        {
-            throw new ArgumentException("Los parámetros del docente son inválidos.");
-        }
-    }
-
-    private void verificarParametrosCambiarContrasenia(CambiarContraseniaDTO cambiarContraseniaDto)
-    {
-        if (string.IsNullOrEmpty(cambiarContraseniaDto.contraseniaActual) ||
-            string.IsNullOrEmpty(cambiarContraseniaDto.contraseniaNueva))
-        {
-            throw new ArgumentException("Los parámetros para cambiar la contraseña son inválidos.");
-        }
-    }
-
-    private async Task verificarDocenteNombreRegistroAsync(string nombreUsuario)
-    {
-        var docenteExistente = await _docenteDAO.ObtenerPorNombreUsuarioAsync(nombreUsuario);
-        if (docenteExistente != null)
-        {
-            throw new RecursoYaExistenteException($"El nombre de usuario '{nombreUsuario}' ya está en uso por otro docente.");
-        }
-    }
-
-    private async Task verificarDocenteNombreActualizacionAsync(string nombreUsuario, int id)
-    {
-        var docenteExistente = await _docenteDAO.ObtenerPorNombreUsuarioEIdAsync(nombreUsuario, id);
-        if (docenteExistente != null)
-        {
-            throw new RecursoYaExistenteException($"El nombre de usuario '{nombreUsuario}' ya está en uso por otro docente.");
-        }
-    }
-
-    private void verificarIgualdadId(int id, int idDocente)
-    {
-        if (id != idDocente)
-        {
-            throw new DiscordanciaDeIdException("El ID del docente no coincide con el ID proporcionado.");
-        }
-    }
-
-    private async Task verificarDocenteCorreoAsync(string correo)
-    {
-        var docenteExistente = await _docenteDAO.ObtenerPorCorreoAsync(correo);
-        if (docenteExistente != null)
-        {
-            throw new RecursoYaExistenteException($"El correo '{correo}' ya está en uso por otro docente.");
-        }
-    }
-
-    private void verificarAutorizacion(HttpContext context)
-    {
-        if (!context.User.Identity?.IsAuthenticated ?? true)
-        {
-            throw new UnauthorizedAccessException("El usuario no está autenticado.");
-        }
-    }
-
-    private void verificarContraseniaActual(docente docente, string contraseniaActual)
-    {
-        if (docente.contrasenia != contraseniaActual)
-        {
-            throw new ContraseniaDiferenteException("La contraseña actual es incorrecta.");
-        }
-    }
-
-    private async Task<docente> ObtenerDocentePorIdAsync(int id)
-    {
-        var alumno = await _docenteDAO.ObtenerPorIdNormalAsync(id);
-        if (alumno == null)
-        {
-            throw new RecursoNoEncontradoException($"El docente con ID {id} no existe.");
-        }
-        return alumno;
     }
 }

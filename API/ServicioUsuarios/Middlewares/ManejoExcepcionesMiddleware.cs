@@ -32,23 +32,19 @@ public class ManejoExcepcionesMiddleware
 
         switch (ex)
         {
-            case RecursoNoEncontradoException notFoundEx:
-                _logger.LogWarning(ex, "Recurso no encontrado.");
-                contexto.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                await contexto.Response.WriteAsJsonAsync(new { error = notFoundEx.Message });
-                break;
-            case DiscordanciaDeIdException badRequestEx:
-                _logger.LogWarning(ex, "Discordancia de ID detectada.");
+            //BadRequest
+            case IdInvalidaException badRequestEx:
+                _logger.LogWarning(ex, "Id inválido proporcionado.");
                 contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 await contexto.Response.WriteAsJsonAsync(new { error = badRequestEx.Message });
                 break;
-            case RecursoYaExistenteException statusConflictEx:
-                _logger.LogWarning(ex, "Recurso ya existe.");
-                contexto.Response.StatusCode = (int)HttpStatusCode.Conflict;
-                await contexto.Response.WriteAsJsonAsync(new { error = statusConflictEx.Message });
+            case CampoObligatorioException badRequestEx:
+                _logger.LogWarning(ex, "Campo obligadotio no proporcionado.");
+                contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                await contexto.Response.WriteAsJsonAsync(new { error = badRequestEx.Message });
                 break;
-            case IdInvalidaException badRequestEx:
-                _logger.LogWarning(ex, "ID inválido proporcionado.");
+            case DiscordanciaDeIdException badRequestEx:
+                _logger.LogWarning(ex, "Discordancia de ID detectada.");
                 contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 await contexto.Response.WriteAsJsonAsync(new { error = badRequestEx.Message });
                 break;
@@ -56,6 +52,23 @@ public class ManejoExcepcionesMiddleware
                 _logger.LogWarning(ex, "Las contraseñas no coinciden.");
                 contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 await contexto.Response.WriteAsJsonAsync(new { error = badRequestEx.Message });
+                break;
+            case TipoUsuarioInvalidoException badRequestEx:
+                _logger.LogWarning(ex, "Tipo usuario inválido.");
+                contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                await contexto.Response.WriteAsJsonAsync(new { error = badRequestEx.Message });
+                break;
+            //NotFoundEx
+            case RecursoNoEncontradoException notFoundEx:
+                _logger.LogWarning(ex, "Recurso no encontrado.");
+                contexto.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                await contexto.Response.WriteAsJsonAsync(new { error = notFoundEx.Message });
+                break;
+            //Conflict
+            case RecursoYaExistenteException statusConflictEx:
+                _logger.LogWarning(ex, "Recurso ya existe.");
+                contexto.Response.StatusCode = (int)HttpStatusCode.Conflict;
+                await contexto.Response.WriteAsJsonAsync(new { error = statusConflictEx.Message });
                 break;
             default:
                 _logger.LogError(ex, "Ocurrió un error inesperado.");

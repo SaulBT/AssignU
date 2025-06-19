@@ -1,9 +1,9 @@
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using ServicioUsuarios.DTOs;
 using System.Text;
 using System.Text.Json;
 using ServicioUsuarios.Services.Interfaces;
+using ServicioUsuarios.Data.DTOs.RPC;
 
 namespace ServicioUsuarios.Config
 {

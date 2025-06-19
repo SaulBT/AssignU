@@ -1,4 +1,3 @@
-using ServicioClases.Data.DTOs;
 using ServicioClases.Models;
 
 namespace ServicioClases.Data.DAOs.Interfaces;

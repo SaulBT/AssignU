@@ -1,3 +1,4 @@
+using System.Data;
 using ServicioTareas.Exceptions;
 
 namespace ServicioTareas.Validations;
@@ -8,6 +9,12 @@ public static class LanzarExcepciones
     {
         switch (tipo)
         {
+            case "Data":
+                return new DataException(mensaje);
+            case "CampoObligatorioException":
+                return new CampoObligatorioException(mensaje);
+            case "IdInvalidaException":
+                return new IdInvalidaException(mensaje);
             case "CuestionarioInvalido":
                 return new CuestionarioInvalidoException(mensaje);
             case "PreguntaInvalida":

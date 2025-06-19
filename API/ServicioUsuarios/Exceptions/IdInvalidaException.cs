@@ -1,6 +1,6 @@
 namespace ServicioUsuarios.Exceptions;
 
-public class IdInvalidaException : Exception
+public class IdInvalidaException : ArgumentException
 {
     public IdInvalidaException(string mensaje) : base(mensaje) { }
 }

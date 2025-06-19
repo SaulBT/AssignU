@@ -71,7 +71,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 //ServicioAlumno
-app.MapPost("/alumnos", async (RegistrarAlumnoDTO alumnoNuevoDto, IServicioAlumno servicio) =>
+app.MapPost("/usuarios/alumnos", async (RegistrarAlumnoDTO alumnoNuevoDto, IServicioAlumno servicio) =>
 {
     await servicio.RegistrarAsync(alumnoNuevoDto);
     return Results.Created();
@@ -92,7 +92,7 @@ app.MapPost("/alumnos", async (RegistrarAlumnoDTO alumnoNuevoDto, IServicioAlumn
 .Produces(409)
 .WithOpenApi();
 
-app.MapGet("/alumnos/{idAlumno}", async (int idAlumno, IServicioAlumno servicio) =>
+app.MapGet("/usuarios/alumnos/{idAlumno}", async (int idAlumno, IServicioAlumno servicio) =>
 {
     var alumno = await servicio.ObtenerAlumnoPorIdAsync(idAlumno);
     return Results.Ok(alumno);
@@ -114,7 +114,7 @@ app.MapGet("/alumnos/{idAlumno}", async (int idAlumno, IServicioAlumno servicio)
 .Produces(409)
 .WithOpenApi();
 
-app.MapPut("/alumnos/{idAlumno}", async (HttpContext context, int idAlumno, ActualizarAlumnoDTO alumnoActualizadoDTO, IServicioAlumno servicio) =>
+app.MapPut("/usuarios/alumnos/{idAlumno}", async (HttpContext context, int idAlumno, ActualizarAlumnoDTO alumnoActualizadoDTO, IServicioAlumno servicio) =>
 {
     await servicio.ActualizarAsync(context, idAlumno, alumnoActualizadoDTO);
     return Results.Accepted();
@@ -143,7 +143,7 @@ app.MapPut("/alumnos/{idAlumno}", async (HttpContext context, int idAlumno, Actu
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapDelete("/alumnos/{idAlumno}", async (HttpContext context, int idAlumno, IServicioAlumno servicio) =>
+app.MapDelete("/usuarios/alumnos/{idAlumno}", async (HttpContext context, int idAlumno, IServicioAlumno servicio) =>
 {
     await servicio.EliminarAsync(context, idAlumno);
     return Results.Accepted();
@@ -159,7 +159,7 @@ app.MapDelete("/alumnos/{idAlumno}", async (HttpContext context, int idAlumno, I
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapPut("/alumnos/{idAlumno}/contrasenia", async (CambiarContraseniaDTO cambiarContraseniaDto, int idAlumno, IServicioAlumno servicio, HttpContext context) =>
+app.MapPut("/usuarios/alumnos/{idAlumno}/contrasenia", async (CambiarContraseniaDTO cambiarContraseniaDto, int idAlumno, IServicioAlumno servicio, HttpContext context) =>
 {
     await servicio.CambiarContraseniaAsync(cambiarContraseniaDto, idAlumno, context);
     return Results.Accepted();
@@ -176,7 +176,7 @@ app.MapPut("/alumnos/{idAlumno}/contrasenia", async (CambiarContraseniaDTO cambi
 .RequireAuthorization()
 .WithOpenApi();
 
-app.MapGet("/alumnos/{idAlumno}/estadisticas", async (HttpContext context, int idAlumno, IServicioAlumno servicio) =>
+app.MapGet("/usuarios/alumnos/{idAlumno}/estadisticas", async (HttpContext context, int idAlumno, IServicioAlumno servicio) =>
 {
     var estadisticas = await servicio.ObtenerEstadisticasPerfilAlumnoAsync(context, idAlumno);
     return Results.Ok(estadisticas);
@@ -198,7 +198,7 @@ app.MapGet("/alumnos/{idAlumno}/estadisticas", async (HttpContext context, int i
 .WithOpenApi();
 
 //DocenteService
-app.MapPost("/docentes", async (RegistrarDocenteDTO docenteNuevoDto, IServicioDocente servicio) =>
+app.MapPost("/usuarios/docentes", async (RegistrarDocenteDTO docenteNuevoDto, IServicioDocente servicio) =>
 {
     await servicio.RegistrarAsync(docenteNuevoDto);
     return Results.Created();

@@ -1,4 +1,3 @@
-version: '3.9'
 services:
   rabbitmq:
     image: rabbitmq:3-management
@@ -10,9 +9,10 @@ services:
       - RABBITMQ_DEFAULT_PASS=guest
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "status"]
-      interval: 20s
+      interval: 15s
       timeout: 5s
       retries: 5
+  
   mysql_usuarios:
     image: mysql:latest
     container_name: contenedor_mysql_usuarios
@@ -28,6 +28,7 @@ services:
       - volumen_mysql_usuarios:/var/lib/mysql
     ports:
       - "3307:3306"
+  
   mysql_clases:
     image: mysql:latest
     container_name: contenedor_mysql_clases
@@ -43,6 +44,7 @@ services:
       - volumen_mysql_clases:/var/lib/mysql
     ports:
       - "3308:3306"
+  
   mysql_tareas:
     image: mysql:latest
     container_name: contenedor_mysql_tareas
@@ -58,6 +60,7 @@ services:
       - volumen_mysql_tareas:/var/lib/mysql
     ports:
       - "3309:3306"
+  
   mongo_cuestionarios:
     image: mongodb/mongodb-community-server:7.0.21-rc0-ubi8
     container_name: contenedor_mongodb_cuestionarios
@@ -70,6 +73,20 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  
+  mongo_archivos:
+    image: mongodb/mongodb-community-server:7.0.21-rc0-ubi8
+    container_name: contenedor_mongodb_archivos
+    ports:
+      - "27018:27017"
+    volumes:
+      - volumen_mongo_archivos:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
   servicio_usuarios:
     image: imagen_servicio_usuarios:1.0
     depends_on:    
@@ -79,6 +96,7 @@ services:
         condition: service_healthy
     ports:
       - "5001:80"
+  
   servicio_clases:
     image: imagen_servicio_clases:1.0
     depends_on:    
@@ -88,6 +106,7 @@ services:
         condition: service_healthy
     ports:
       - "5002:80"
+  
   servicio_tareas:
     image: imagen_servicio_tareas:1.0
     depends_on:    
@@ -97,6 +116,7 @@ services:
         condition: service_healthy
     ports:
       - "5003:80"
+  
   servicio_cuestionarios:
     image: imagen_servicio_cuestionarios:1.0
     depends_on:    
@@ -106,6 +126,26 @@ services:
         condition: service_healthy
     ports:
       - "5004:80"
+
+  servicio_archivos:
+    image: imagen_servicio_archivos:1.0
+    depends_on:    
+      rabbitmq:
+        condition: service_healthy
+      mongo_archivos:
+        condition: service_healthy
+    ports:
+      - "5005:5005"
+
+  envoy:
+    image: envoyproxy/envoy-dev:latest
+    volumes:
+      - ./ServicioArchivos/envoy.yaml:/etc/envoy/envoy.yaml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - servicio_archivos
+
   apigateway:
     image: imagen_apigateway:1.0
     ports:
@@ -115,3 +155,4 @@ volumes:
   volumen_mysql_clases:
   volumen_mysql_tareas:
   volumen_mongo_cuestionarios:
+  volumen_mongo_archivos:

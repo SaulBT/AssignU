@@ -11,7 +11,10 @@ const {
 } = require('./controllers/cuestionario-controladores');
 
 async function iniciarServidorRpc() {
-  const connection = await amqp.connect('amqp://localhost');
+  const hostDevelopment = 'amqp://localhost';
+  const hostProduction = 'amqp://guest:guest@rabbitmq';
+  
+  const connection = await amqp.connect(hostProduction);
   const channel = await connection.createChannel();
 
   const queue = 'cola_cuestionarios';

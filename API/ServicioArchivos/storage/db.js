@@ -1,6 +1,9 @@
+import dotenv from 'dotenv';
 import { MongoClient, GridFSBucket } from "mongodb";
 
-const cliente = new MongoClient("mongodb://localhost:27017/archivos_bd_assignu");
+dotenv.config();
+
+const cliente = new MongoClient(process.env.MONGODB_URI_PRODUCTION);
 await cliente.connect();
 
 const db = cliente.db("archivos_bd_assignu");

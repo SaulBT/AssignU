@@ -63,6 +63,8 @@ var app = builder.Build();
 app.UseManejoExcepciones();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 //ServicioClase
 app.MapPost("/clases", async (IServicioClase servicio, CrearClaseDTO crearClaseDto, HttpContext httpContext) =>

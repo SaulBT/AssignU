@@ -1,6 +1,5 @@
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using ServicioTareas.Data.DTOs;
 using System.Text;
 using System.Text.Json;
 using ServicioTareas.Services.Interfaces;
@@ -14,11 +13,13 @@ namespace ServicioTareas.Config
         private IChannel _channel;
         private string _queueName;
         private IServicioTarea _servicioTarea;
+        private readonly string _rabbitMqHostDevelopment = "localhost";
+        private readonly string _rabbitMqHostProduction = "rabbitmq";
 
-        public async Task InicializarServidor(IServicioTarea servicioTarea, string rabbitMqHost = "localhost", string queueName = "cola_tareas")
+        public async Task InicializarServidor(IServicioTarea servicioTarea, string queueName = "cola_tareas")
         {
             _servicioTarea = servicioTarea;
-            var factory = new ConnectionFactory() { HostName = rabbitMqHost };
+            var factory = new ConnectionFactory() { HostName = _rabbitMqHostProduction };
             _connection = await factory.CreateConnectionAsync();
             _channel = await _connection.CreateChannelAsync();
 

@@ -59,6 +59,8 @@ var app = builder.Build();
 app.UseManejoExcepciones();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 //ServicioTarea
 app.MapPost("/tareas", async (IServicioTarea servicio, CrearTareaDTO crearTareaDto, HttpContext httpContext) =>

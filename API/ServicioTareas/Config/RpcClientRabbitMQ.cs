@@ -12,12 +12,12 @@ public class RpcClientRabbitMQ : IAsyncDisposable
     private AsyncEventingBasicConsumer _consumer;
     private string _correlationId;
     private TaskCompletionSource<string> _tcsResponse;
+    private readonly string _rabbitMqHostDevelopment = "localhost";
+    private readonly string _rabbitMqHostProduction = "rabbitmq";
 
-
-
-    public async Task InicializarCliente(string _rabbitMqHost = "localhost")
+    public async Task InicializarCliente()
     {
-        var factory = new ConnectionFactory() { HostName = _rabbitMqHost };
+        var factory = new ConnectionFactory() { HostName = _rabbitMqHostProduction };
         _connection = await factory.CreateConnectionAsync();
         _channel = await _connection.CreateChannelAsync();
 

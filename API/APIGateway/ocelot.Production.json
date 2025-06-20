@@ -1,0 +1,32 @@
+{
+    "Routes": [
+        {
+            "UpstreamPathTemplate": "/usuarios/{everything}",
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "DownstreamPathTemplate": "/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [{ "Host": "servicio_usuarios", "Port": 80 }]
+        },
+        {
+            "UpstreamPathTemplate": "/clases/{everything}",
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "DownstreamPathTemplate": "/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [{ "Host": "servicio_clases", "Port": 80 }]
+        },
+        {
+            "UpstreamPathTemplate": "/tareas/{everything}",
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "DownstreamPathTemplate": "/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [{ "Host": "servicio_tareas", "Port": 80 }]
+        },
+        {
+            "UpstreamPathTemplate": "/cuestionarios/{everything}",
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "DownstreamPathTemplate": "/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [{ "Host": "servicio_cuestionarios", "Port": 80 }]
+        }
+    ]
+}

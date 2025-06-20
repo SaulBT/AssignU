@@ -13,11 +13,13 @@ namespace ServicioClases.Config
         private IChannel _channel;
         private string _queueName;
         private IServicioClase _ServicioClase;
+        private readonly string _rabbitMqHostDevelopment = "localhost";
+        private readonly string _rabbitMqHostProduction = "rabbitmq";
 
-        public async Task InicializarServidor(IServicioClase ServicioClase, string rabbitMqHost = "localhost", string queueName = "cola_clases")
+        public async Task InicializarServidor(IServicioClase ServicioClase, string queueName = "cola_clases")
         {
             _ServicioClase = ServicioClase;
-            var factory = new ConnectionFactory() { HostName = rabbitMqHost };
+            var factory = new ConnectionFactory() { HostName = _rabbitMqHostProduction };
             _connection = await factory.CreateConnectionAsync();
             _channel = await _connection.CreateChannelAsync();
 

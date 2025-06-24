@@ -1,5 +1,6 @@
 package com.AssignU.controllers;
 
+import com.AssignU.controllers.Menu.MenuController;
 import com.AssignU.utils.ApiCliente;
 import com.AssignU.models.Usuarios.IniciarSesionDTO;
 import com.AssignU.models.Usuarios.RespuestaIniciarSesionDTO;
@@ -12,10 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -35,7 +33,7 @@ public class LoginController implements Initializable {
     @FXML
     public Label lbNombreUsuarioCorreoError;
     @FXML
-    public TextField tfContrasenia;
+    public PasswordField pfContrasenia;
     @FXML
     public Label lbContraseniaError;
     @FXML
@@ -51,7 +49,7 @@ public class LoginController implements Initializable {
         if (verificarCampos()) {
             String tipoUsuario = (cbTipousuarios.getValue().toString().toLowerCase());
             String nombreUsuarioOCorreo = tfNombreUsuarioCorreo.getText();
-            String contrasenia = tfContrasenia.getText();
+            String contrasenia = pfContrasenia.getText();
             enviarSolicitudLogin(tipoUsuario, nombreUsuarioOCorreo, contrasenia);
         } else {
             Alert ventana = VentanaEmergente.mostrarVentana("Error", "Campos Vacíos", "Favor de llenar todos los campos", Alert.AlertType.ERROR);
@@ -72,8 +70,15 @@ public class LoginController implements Initializable {
         try {
             IniciarSesionDTO iniciarSesionDto = new IniciarSesionDTO(tipoUsuario, nombreUsuarioOCorreo, contrasenia);
             RespuestaIniciarSesionDTO respuesta = ApiCliente.enviarSolicitud("/usuarios/login", "POST", iniciarSesionDto, headers, RespuestaIniciarSesionDTO.class);
-            Alert ventana = VentanaEmergente.mostrarVentana("Bien", "Mira si sirve", "Token: " + respuesta.getToken(), Alert.AlertType.CONFIRMATION);
-            ventana.showAndWait();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Menu/menu.fxml"));
+            Parent root = loader.load();
+            MenuController controller = loader.getController();
+            controller.cargarValores(tipoUsuario, respuesta.getToken(), respuesta.getIdUsuario());
+            Stage stage = (Stage) lbContraseniaError.getScene().getWindow();
+            Scene nuevaEscena = new Scene(root);
+            stage.setScene(nuevaEscena);
+
         } catch (Exception e) {
             Alert ventana = VentanaEmergente.mostrarVentana("Error", "Credenciales incorrectas", e.getMessage(), Alert.AlertType.ERROR);
             ventana.showAndWait();
@@ -96,7 +101,7 @@ public class LoginController implements Initializable {
     private boolean verificarCampos() {
         Object tipoUsuario = cbTipousuarios.getValue();
         String nombreUsuarioOCorreo = tfNombreUsuarioCorreo.getText();
-        String contrasenia = tfContrasenia.getText();
+        String contrasenia = pfContrasenia.getText();
         boolean bandera = true;
 
         ocultarLabelsErrores();

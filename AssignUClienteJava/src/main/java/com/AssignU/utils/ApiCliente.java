@@ -42,7 +42,8 @@ public class ApiCliente {
         HttpResponse<String> respuesta = procesarSolicitud(endpoint, metodo, cuerpoJson, cabeceras);
 
         if (respuesta.statusCode() != 200 && respuesta.statusCode() != 201 && respuesta.statusCode() != 202) {
-            throw new Exception(respuesta.body());
+            ErroREST error = gson.fromJson(respuesta.body(), ErroREST.class);
+            throw new Exception(error.getError());
         }
 
         Type tipoLista = TypeToken.getParameterized(List.class, tipoElemento).getType();

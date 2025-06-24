@@ -148,7 +148,7 @@
                   <Insets bottom="30.0" />
                </VBox.margin>
             </HBox>
-            <Button fx:id="btnRegistrarse" disable="true" mnemonicParsing="false" onAction="#clicBtnRegistrarse" prefHeight="47.0" prefWidth="152.0" stylesheets="@stylesheets/button.css" text="Registrarse" textFill="#18529d">
+            <Button fx:id="btnRegistrarse" disable="true" mnemonicParsing="false" onAction="#clicBtnRegistrarse" prefHeight="47.0" prefWidth="152.0" stylesheets="@stylesheets/button_ok.css" text="Registrarse" textFill="#18529d">
                <font>
                   <Font name="System Bold" size="21.0" />
                </font>

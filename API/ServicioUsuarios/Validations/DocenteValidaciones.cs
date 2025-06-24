@@ -73,13 +73,25 @@ public class DocenteValidaciones
 
     private void verificarParametrosDocenteRegistro(RegistrarDocenteDTO docenteDto)
     {
-        if (docenteDto.NombreUsuario == "" ||
-            docenteDto.NombreCompleto == "" ||
-            docenteDto.Contrasenia == "" ||
-            docenteDto.CorreoElectronico == "" ||
-            docenteDto.IdGradoProfesional <= 0)
+        if (string.IsNullOrEmpty(docenteDto.NombreCompleto))
         {
-            throw new ArgumentException("Los parámetros del docente son inválidos.");
+            throw new CampoObligatorioException("Los parámetros de registro del docente son inválidos: El nombre completo es nulo");
+        }
+        else if (string.IsNullOrEmpty(docenteDto.NombreUsuario))
+        {
+            throw new CampoObligatorioException("Los parámetros de registro del docente son inválidos: El nombre usuario es nulo");
+        }
+        else if (string.IsNullOrEmpty(docenteDto.Contrasenia))
+        {
+            throw new CampoObligatorioException("Los parámetros de registro del docente son inválidos: La contraseña es nula");
+        }
+        else if (string.IsNullOrEmpty(docenteDto.CorreoElectronico))
+        {
+            throw new CampoObligatorioException("Los parámetros de registro del docente son inválidos: El correo electrónico es nulo");
+        }
+        else if (docenteDto.IdGradoProfesional <= 0)
+        {
+            throw new IdInvalidaException($"Los parámetros de registro del docente son inválidos: Id del grado de estudios: {docenteDto.IdGradoProfesional}");
         }
     }
 

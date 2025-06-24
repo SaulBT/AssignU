@@ -1,11 +1,12 @@
+using ServicioUsuarios.Data.DTOs.Catalogo;
 using ServicioUsuarios.Models;
 
 namespace ServicioUsuarios.Services.Interfaces;
 
 public interface IServicioCatalogo
 {
-    Task<List<GradoEstudios>> ObtenerGradosEstudiosAsync();
-    Task<List<GradoProfesional>> ObtenerGradosProfesionalesAsync();
-    Task<GradoEstudios> ObtenerGradoEstudioPorIdAsync(int id);
-    Task<GradoProfesional> ObtenerGradoProfesionalPorIdAsync(int id);
+    Task<List<GradoEstudiosDTO>> ObtenerGradosEstudiosAsync();
+    Task<List<GradoProfesionalDTO>> ObtenerGradosProfesionalesAsync();
+    Task<GradoEstudiosDTO> ObtenerGradoEstudioPorIdAsync(int id);
+    Task<GradoProfesionalDTO> ObtenerGradoProfesionalPorIdAsync(int id);
 }

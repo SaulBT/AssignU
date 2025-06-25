@@ -26,6 +26,16 @@ public class ClaseController {
     }
 
     public void clicBtnCrearTarea(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Tarea/crearTarea.fxml"));
+            Parent vistaCrearTarea = loader.load();
+            Stage escenario = (Stage) lbCambiarNombre.getScene().getWindow();
+            Scene nuevaEscena = new Scene(vistaCrearTarea);
+            escenario.setTitle("Crear tarea");
+            escenario.setScene(nuevaEscena);
+        } catch (Exception ex) {
+            VentanaEmergente.mostrarVentana("Error al cambiar la vista", null, ex.getMessage(), Alert.AlertType.ERROR).showAndWait();
+        }
     }
 
     public void btnLbEliminarClase(MouseEvent mouseEvent) {

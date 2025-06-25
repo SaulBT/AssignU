@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #18529D;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.AssignU.controllers.Tarea.CrearTareaController">
+   <children>
+      <HBox prefHeight="47.0" prefWidth="1280.0">
+         <children>
+            <Label onMouseClicked="#btnLbVolver" text="&lt; Volver" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <Label text="Crear Tarea">
+         <font>
+            <Font name="System Bold" size="35.0" />
+         </font>
+      </Label>
+      <Separator prefWidth="200.0">
+         <VBox.margin>
+            <Insets left="20.0" right="20.0" />
+         </VBox.margin>
+      </Separator>
+      <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="1280.0">
+         <children>
+            <Label text="Nombre de la tarea:" textFill="WHITE">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <TextField fx:id="tfNombreTarea" prefHeight="44.0" prefWidth="414.0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </TextField>
+         </children>
+      </HBox>
+      <GridPane prefHeight="69.0" prefWidth="1280.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <VBox.margin>
+            <Insets left="20.0" right="20.0" />
+         </VBox.margin>
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Fecha límite:" textFill="WHITE">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
+                  <DatePicker fx:id="dpFechaLimite" prefHeight="41.0" prefWidth="276.0">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </DatePicker>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+               <children>
+                  <Label text="Archivo:" textFill="WHITE">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+                  <Label fx:id="lbNombreArchivo" text="nombre_archivo.pdf" textFill="WHITE">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Button mnemonicParsing="false" onAction="#btnSeleccionarArchivo" style="-fx-border-image-width: 3;" stylesheets="@../stylesheets/button_azul.css" text="Seleccionar archivo">
+                     <HBox.margin>
+                        <Insets left="30.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </GridPane>
+      <Separator prefWidth="200.0">
+         <VBox.margin>
+            <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+         </VBox.margin>
+      </Separator>
+      <ComboBox onAction="#cbAgregarPregunta" prefHeight="38.0" prefWidth="205.0" promptText="Agregar pregunta">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </ComboBox>
+      <ScrollPane prefHeight="337.0" prefWidth="1240.0">
+         <VBox.margin>
+            <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+         </VBox.margin>
+         <content>
+            <VBox prefHeight="337.0" prefWidth="1237.0" />
+         </content>
+      </ScrollPane>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#btnEliminar" prefHeight="52.0" prefWidth="161.0" stylesheets="@../stylesheets/button_cancelar.css" text="Eliminar">
+               <font>
+                  <Font name="System Bold" size="23.0" />
+               </font>
+               <HBox.margin>
+                  <Insets right="60.0" />
+               </HBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#btnCrear" prefHeight="52.0" prefWidth="159.0" stylesheets="@../stylesheets/button_ok.css" text="Crear">
+               <font>
+                  <Font name="System Bold" size="23.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</VBox>

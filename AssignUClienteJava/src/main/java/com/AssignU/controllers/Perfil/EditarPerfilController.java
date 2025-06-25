@@ -5,7 +5,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class EditarPerfil {
+public class EditarPerfilController {
     public TextField tfNombreCompleto;
     public TextField tfNombreUsuario;
     public ComboBox cbGrados;

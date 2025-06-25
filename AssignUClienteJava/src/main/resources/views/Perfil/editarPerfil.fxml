@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #18529D;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.AssignU.controllers.Perfil.EditarPerfil">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #18529D;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.AssignU.controllers.Perfil.EditarPerfilController">
    <top>
       <Label text="Editar perfil" textFill="WHITE" BorderPane.alignment="CENTER">
          <font>

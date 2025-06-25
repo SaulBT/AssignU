@@ -1,7 +1,7 @@
 package com.AssignU.controllers;
 
 import com.AssignU.models.Usuarios.Alumno.RegistrarAlumnoDTO;
-import com.AssignU.models.Usuarios.Alumno.RegistrarDocenteDTO;
+import com.AssignU.models.Usuarios.Docente.RegistrarDocenteDTO;
 import com.AssignU.models.Usuarios.Catalogo.GradoEstudios;
 import com.AssignU.models.Usuarios.Catalogo.GradoProfesional;
 import com.AssignU.utils.ApiCliente;

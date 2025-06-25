@@ -1,4 +1,4 @@
-package com.AssignU.models.Usuarios.Alumno;
+package com.AssignU.models.Usuarios.Docente;
 
 public class RegistrarDocenteDTO {
     public String nombreCompleto;

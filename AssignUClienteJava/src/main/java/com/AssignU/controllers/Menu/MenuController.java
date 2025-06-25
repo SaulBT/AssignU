@@ -38,11 +38,21 @@ public class MenuController {
             Scene nuevaEscena = new Scene(nuevaVista);
             stage.setScene(nuevaEscena);
         } catch (IOException ex) {
-
+            VentanaEmergente.mostrarVentana("Error al cambiar la vista", null, ex.getMessage(), Alert.AlertType.ERROR).showAndWait();
         }
     }
 
     public void btnLbPerfil(MouseEvent mouseEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Perfil/perfil.fxml"));
+            Parent vistaPerfil = loader.load();
+            Stage escenario = (Stage) btnAccionClase.getScene().getWindow();
+            Scene nuevaEscena = new Scene(vistaPerfil);
+            escenario.setScene(nuevaEscena);
+        } catch (Exception ex) {
+            VentanaEmergente.mostrarVentana("Error al cambiar la vista", null, ex.getMessage(), Alert.AlertType.ERROR).showAndWait();
+        }
+
     }
 
     public void clicBtnAccionClase(ActionEvent actionEvent) {
@@ -57,7 +67,7 @@ public class MenuController {
                 Stage nuevaVentana = new Stage();
                 nuevaVentana.setTitle("Crear clase");
                 nuevaVentana.setScene(new Scene(nuevaVista));
-                nuevaVentana.initModality(Modality.APPLICATION_MODAL); // ← Esto bloquea la ventana principal
+                nuevaVentana.initModality(Modality.APPLICATION_MODAL);
                 nuevaVentana.showAndWait();
             }
         } catch (Exception e) {

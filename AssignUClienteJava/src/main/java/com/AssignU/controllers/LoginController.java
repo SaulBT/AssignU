@@ -4,6 +4,7 @@ import com.AssignU.controllers.Menu.MenuController;
 import com.AssignU.utils.ApiCliente;
 import com.AssignU.models.Usuarios.IniciarSesionDTO;
 import com.AssignU.models.Usuarios.RespuestaIniciarSesionDTO;
+import com.AssignU.models.Usuarios.Sesion;
 import com.AssignU.utils.Constantes;
 import com.AssignU.utils.VentanaEmergente;
 import javafx.collections.FXCollections;
@@ -70,15 +71,18 @@ public class LoginController implements Initializable {
         try {
             IniciarSesionDTO iniciarSesionDto = new IniciarSesionDTO(tipoUsuario, nombreUsuarioOCorreo, contrasenia);
             RespuestaIniciarSesionDTO respuesta = ApiCliente.enviarSolicitud("/usuarios/login", "POST", iniciarSesionDto, headers, RespuestaIniciarSesionDTO.class);
-
+            //----------------------------------------------------
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Menu/menu.fxml"));
             Parent root = loader.load();
+            
             MenuController controller = loader.getController();
-            controller.cargarValores(tipoUsuario, respuesta.getToken(), respuesta.getIdUsuario());
+            Sesion sesion = new Sesion(tipoUsuario, respuesta.getToken(), respuesta.getIdUsuario());
+            controller.cargarValores(sesion);
+            
             Stage stage = (Stage) lbContraseniaError.getScene().getWindow();
             Scene nuevaEscena = new Scene(root);
             stage.setScene(nuevaEscena);
-
+            //----------------------------------------------------
         } catch (Exception e) {
             Alert ventana = VentanaEmergente.mostrarVentana("Error", "Credenciales incorrectas", e.getMessage(), Alert.AlertType.ERROR);
             ventana.showAndWait();

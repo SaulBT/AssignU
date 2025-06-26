@@ -1,6 +1,9 @@
 package com.AssignU.controllers.Perfil;
 
+import com.AssignU.models.Usuarios.Sesion;
 import com.AssignU.utils.VentanaEmergente;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class PerfilController {
+public class PerfilController{
     public Label lbPerfilNombreUsuario;
     public Label lbNombreUsuario;
     public Label lbNombreCompleto;
@@ -27,7 +30,25 @@ public class PerfilController {
     public Button btnEditarPerfil;
     public Label lbTextoGradoEstudios;
     public ScrollPane spInformacionClase;
+    
+    private Sesion sesion;
+    private String mensajeError;
+    private boolean esDocente;
+    
+    private Map<String, String> headers = new HashMap<String, String>();
+    
 
+    public void CargarValores(Sesion sesion){
+        this.sesion = sesion;
+        if (sesion.tipoUsuario.matches("alumno")) {
+            esDocente = false;
+            cargarVentanaAlumno();
+        } else if (sesion.tipoUsuario.matches("docente")) {
+            esDocente = true;
+            cargarVentanaDocente();
+        }
+    }
+    
     public void btnLbVolver(MouseEvent mouseEvent) {
     }
 

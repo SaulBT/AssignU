@@ -87,7 +87,7 @@ public class MenuController {
             Parent vistaPerfil = loader.load();
             
             PerfilController controller = loader.getController();
-            controller.CargarValores(sesion);
+            controller.cargarValores(sesion);
             
             Stage escenario = (Stage) btnAccionClase.getScene().getWindow();
             Scene nuevaEscena = new Scene(vistaPerfil);

@@ -6,6 +6,7 @@ import com.AssignU.models.Usuarios.Catalogo.GradoEstudios;
 import com.AssignU.models.Usuarios.Catalogo.GradoProfesional;
 import com.AssignU.utils.ApiCliente;
 import com.AssignU.utils.Constantes;
+import com.AssignU.utils.Utils;
 import com.AssignU.utils.VentanaEmergente;
 import com.google.common.reflect.TypeToken;
 import javafx.collections.FXCollections;
@@ -169,42 +170,42 @@ public class RegistroUsuarioController implements Initializable {
             mensajeError = "Selecciona un Grado";
         }
 
-        mensaje = verificarCorreo(correo, 45);
+        mensaje = Utils.verificarCorreo(correo, 45);
         if (!mensaje.matches("ok")){
             bandera = false;
             tfCorreo.setStyle("-fx-border-color: red");
             mensajeError = "El Correo Electrónico es inválido: " + mensaje;
         }
 
-        mensaje = verificarCampoNormal(confirmarContrasenia, 64);
+        mensaje = Utils.verificarCampoNormal(confirmarContrasenia, 64);
         if (!mensaje.matches("ok")){
             bandera = false;
             pfConfirmarContrasenia.setStyle("-fx-border-color: red");
             mensajeError = "El Nombre Completo es inválido: " + mensaje;
         }
 
-        mensaje = verificarCampoNormal(contrasenia, 64);
+        mensaje = Utils.verificarCampoNormal(contrasenia, 64);
         if (!mensaje.matches("ok")){
             bandera = false;
             pfContrasenia.setStyle("-fx-border-color: red");
             mensajeError = "El Nombre Completo es inválido: " + mensaje;
         }
 
-        if (!verificarContrasenia(contrasenia, confirmarContrasenia)) {
+        if (!Utils.verificarContrasenia(contrasenia, confirmarContrasenia)) {
             bandera = false;
             pfContrasenia.setStyle("-fx-border-color: red");
             pfConfirmarContrasenia.setStyle("-fx-border-color: red");
             mensajeError = "Las contraseñas no coinciden";
         }
 
-        mensaje = verificarNombreUsuario(nombreUsuario, 45);
+        mensaje = Utils.verificarNombreUsuario(nombreUsuario, 45);
         if (!mensaje.matches("ok")){
             bandera = false;
             tfNombreUsuario.setStyle("-fx-border-color: red");
             mensajeError = "El Nombre Usuario es inválido: " + mensaje;
         }
 
-        mensaje = verificarCampoNormal(nombreCompleto, 135);
+        mensaje = Utils.verificarCampoNormal(nombreCompleto, 135);
         if (!mensaje.matches("ok")){
             bandera = false;
             tfNombreCompleto.setStyle("-fx-border-color: red");
@@ -212,56 +213,6 @@ public class RegistroUsuarioController implements Initializable {
         }
 
         return bandera;
-    }
-
-    private String verificarCampoNormal(String campo, int tamanioMaximo) {
-        if (campo.isEmpty()){
-            return "campo vacío";
-        } else if (!verificarTamanioCampo(campo, tamanioMaximo)) {
-            return "no debe sobrepasar de los " + tamanioMaximo + " caracteres";
-        }
-
-        return "ok";
-    }
-
-    private String verificarNombreUsuario(String nombreUsuario, int tamanioMaximo) {
-        if (nombreUsuario.isEmpty()){
-            return "campo vacío";
-        } else if (!verificarTamanioCampo(nombreUsuario, tamanioMaximo)) {
-            return "no debe sobrepasar de los " + tamanioMaximo + " caracteres";
-        } else if (!nombreUsuario.matches("[a-zA-Z0-9\\s]*")) {
-            return "no puede tener caracteres especiales";
-        }
-
-        return "ok";
-    }
-
-    private String verificarCorreo(String correo, int tamanioMaximo) {
-        if (correo.isEmpty()){
-            return "campo vacío";
-        } else if (!verificarTamanioCampo(correo, tamanioMaximo)) {
-            return "no debe sobrepasar de los " + tamanioMaximo + " caracteres";
-        } else if (!correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
-            return "no tiene formato de correo electrónico";
-        }
-
-        return "ok";
-    }
-
-    private boolean verificarContrasenia(String contrasenia, String confirmarContrasenia) {
-        if (!contrasenia.matches(confirmarContrasenia)){
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    private boolean verificarTamanioCampo(String campo, int tamanioMaximo) {
-        char[] cadena = campo.toCharArray();
-        if (cadena.length > tamanioMaximo) {
-            return false;
-        }
-        return true;
     }
 
     private void restaurarCampos(){

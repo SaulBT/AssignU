@@ -144,7 +144,7 @@
          <content>
             <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="1216.0">
                <children>
-                  <TableView fx:id="tbDatosClase" prefHeight="164.0" prefWidth="902.0">
+                  <TableView fx:id="tvDatosClase" prefHeight="164.0" prefWidth="902.0">
                     <columns>
                       <TableColumn fx:id="tcNombre" prefWidth="95.0" text="Nombre" />
                       <TableColumn fx:id="tcPregunta" prefWidth="90.0" text="Pn" />

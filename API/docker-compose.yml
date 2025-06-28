@@ -149,7 +149,8 @@ services:
   apigateway:
     image: imagen_apigateway:1.0
     ports:
-      - "5010:80"
+      - "5010:5010"
+      - "5011:5011"
 volumes:
   volumen_mysql_usuarios:
   volumen_mysql_clases:

@@ -1,16 +1,7 @@
-FROM mcr.microsoft.com/dotnet/aspnet:latest AS base
-WORKDIR /app
-EXPOSE 80
+FROM nginx:latest
 
-FROM mcr.microsoft.com/dotnet/sdk:latest AS build
-WORKDIR /src
+COPY nginx.conf /etc/nginx/nginx.conf
 
-COPY . .
-RUN dotnet restore
+COPY conf.d/ /etc/nginx/conf.d/
 
-RUN dotnet publish -c Release -o /app/publish
-
-FROM base AS final
-WORKDIR /app
-COPY --from=build /app/publish .
-ENTRYPOINT ["dotnet", "APIGateway.dll"]
+EXPOSE 5010 5011

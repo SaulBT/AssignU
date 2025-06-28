@@ -63,7 +63,6 @@ public class PerfilController{
     // A L U M N O
     private void obtenerDatosAlumno(){
         try {
-            headers.put("Content-Type", "application/json");
             headers.put("Authorization", "Bearer " + sesion.jwt);
             String endpoint = String.format("/usuarios/alumnos/%s/estadisticas", sesion.idUsuario);
             EstadisticasPerfilDTO estadisticasDto = ApiCliente.enviarSolicitud(endpoint, "GET", null, headers, EstadisticasPerfilDTO.class);
@@ -86,7 +85,6 @@ public class PerfilController{
     private void cargarGradoEstudios(int idGradoEstudios){
         lbTextoGradoEstudios.setText("Grado estudios:");
         try {
-            headers.put("Content-Type", "application/json");
             headers.put("Authorization", "Bearer " + sesion.jwt);
             String endpoint = String.format("/usuarios/catalogos/grados-estudios/%s", idGradoEstudios);
             GradoEstudios gradoEstudios = ApiCliente.enviarSolicitud(endpoint, "GET", null, headers, GradoEstudios.class);
@@ -103,7 +101,6 @@ public class PerfilController{
     // D O C E N T E
     private void obtenerDatosDocente(){
         try {
-            headers.put("Content-Type", "application/json");
             headers.put("Authorization", "Bearer " + sesion.jwt);
             String endpoint = String.format("/usuarios/docentes/%s", sesion.idUsuario);
             DocenteDTO docenteDto = ApiCliente.enviarSolicitud(endpoint, "GET", null, headers, DocenteDTO.class);
@@ -128,7 +125,6 @@ public class PerfilController{
     private void cargarGradoProfesional(int idGradoProfesional){
         lbTextoGradoEstudios.setText("Grado profesional:");
         try {
-            headers.put("Content-Type", "application/json");
             headers.put("Authorization", "Bearer " + sesion.jwt);
             String endpoint = String.format("/usuarios/catalogos/grados-profesionales/%s", idGradoProfesional);
             GradoProfesional gradoProfesional = ApiCliente.enviarSolicitud(endpoint, "GET", null, headers, GradoProfesional.class);
@@ -144,6 +140,10 @@ public class PerfilController{
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Perfil/cambiarContrasenia.fxml"));
             Parent vistaCambiarContrasenia = loader.load();
+            
+            CambiarContraseniaController controller = loader.getController();
+            controller.cargarValores(sesion);
+            
             Stage nuevaVentana = new Stage();
             nuevaVentana.setTitle("Cambiar contraseña");
             nuevaVentana.setScene(new Scene(vistaCambiarContrasenia));

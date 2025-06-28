@@ -6,6 +6,7 @@ import com.AssignU.models.Usuarios.Catalogo.GradoProfesional;
 import com.AssignU.models.Usuarios.Docente.ActualizarDocenteDTO;
 import com.AssignU.models.Usuarios.Sesion;
 import com.AssignU.utils.ApiCliente;
+import com.AssignU.utils.IFormulario;
 import com.AssignU.utils.Utils;
 import com.AssignU.utils.VentanaEmergente;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
-public class EditarPerfilController {
+public class EditarPerfilController implements IFormulario{
     private TextField tfNombreCompleto;
     private TextField tfNombreUsuario;
     @FXML
@@ -137,7 +138,8 @@ public class EditarPerfilController {
         
     }
     
-    private boolean verificarCampos(){
+    @Override
+    public boolean verificarCampos(){
         restaurarCampos();
         boolean bandera = true;
         String mensaje = "";
@@ -166,7 +168,8 @@ public class EditarPerfilController {
         return bandera;
     }
 
-    private void restaurarCampos(){
+    @Override
+    public void restaurarCampos(){
         tfNombreUsuario.setStyle("-fx-border-color: black");
         tfNombreCompleto.setStyle("-fx-border-color: black");
         if(esDocente){
@@ -210,5 +213,11 @@ public class EditarPerfilController {
     private void cerrarVentana(){
         Stage escenario = (Stage) tfNombreCompleto.getScene().getWindow();
         escenario.close();
+    }
+    
+    @Override
+    public void limpiarCampos(){
+        tfNombreCompleto.clear();
+        tfNombreUsuario.clear();
     }
 }

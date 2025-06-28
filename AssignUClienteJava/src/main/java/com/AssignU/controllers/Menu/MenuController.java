@@ -71,6 +71,7 @@ public class MenuController {
 
     public void btnLbCerrarSesion(MouseEvent mouseEvent) {
         try {
+            this.sesion = null;
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/login.fxml"));
             Parent nuevaVista = loader.load();
             Stage stage = (Stage) btnAccionClase.getScene().getWindow();
@@ -95,7 +96,6 @@ public class MenuController {
         } catch (Exception ex) {
             VentanaEmergente.mostrarVentana("Error al cambiar la vista", null, ex.getMessage(), Alert.AlertType.ERROR).showAndWait();
         }
-
     }
 
     public void clicBtnAccionClase(ActionEvent actionEvent) {
@@ -103,7 +103,7 @@ public class MenuController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Clase/crearClase.fxml"));
             Parent nuevaVista = loader.load();
             CrearUnirseAClaseController controller = loader.getController();
-            controller.cargarDatos(this, sesion);
+            controller.cargarValores(this, sesion);
             Stage nuevaVentana = new Stage();
             nuevaVentana.setScene(new Scene(nuevaVista));
             nuevaVentana.initModality(Modality.APPLICATION_MODAL);

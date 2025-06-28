@@ -9,6 +9,8 @@ public class Utils {
             mensaje = "campo vacío";
         } else if (!verificarTamanioCampo(campo, tamanioMaximo)) {
             mensaje = "no debe sobrepasar de los " + tamanioMaximo + " caracteres";
+        } else if (contieneEspacios(campo)) {
+            mensaje = "no se permiten espacios";
         } else {
             mensaje = "ok";
         }
@@ -23,6 +25,8 @@ public class Utils {
             mensaje = "no debe sobrepasar de los " + tamanioMaximo + " caracteres";
         } else if (!nombreUsuario.matches("[a-zA-Z0-9\\s]*")) {
             mensaje = "no puede tener caracteres especiales";
+        } else if (contieneEspacios(nombreUsuario)) {
+            mensaje = "no se permiten espacios";
         } else {
             mensaje = "ok";
         }
@@ -37,18 +41,23 @@ public class Utils {
             mensaje = "no debe sobrepasar de los " + tamanioMaximo + " caracteres";
         } else if (!correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
             mensaje = "no tiene formato de correo electrónico";
+        } else if (contieneEspacios(correo)) {
+            mensaje = "no se permiten espacios";
         } else {
             mensaje = "ok";
         }
         return mensaje;
     }
 
-    public static boolean verificarContrasenia(String contrasenia, String confirmarContrasenia) {
-        return contrasenia.equals(confirmarContrasenia);
-    }
-
     public static boolean verificarTamanioCampo(String campo, int tamanioMaximo) {
         return campo.length() <= tamanioMaximo;
     }
+
+    public static boolean verificarContrasenia(String contrasenia, String confirmarContrasenia) {
+        return contrasenia.equals(confirmarContrasenia);
+    }
     
+    public static boolean contieneEspacios(String texto) {
+        return texto.matches(".*\\s.*");
+    }
 }

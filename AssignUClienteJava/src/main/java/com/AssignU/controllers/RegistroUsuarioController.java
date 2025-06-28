@@ -6,6 +6,7 @@ import com.AssignU.models.Usuarios.Catalogo.GradoEstudios;
 import com.AssignU.models.Usuarios.Catalogo.GradoProfesional;
 import com.AssignU.utils.ApiCliente;
 import com.AssignU.utils.Constantes;
+import com.AssignU.utils.IFormulario;
 import com.AssignU.utils.Utils;
 import com.AssignU.utils.VentanaEmergente;
 import com.google.common.reflect.TypeToken;
@@ -28,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class RegistroUsuarioController implements Initializable {
+public class RegistroUsuarioController implements Initializable, IFormulario {
     private List<GradoEstudios> listaGradoEstudios;
     private List<GradoProfesional> listaGradoProfesional;
     private String mensajeError;
@@ -65,34 +66,9 @@ public class RegistroUsuarioController implements Initializable {
     public Button btnRegistrarse;
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(URL url, ResourceBundle resourceBundle){
         cargarCatalogos();
         configurarCbTipoUsuario();
-    }
-
-    public void clicBtnRegistrarse(ActionEvent actionEvent) {
-        if (verificarCampos()) {
-            registrarUsuario();
-        } else {
-            Alert ventana = VentanaEmergente.mostrarVentana("Error", "Campos inválidos", mensajeError, Alert.AlertType.ERROR);
-            ventana.showAndWait();
-        }
-    }
-
-    public void btnLbVolver(MouseEvent mouseEvent) {
-        volverALogin();
-    }
-
-    private void volverALogin(){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/login.fxml"));
-            Parent nuevaVista = loader.load();
-            Stage stage = (Stage) cbTipoUsuario.getScene().getWindow();
-            Scene nuevaEscena = new Scene(nuevaVista);
-            stage.setScene(nuevaEscena);
-        } catch (IOException ex) {
-
-        }
     }
 
     private void cargarCatalogos(){
@@ -154,10 +130,20 @@ public class RegistroUsuarioController implements Initializable {
         btnRegistrarse.setDisable(false);
     }
 
-    private boolean verificarCampos() {
+    public void clicBtnRegistrarse(ActionEvent actionEvent) {
+        if (verificarCampos()) {
+            registrarUsuario();
+        } else {
+            Alert ventana = VentanaEmergente.mostrarVentana("Error", "Campos inválidos", mensajeError, Alert.AlertType.ERROR);
+            ventana.showAndWait();
+        }
+    }
+
+    @Override
+    public boolean verificarCampos() {
         restaurarCampos();
         boolean bandera = true;
-        String mensaje = "";
+        String mensaje;
         String nombreCompleto = tfNombreCompleto.getText();
         String nombreUsuario = tfNombreUsuario.getText();
         String contrasenia = pfContrasenia.getText();
@@ -171,24 +157,24 @@ public class RegistroUsuarioController implements Initializable {
         }
 
         mensaje = Utils.verificarCorreo(correo, 45);
-        if (!mensaje.matches("ok")){
+        if (!mensaje.equals("ok")){
             bandera = false;
             tfCorreo.setStyle("-fx-border-color: red");
             mensajeError = "El Correo Electrónico es inválido: " + mensaje;
         }
 
         mensaje = Utils.verificarCampoNormal(confirmarContrasenia, 64);
-        if (!mensaje.matches("ok")){
+        if (!mensaje.equals("ok")){
             bandera = false;
             pfConfirmarContrasenia.setStyle("-fx-border-color: red");
-            mensajeError = "El Nombre Completo es inválido: " + mensaje;
+            mensajeError = "La contraseña es inválida: " + mensaje;
         }
 
         mensaje = Utils.verificarCampoNormal(contrasenia, 64);
-        if (!mensaje.matches("ok")){
+        if (!mensaje.equals("ok")){
             bandera = false;
             pfContrasenia.setStyle("-fx-border-color: red");
-            mensajeError = "El Nombre Completo es inválido: " + mensaje;
+            mensajeError = "La contraseña es inválida: " + mensaje;
         }
 
         if (!Utils.verificarContrasenia(contrasenia, confirmarContrasenia)) {
@@ -199,14 +185,14 @@ public class RegistroUsuarioController implements Initializable {
         }
 
         mensaje = Utils.verificarNombreUsuario(nombreUsuario, 45);
-        if (!mensaje.matches("ok")){
+        if (!mensaje.equals("ok")){
             bandera = false;
             tfNombreUsuario.setStyle("-fx-border-color: red");
             mensajeError = "El Nombre Usuario es inválido: " + mensaje;
         }
 
         mensaje = Utils.verificarCampoNormal(nombreCompleto, 135);
-        if (!mensaje.matches("ok")){
+        if (!mensaje.equals("ok")){
             bandera = false;
             tfNombreCompleto.setStyle("-fx-border-color: red");
             mensajeError = "El Nombre Completo es inválido: " + mensaje;
@@ -215,7 +201,8 @@ public class RegistroUsuarioController implements Initializable {
         return bandera;
     }
 
-    private void restaurarCampos(){
+    @Override
+    public void restaurarCampos(){
         tfNombreUsuario.setStyle("-fx-border-color: black");
         tfNombreCompleto.setStyle("-fx-border-color: black");
         pfContrasenia.setStyle("-fx-border-color: black");
@@ -233,12 +220,12 @@ public class RegistroUsuarioController implements Initializable {
             String correo = tfCorreo.getText();
             int idGrado = determinarGrado(tipoUsuario, cbGrado.getValue().toString());
 
-            if (tipoUsuario.matches("Alumno")) {
+            if (tipoUsuario.equals("Alumno")) {
                 RegistrarAlumnoDTO registrarAlumnoDto = new RegistrarAlumnoDTO(nombreCompleto, nombreUsuario, contrasenia, correo, idGrado);
                 ApiCliente.enviarSolicitud("/usuarios/alumnos", "POST", registrarAlumnoDto, headers, Object.class);
                 VentanaEmergente.mostrarVentana("Alumno registrado", null, "Alumno registrado con éxito, por favor inicia sesión para continuar", Alert.AlertType.INFORMATION).showAndWait();
                 volverALogin();
-            } else if (tipoUsuario.matches("Docente")) {
+            } else if (tipoUsuario.equals("Docente")) {
                 RegistrarDocenteDTO registrarDocenteDto = new RegistrarDocenteDTO(nombreCompleto, nombreUsuario, contrasenia, correo, idGrado);
                 ApiCliente.enviarSolicitud("/usuarios/docentes", "POST", registrarDocenteDto, headers, Object.class);
                 VentanaEmergente.mostrarVentana("Docente registrado", null, "Docente registrado con éxito, por favor inicia sesión para continuar", Alert.AlertType.INFORMATION).showAndWait();
@@ -250,22 +237,47 @@ public class RegistroUsuarioController implements Initializable {
     }
 
     private int determinarGrado(String tipoUsuario, String grado) {
-        if (tipoUsuario.matches("Alumno")) {
+        if (tipoUsuario.equals("Alumno")) {
             GradoEstudios[] arrayGradoEstudios = listaGradoEstudios.toArray(new GradoEstudios[0]);
             for (GradoEstudios gradoEstudios : arrayGradoEstudios) {
-                if (gradoEstudios.getNombre().matches(grado)) {
+                if (gradoEstudios.getNombre().equals(grado)) {
                     return gradoEstudios.getIdGradoEstudios();
                 }
             }
-        } else if (tipoUsuario.matches("Docente")) {
+        } else if (tipoUsuario.equals("Docente")) {
             GradoProfesional[] arrayGradoProfesional = listaGradoProfesional.toArray(new GradoProfesional[0]);
             for (GradoProfesional gradoProfesional : arrayGradoProfesional) {
-                if (gradoProfesional.getNombre().matches(grado)) {
+                if (gradoProfesional.getNombre().equals(grado)) {
                     return gradoProfesional.getIdGradoProfesional();
                 }
             }
         }
 
         return 0;
+    }
+
+    public void btnLbVolver(MouseEvent mouseEvent) {
+        volverALogin();
+    }
+
+    private void volverALogin(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/login.fxml"));
+            Parent nuevaVista = loader.load();
+            Stage stage = (Stage) cbTipoUsuario.getScene().getWindow();
+            Scene nuevaEscena = new Scene(nuevaVista);
+            stage.setScene(nuevaEscena);
+        } catch (IOException ex) {
+            System.err.println(ex);
+        }
+    }
+    
+    @Override
+    public void limpiarCampos(){
+        tfNombreCompleto.clear();
+        tfNombreUsuario.clear();
+        pfContrasenia.clear();
+        pfConfirmarContrasenia.clear();
+        tfCorreo.clear();
     }
 }

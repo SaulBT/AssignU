@@ -5,6 +5,7 @@ import com.AssignU.models.Clases.ClaseDTO;
 import com.AssignU.models.Clases.CrearClaseDTO;
 import com.AssignU.models.Usuarios.Sesion;
 import com.AssignU.utils.ApiCliente;
+import com.AssignU.utils.IFormulario;
 import com.AssignU.utils.VentanaEmergente;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
@@ -17,7 +18,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-public class CrearUnirseAClaseController {
+public class CrearUnirseAClaseController implements IFormulario{
     
     public MenuController menuController;
     private Sesion sesion;
@@ -35,7 +36,7 @@ public class CrearUnirseAClaseController {
     @FXML
     private TextField tfContenido;
 
-    public void cargarDatos(MenuController menuController, Sesion sesion) {
+    public void cargarValores(MenuController menuController, Sesion sesion) {
         this.menuController = menuController;
         this.sesion = sesion;
         if (sesion.tipoUsuario.matches("alumno")) {
@@ -61,7 +62,7 @@ public class CrearUnirseAClaseController {
 
     @FXML
     public void btnAceptar(ActionEvent actionEvent) {
-        if (verificarCampo()) {
+        if (verificarCampos()) {
             if (esDocente){
                 crearClase(tfContenido.getText());
             }else{
@@ -73,9 +74,11 @@ public class CrearUnirseAClaseController {
         }
     }
 
-    private boolean verificarCampo() {
+    @Override
+    public boolean verificarCampos() {
+        restaurarCampos();
         String nombreClase = tfContenido.getText();
-        boolean error;
+        boolean error = true;
         
         if (nombreClase.isEmpty()) {
             if(esDocente){
@@ -84,13 +87,18 @@ public class CrearUnirseAClaseController {
                 mensajeError = "Ingrese el código de la clase.";
             }
             error = false;
+            tfContenido.setStyle("-fx-border-color: red");
         } else if (nombreClase.toCharArray().length > 45) {
             mensajeError = "El nombre debe de ser menor a 45 caracteres.";
             error = false;
-        } else {
-            error = true;
+            tfContenido.setStyle("-fx-border-color: red");
         }
         return error;
+    }
+    
+    @Override
+    public void restaurarCampos(){
+        tfContenido.setStyle("-fx-border-color: black");
     }
 
     private void crearClase(String nombreClase) {
@@ -125,7 +133,13 @@ public class CrearUnirseAClaseController {
     }
 
     private void cerrarVentana() {
+        limpiarCampos();
         Stage stage = (Stage) tfContenido.getScene().getWindow();
         stage.close();
+    }
+    
+    @Override
+    public void limpiarCampos(){
+        tfContenido.clear();
     }
 }

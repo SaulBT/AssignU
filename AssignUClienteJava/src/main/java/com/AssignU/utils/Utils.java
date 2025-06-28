@@ -1,7 +1,17 @@
 
 package com.AssignU.utils;
 
+import javafx.scene.control.Alert;
+
 public class Utils {
+    
+    public static void mostrarVentana(String tituloVentana, String cuerpo, Alert.AlertType tipo) {
+        Alert alerta = new Alert(tipo);
+        alerta.setTitle(tituloVentana);
+        alerta.setHeaderText(null);
+        alerta.setContentText(cuerpo);
+        alerta.showAndWait();
+    }
 
     public static String verificarCampoNormal(String campo, int tamanioMaximo) {
         String mensaje;

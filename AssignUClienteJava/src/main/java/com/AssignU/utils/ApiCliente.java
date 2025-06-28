@@ -1,8 +1,9 @@
 package com.AssignU.utils;
 
-import com.AssignU.models.Usuarios.ErroREST;
+import com.AssignU.models.Usuarios.ErrorREST;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import java.io.IOException;
 
 import java.lang.reflect.Type;
 import java.net.URI;
@@ -22,11 +23,17 @@ public class ApiCliente {
             cuerpoJson =gson.toJson(cuerpo);
         }
 
-        HttpResponse<String> respuesta = procesarSolicitud(endpoint, metodo, cuerpoJson, cabeceras);
+        HttpResponse<String> respuesta;
+        try {
+            respuesta = procesarSolicitud(endpoint, metodo, cuerpoJson, cabeceras);
+        } catch (IOException | InterruptedException e) {
+            throw new Exception("Error de red al conectar con el servidor.");
+        }
 
-        if (respuesta.statusCode() != 200 && respuesta.statusCode() != 201 && respuesta.statusCode() != 202) {
-            ErroREST error = gson.fromJson(respuesta.body(), ErroREST.class);
-            throw new Exception(error.getError());
+        int codigo = respuesta.statusCode();
+        if (codigo >= 400) {
+            ErrorREST error = gson.fromJson(respuesta.body(), ErrorREST.class);
+            throw new ExcepcionHTTP(codigo, error.getError());
         }
 
         return gson.fromJson(respuesta.body(), tipoRespuesta);
@@ -39,11 +46,17 @@ public class ApiCliente {
             cuerpoJson =gson.toJson(cuerpo);
         }
 
-        HttpResponse<String> respuesta = procesarSolicitud(endpoint, metodo, cuerpoJson, cabeceras);
+        HttpResponse<String> respuesta;
+        try {
+            respuesta = procesarSolicitud(endpoint, metodo, cuerpoJson, cabeceras);
+        } catch (IOException | InterruptedException e) {
+            throw new Exception("Error de red al conectar con el servidor.");
+        }
 
-        if (respuesta.statusCode() != 200 && respuesta.statusCode() != 201 && respuesta.statusCode() != 202) {
-            ErroREST error = gson.fromJson(respuesta.body(), ErroREST.class);
-            throw new Exception(error.getError());
+        int codigo = respuesta.statusCode();
+        if (codigo >= 400) {
+            ErrorREST error = gson.fromJson(respuesta.body(), ErrorREST.class);
+            throw new ExcepcionHTTP(codigo, error.getError());
         }
 
         Type tipoLista = TypeToken.getParameterized(List.class, tipoElemento).getType();

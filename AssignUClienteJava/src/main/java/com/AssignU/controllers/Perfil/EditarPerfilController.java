@@ -44,11 +44,11 @@ public class EditarPerfilController implements IFormulario{
         this.sesion = sesion;
         tfNombreCompleto.setText(nombreCompleto);
         tfNombreUsuario.setText(nombreUsuario);
-        if (sesion.tipoUsuario.matches("alumno")) {
+        if (sesion.tipoUsuario.equals("alumno")) {
             esDocente = false;
             lbGrado.setText("Grado de Estudios:");
             configurarGradoEstudios(idGrado);
-        } else if (sesion.tipoUsuario.matches("docente")) {
+        } else if (sesion.tipoUsuario.equals("docente")) {
             esDocente = true;
             lbGrado.setText("Grado Profesional:");
             configurarGradoProfesional(idGrado);

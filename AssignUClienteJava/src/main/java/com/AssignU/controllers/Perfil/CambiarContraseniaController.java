@@ -29,9 +29,9 @@ public class CambiarContraseniaController implements IFormulario{
         headers.put("Authorization", "Bearer " + sesion.jwt);
         
         mensajeError = "";
-        if (sesion.tipoUsuario.matches("alumno")) {
+        if (sesion.tipoUsuario.equals("alumno")) {
             esDocente = false;
-        } else if (sesion.tipoUsuario.matches("docente")) {
+        } else if (sesion.tipoUsuario.equals("docente")) {
             esDocente = true;
         }
     }

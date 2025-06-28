@@ -1,11 +1,13 @@
 package com.AssignU.controllers.Perfil;
 
+import com.AssignU.controllers.Menu.MenuController;
 import com.AssignU.models.Perfil.EstadisticasPerfilDTO;
 import com.AssignU.models.Usuarios.Catalogo.GradoEstudios;
 import com.AssignU.models.Usuarios.Catalogo.GradoProfesional;
 import com.AssignU.models.Usuarios.Docente.DocenteDTO;
 import com.AssignU.models.Usuarios.Sesion;
 import com.AssignU.utils.ApiCliente;
+import com.AssignU.utils.Navegador;
 import com.AssignU.utils.VentanaEmergente;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,10 +53,10 @@ public class PerfilController{
 
     public void cargarValores(Sesion sesion){
         this.sesion = sesion;
-        if (sesion.tipoUsuario.matches("alumno")) {
+        if (sesion.tipoUsuario.equals("alumno")) {
             esDocente = false;
             obtenerDatosAlumno();
-        } else if (sesion.tipoUsuario.matches("docente")) {
+        } else if (sesion.tipoUsuario.equals("docente")) {
             esDocente = true;
             obtenerDatosDocente();
         }
@@ -137,43 +139,29 @@ public class PerfilController{
     // U S U A R I O
     @FXML
     public void clicBtnCambiarContrasenia(ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Perfil/cambiarContrasenia.fxml"));
-            Parent vistaCambiarContrasenia = loader.load();
-            
-            CambiarContraseniaController controller = loader.getController();
-            controller.cargarValores(sesion);
-            
-            Stage nuevaVentana = new Stage();
-            nuevaVentana.setTitle("Cambiar contraseña");
-            nuevaVentana.setScene(new Scene(vistaCambiarContrasenia));
-            nuevaVentana.initModality(Modality.APPLICATION_MODAL);
-            nuevaVentana.showAndWait();
-        } catch (Exception ex) {
-            VentanaEmergente.mostrarVentana("Error al cambiar la vista", null, ex.getMessage(), Alert.AlertType.ERROR).showAndWait();
-        }
+        Navegador.abrirVentanaModal(
+            "/views/Perfil/cambiarContrasenia.fxml",
+            "Cambiar Contraseña",
+            controller -> ((CambiarContraseniaController) controller).cargarValores(sesion)
+        );
     }
 
     @FXML
     public void clicBtnEditarPerfil(ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Perfil/editarPerfil.fxml"));
-            Parent vistaEditarPerfil = loader.load();
-            
-            EditarPerfilController controller = loader.getController();
-            controller.cargarValores(sesion, lbNombreCompleto.getText(), lbNombreUsuario.getText(), idGrado);
-            
-            Stage nuevaVentana = new Stage();
-            nuevaVentana.setTitle("Editar perfil");
-            nuevaVentana.setScene(new Scene(vistaEditarPerfil));
-            nuevaVentana.initModality(Modality.APPLICATION_MODAL);
-            nuevaVentana.showAndWait();
-        } catch (Exception ex) {
-            VentanaEmergente.mostrarVentana("Error al cambiar la vista", null, ex.getMessage(), Alert.AlertType.ERROR).showAndWait();
-        }
+        Navegador.abrirVentanaModal(
+            "/views/Perfil/editarPerfil.fxml",
+            "Editar Perfil",
+            controller -> ((EditarPerfilController) controller).cargarValores(
+                sesion,lbNombreCompleto.getText(),lbNombreUsuario.getText(),idGrado)
+        );
     }
     
     @FXML
     public void btnLbVolver(MouseEvent mouseEvent) {
+        Navegador.cambiarVentana(
+            lbNombreCompleto.getScene(),
+            "/views/Menu/menu.fxml",
+            controller -> ((MenuController) controller).cargarValores(sesion)
+        );
     }
 }

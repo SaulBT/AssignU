@@ -1,9 +1,9 @@
 package com.AssignU.models.Usuarios;
 
-public class ErroREST {
+public class ErrorREST {
     public String error;
 
-    public ErroREST(String error) {
+    public ErrorREST(String error) {
         this.error = error;
     }
 

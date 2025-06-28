@@ -2,37 +2,40 @@
 package com.AssignU.models.Usuarios;
 
 public class Sesion {
-    public String tipoUsuario;
-    public String jwt;
-    public int idUsuario;
+    private static Sesion sesion;
 
-    public Sesion(String tipoUsuario, String jwt, int idUsuario) {
-        this.tipoUsuario = tipoUsuario;
+    private final boolean esDocente;
+    private final String jwt;
+    private final int idUsuario;
+
+    private Sesion(boolean esDocente, String jwt, int idUsuario) {
+        this.esDocente = esDocente;
         this.jwt = jwt;
         this.idUsuario = idUsuario;
     }
 
-    public String getTipoUsuario() {
-        return tipoUsuario;
+    public static void iniciarSesion(boolean esDocente, String jwt, int idUsuario) {
+        sesion = new Sesion(esDocente, jwt, idUsuario);
     }
 
-    public void setTipoUsuario(String tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
+    public static Sesion getSesion() {
+        return sesion;
+    }
+
+    public boolean esDocente() {
+        return esDocente;
     }
 
     public String getJwt() {
         return jwt;
     }
 
-    public void setJwt(String jwt) {
-        this.jwt = jwt;
-    }
-
     public int getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public static void cerrarSesion() {
+        sesion = null;
     }
 }
+

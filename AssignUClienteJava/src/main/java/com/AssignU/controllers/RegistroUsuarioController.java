@@ -1,14 +1,14 @@
 package com.AssignU.controllers;
 
-import com.AssignU.models.Usuarios.Alumno.RegistrarAlumnoDTO;
-import com.AssignU.models.Usuarios.Docente.RegistrarDocenteDTO;
 import com.AssignU.models.Usuarios.Catalogo.GradoEstudios;
 import com.AssignU.models.Usuarios.Catalogo.GradoProfesional;
+import com.AssignU.servicios.usuarios.ServicioAlumnos;
+import com.AssignU.servicios.usuarios.ServicioDocentes;
 import com.AssignU.utils.ApiCliente;
 import com.AssignU.utils.Constantes;
 import com.AssignU.utils.IFormulario;
+import com.AssignU.utils.Navegador;
 import com.AssignU.utils.Utils;
-import com.AssignU.utils.VentanaEmergente;
 import com.google.common.reflect.TypeToken;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -25,15 +25,15 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class RegistroUsuarioController implements Initializable, IFormulario {
     private List<GradoEstudios> listaGradoEstudios;
     private List<GradoProfesional> listaGradoProfesional;
     private String mensajeError;
-    Map<String, String> headers = Map.of("Content-Type", "application/json");
+    
     @FXML
     public ComboBox cbTipoUsuario;
     @FXML
@@ -134,8 +134,7 @@ public class RegistroUsuarioController implements Initializable, IFormulario {
         if (verificarCampos()) {
             registrarUsuario();
         } else {
-            Alert ventana = VentanaEmergente.mostrarVentana("Error", "Campos inválidos", mensajeError, Alert.AlertType.ERROR);
-            ventana.showAndWait();
+            Utils.mostrarVentana("Campos inválidos", mensajeError, Alert.AlertType.ERROR);
         }
     }
 
@@ -212,27 +211,29 @@ public class RegistroUsuarioController implements Initializable, IFormulario {
     }
 
     private void registrarUsuario(){
-        try {
-            String tipoUsuario = cbTipoUsuario.getValue().toString();
-            String nombreCompleto = tfNombreCompleto.getText();
-            String nombreUsuario = tfNombreUsuario.getText();
-            String contrasenia = pfContrasenia.getText();
-            String correo = tfCorreo.getText();
-            int idGrado = determinarGrado(tipoUsuario, cbGrado.getValue().toString());
+        String tipoUsuario = cbTipoUsuario.getValue().toString();
+        String nombreCompleto = tfNombreCompleto.getText();
+        String nombreUsuario = tfNombreUsuario.getText();
+        String contrasenia = pfContrasenia.getText();
+        String correo = tfCorreo.getText();
+        int idGrado = determinarGrado(tipoUsuario, cbGrado.getValue().toString());
 
-            if (tipoUsuario.equals("Alumno")) {
-                RegistrarAlumnoDTO registrarAlumnoDto = new RegistrarAlumnoDTO(nombreCompleto, nombreUsuario, contrasenia, correo, idGrado);
-                ApiCliente.enviarSolicitud("/usuarios/alumnos", "POST", registrarAlumnoDto, headers, Object.class);
-                VentanaEmergente.mostrarVentana("Alumno registrado", null, "Alumno registrado con éxito, por favor inicia sesión para continuar", Alert.AlertType.INFORMATION).showAndWait();
-                volverALogin();
-            } else if (tipoUsuario.equals("Docente")) {
-                RegistrarDocenteDTO registrarDocenteDto = new RegistrarDocenteDTO(nombreCompleto, nombreUsuario, contrasenia, correo, idGrado);
-                ApiCliente.enviarSolicitud("/usuarios/docentes", "POST", registrarDocenteDto, headers, Object.class);
-                VentanaEmergente.mostrarVentana("Docente registrado", null, "Docente registrado con éxito, por favor inicia sesión para continuar", Alert.AlertType.INFORMATION).showAndWait();
-                volverALogin();
-            }
-        } catch (Exception e) {
-            VentanaEmergente.mostrarVentana("Error", null, e.getMessage(), Alert.AlertType.ERROR).showAndWait();
+        HashMap<String, Object> respuesta = new HashMap<>();
+        
+        if (tipoUsuario.equals("Alumno")) {
+            respuesta = ServicioAlumnos.registrarAlumno(nombreCompleto, nombreUsuario, contrasenia, correo, idGrado);
+        } else if (tipoUsuario.equals("Docente")) {
+            respuesta = ServicioDocentes.registrarDocente(nombreCompleto, nombreUsuario, contrasenia, correo, idGrado);
+        } else {
+            respuesta.put(Constantes.KEY_ERROR, true);
+            respuesta.put(Constantes.KEY_MENSAJE, "Tipo de usuario no reconocido.");
+        }
+        
+        if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+            Utils.mostrarVentana("Registro exitoso", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+            volverALogin();
+        } else {
+            Utils.mostrarVentana("Error al registrar", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
 
@@ -261,15 +262,12 @@ public class RegistroUsuarioController implements Initializable, IFormulario {
     }
 
     private void volverALogin(){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/login.fxml"));
-            Parent nuevaVista = loader.load();
-            Stage stage = (Stage) cbTipoUsuario.getScene().getWindow();
-            Scene nuevaEscena = new Scene(nuevaVista);
-            stage.setScene(nuevaEscena);
-        } catch (IOException ex) {
-            System.err.println(ex);
-        }
+        limpiarCampos();
+        Navegador.cambiarVentana(
+            cbTipoUsuario.getScene(),
+            "/views/login.fxml",
+            null
+        );
     }
     
     @Override

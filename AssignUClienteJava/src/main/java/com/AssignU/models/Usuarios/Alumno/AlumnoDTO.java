@@ -5,14 +5,14 @@ public class AlumnoDTO {
     public int idAlumno;
     public String nombreCompleto;
     public String nombreUsuario;
-    public String correo;
+    public String correoElectronico;
     public int idGradoEstudios;
 
-    public AlumnoDTO(int idAlumno, String nombreCompleto, String nombreUsuario, String correo, int idGradoEstudios) {
+    public AlumnoDTO(int idAlumno, String nombreCompleto, String nombreUsuario, String correoElectronico, int idGradoEstudios) {
         this.idAlumno = idAlumno;
         this.nombreCompleto = nombreCompleto;
         this.nombreUsuario = nombreUsuario;
-        this.correo = correo;
+        this.correoElectronico = correoElectronico;
         this.idGradoEstudios = idGradoEstudios;
     }
 
@@ -40,12 +40,12 @@ public class AlumnoDTO {
         this.nombreUsuario = nombreUsuario;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getCorreoElectronico() {
+        return correoElectronico;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
+    public void setCorreoElectronico(String correoElectronico) {
+        this.correoElectronico = correoElectronico;
     }
 
     public int getIdGradoEstudios() {

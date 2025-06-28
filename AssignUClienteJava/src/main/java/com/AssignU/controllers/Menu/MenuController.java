@@ -4,7 +4,11 @@ import com.AssignU.controllers.Clase.CrearUnirseAClaseController;
 import com.AssignU.controllers.Perfil.PerfilController;
 import com.AssignU.models.Clases.ClaseDTO;
 import com.AssignU.models.Usuarios.Sesion;
+import com.AssignU.servicios.ServicioClases;
 import com.AssignU.utils.ApiCliente;
+import com.AssignU.utils.Constantes;
+import com.AssignU.utils.Navegador;
+import com.AssignU.utils.Utils;
 import com.AssignU.utils.VentanaEmergente;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +26,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javafx.fxml.FXML;
 
 public class MenuController {
     public FlowPane fpContenedorClases;
@@ -30,27 +35,29 @@ public class MenuController {
     private List<ClaseDTO> listaClases;
     private Map<String, String> headers = new HashMap<String, String>();
 
-    public void cargarValores(Sesion sesion) {
-        this.sesion = sesion;
-
+    public void cargarValores() {
+        this.sesion = Sesion.getSesion();
         cargarClases();
         desplegarClases();
     }
 
     private void cargarClases() {
-        try {
-            headers.put("Content-Type", "application/json");
-            headers.put("Authorization", "Bearer " + sesion.jwt);
-            if (sesion.tipoUsuario.matches("alumno")) {
-                listaClases = ApiCliente.enviarSolicitudLista("/clases/alumnos/" + sesion.idUsuario + "/clases", "GET", null, headers, ClaseDTO.class);
-                btnAccionClase.setText("+ Unirme a clase");
-            } else if (sesion.tipoUsuario.matches("docente")) {
-                listaClases = ApiCliente.enviarSolicitudLista("/clases/docentes/" + sesion.idUsuario + "/clases", "GET", null, headers, ClaseDTO.class);
+        HashMap<String, Object> respuesta = ServicioClases.obtenerClasesDeUsuario(sesion, esDocente);
+
+        if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+            @SuppressWarnings("unchecked")
+            List<ClaseDTO> listaClases = (List<ClaseDTO>) respuesta.get(Constantes.KEY_RESPUESTA);
+            if (esDocente) {
                 btnAccionClase.setText("+ Crear clase");
+            } else {
+                btnAccionClase.setText("+ Unirme a clase");
             }
-        } catch (Exception e) {
-            VentanaEmergente.mostrarVentana("Error", null, e.getMessage(), Alert.AlertType.ERROR).showAndWait();
+            // Aquí puedes llenar la vista con listaClases
+
+        } else {
+            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
+
     }
 
     private void desplegarClases() {
@@ -69,48 +76,39 @@ public class MenuController {
         }
     }
 
+    @FXML
     public void btnLbCerrarSesion(MouseEvent mouseEvent) {
-        try {
-            this.sesion = null;
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/login.fxml"));
-            Parent nuevaVista = loader.load();
-            Stage stage = (Stage) btnAccionClase.getScene().getWindow();
-            Scene nuevaEscena = new Scene(nuevaVista);
-            stage.setScene(nuevaEscena);
-        } catch (IOException ex) {
-            VentanaEmergente.mostrarVentana("Error al cambiar la vista", null, ex.getMessage(), Alert.AlertType.ERROR).showAndWait();
-        }
+        this.sesion = null;
+
+        Navegador.cambiarVentana(
+            btnAccionClase.getScene(),
+            "/views/login.fxml",
+            null
+        );
     }
 
+    @FXML
     public void btnLbPerfil(MouseEvent mouseEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Perfil/perfil.fxml"));
-            Parent vistaPerfil = loader.load();
-            
-            PerfilController controller = loader.getController();
-            controller.cargarValores(sesion);
-            
-            Stage escenario = (Stage) btnAccionClase.getScene().getWindow();
-            Scene nuevaEscena = new Scene(vistaPerfil);
-            escenario.setScene(nuevaEscena);
-        } catch (Exception ex) {
-            VentanaEmergente.mostrarVentana("Error al cambiar la vista", null, ex.getMessage(), Alert.AlertType.ERROR).showAndWait();
-        }
+        Navegador.cambiarVentana(
+            btnAccionClase.getScene(),
+            "/views/Perfil/perfil.fxml",
+            controller -> ((PerfilController) controller).cargarValores(sesion)
+        );
     }
 
+    @FXML
     public void clicBtnAccionClase(ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Clase/crearClase.fxml"));
-            Parent nuevaVista = loader.load();
-            CrearUnirseAClaseController controller = loader.getController();
-            controller.cargarValores(this, sesion);
-            Stage nuevaVentana = new Stage();
-            nuevaVentana.setScene(new Scene(nuevaVista));
-            nuevaVentana.initModality(Modality.APPLICATION_MODAL);
-            nuevaVentana.showAndWait();
-        } catch (Exception e) {
-            System.out.println("Error:" + e.getMessage());
+        String tituloVentana;
+        if(esDocente){
+            tituloVentana = "Crear Clase";
+        }else{
+            tituloVentana = "Unirse a Clase";
         }
+        Navegador.abrirVentanaModal(
+            "/views/Clase/crearUnirseAClase.fxml",
+            tituloVentana,
+            controller -> ((CrearUnirseAClaseController) controller).cargarValores(this, sesion, esDocente)
+        );
     }
 
     public void enviarAClaseNueva(ClaseDTO claseDto){

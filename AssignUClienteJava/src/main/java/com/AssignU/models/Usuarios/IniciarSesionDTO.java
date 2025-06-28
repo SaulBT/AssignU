@@ -3,12 +3,12 @@ package com.AssignU.models.Usuarios;
 public class IniciarSesionDTO {
     public String tipoUsuario;
     public String nombreUsuarioOCorreo;
-    public String contrasena;
+    public String contrasenia;
 
     public IniciarSesionDTO(String tipoUsuario, String nombreUsuarioOCorreo, String contrasenia) {
         this.tipoUsuario = tipoUsuario;
         this.nombreUsuarioOCorreo = nombreUsuarioOCorreo;
-        this.contrasena = contrasenia;
+        this.contrasenia = contrasenia;
     }
 
     public String getTipoUsuario() {
@@ -28,10 +28,10 @@ public class IniciarSesionDTO {
     }
 
     public String getContrasenia() {
-        return contrasena;
+        return contrasenia;
     }
 
     public void setContrasenia(String contrasenia) {
-        this.contrasena = contrasenia;
+        this.contrasenia = contrasenia;
     }
 }

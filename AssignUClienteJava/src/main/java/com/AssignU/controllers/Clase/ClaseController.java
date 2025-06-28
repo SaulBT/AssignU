@@ -2,6 +2,7 @@ package com.AssignU.controllers.Clase;
 
 import com.AssignU.utils.VentanaEmergente;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,9 +23,11 @@ public class ClaseController {
     public Label lbCambiarNombre;
     public Label lbVerEstadisticas;
 
+    @FXML
     public void btnLbVolver(MouseEvent mouseEvent) {
     }
 
+    @FXML
     public void clicBtnCrearTarea(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Tarea/crearTarea.fxml"));
@@ -38,9 +41,11 @@ public class ClaseController {
         }
     }
 
+    @FXML
     public void btnLbEliminarClase(MouseEvent mouseEvent) {
     }
 
+    @FXML
     public void btnLbCambiarNombre(MouseEvent mouseEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Clase/cambiarNombre.fxml"));
@@ -55,6 +60,7 @@ public class ClaseController {
         }
     }
 
+    @FXML
     public void btnLbVerEstadisticas(MouseEvent mouseEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Clase/estadisticasClase.fxml"));

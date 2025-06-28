@@ -1,32 +1,26 @@
 package com.AssignU.controllers;
 
 import com.AssignU.controllers.Menu.MenuController;
-import com.AssignU.utils.ApiCliente;
-import com.AssignU.models.Usuarios.IniciarSesionDTO;
 import com.AssignU.models.Usuarios.RespuestaIniciarSesionDTO;
 import com.AssignU.models.Usuarios.Sesion;
+import com.AssignU.servicios.usuarios.ServicioLogin;
 import com.AssignU.utils.Constantes;
 import com.AssignU.utils.IFormulario;
-import com.AssignU.utils.VentanaEmergente;
+import com.AssignU.utils.Navegador;
+import com.AssignU.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.Map;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 
 public class LoginController implements Initializable, IFormulario {
-    Map<String, String> headers = Map.of("Content-Type", "application/json");
 
     @FXML
     public Label lbTipoUsuarioError;
@@ -53,13 +47,10 @@ public class LoginController implements Initializable, IFormulario {
 
     public void btnIniciarSesion(ActionEvent actionEvent) {
         if (verificarCampos()) {
-            String tipoUsuario = (cbTipousuarios.getValue().toString().toLowerCase());
-            String nombreUsuarioOCorreo = tfNombreUsuarioCorreo.getText();
-            String contrasenia = pfContrasenia.getText();
-            enviarSolicitudLogin(tipoUsuario, nombreUsuarioOCorreo, contrasenia);
+            enviarSolicitudLogin((cbTipousuarios.getValue().toString().toLowerCase()),
+                tfNombreUsuarioCorreo.getText(), pfContrasenia.getText());
         } else {
-            Alert ventana = VentanaEmergente.mostrarVentana("Error", "Campos Vacíos", "Favor de llenar todos los campos", Alert.AlertType.ERROR);
-            ventana.showAndWait();
+            Utils.mostrarVentana("Campos Vacíos", "Favor de llenar todos los campos", Alert.AlertType.ERROR);
         }
     }
 
@@ -96,43 +87,36 @@ public class LoginController implements Initializable, IFormulario {
     }
 
     private void enviarSolicitudLogin(String tipoUsuario, String nombreUsuarioOCorreo, String contrasenia) {
-        try {
-            IniciarSesionDTO iniciarSesionDto = new IniciarSesionDTO(tipoUsuario, nombreUsuarioOCorreo, contrasenia);
-            RespuestaIniciarSesionDTO respuesta = ApiCliente.enviarSolicitud("/usuarios/login", "POST", iniciarSesionDto, headers, RespuestaIniciarSesionDTO.class);
+        HashMap<String, Object> respuesta = ServicioLogin.iniciarSesion(tipoUsuario, nombreUsuarioOCorreo, contrasenia);
+        boolean esDocente = cbTipousuarios.getValue().equals(Constantes.TIPO_DOCENTE);
+        if (!(boolean) respuesta.get(Constantes.KEY_ERROR)){
+            RespuestaIniciarSesionDTO credenciales = (RespuestaIniciarSesionDTO) respuesta.get(Constantes.KEY_RESPUESTA);
+            
+            Sesion.iniciarSesion(esDocente, credenciales.getToken(), credenciales.getIdUsuario());
+            
             limpiarCampos();
             //----------------------------------------------------
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Menu/menu.fxml"));
-            Parent root = loader.load();
-            
-            MenuController controller = loader.getController();
-            Sesion sesion = new Sesion(tipoUsuario, respuesta.getToken(), respuesta.getIdUsuario());
-            controller.cargarValores(sesion);
-            
-            Stage stage = (Stage) lbContraseniaError.getScene().getWindow();
-            Scene nuevaEscena = new Scene(root);
-            stage.setScene(nuevaEscena);
-            //----------------------------------------------------
-        } catch (Exception e) {
-            Alert ventana = VentanaEmergente.mostrarVentana("Error", "Credenciales incorrectas", e.getMessage(), Alert.AlertType.ERROR);
-            ventana.showAndWait();
+            Navegador.cambiarVentana(
+                lbContraseniaError.getScene(),
+                "/views/Menu/menu.fxml",
+                controller -> ((MenuController) controller).cargarValores()
+            );
+        } else {
+            Utils.mostrarVentana("Error al iniciar sesión", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
 
     public void lbRegistrate(MouseEvent mouseEvent) {
-        limpiarCampos();
         cambiarARegistro();
     }
 
     private void cambiarARegistro() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/registroUsuario.fxml"));
-            Parent nuevaVista = loader.load();
-            Stage stage = (Stage) lbContraseniaError.getScene().getWindow();
-            Scene nuevaEscena = new Scene(nuevaVista);
-            stage.setScene(nuevaEscena);
-        } catch (IOException ex) {
-
-        }
+        limpiarCampos();
+        Navegador.cambiarVentana(
+            lbContraseniaError.getScene(),
+            "/views/registroUsuario.fxml",
+            null
+        );
     }
     
     @Override

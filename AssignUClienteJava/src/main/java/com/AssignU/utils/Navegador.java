@@ -26,12 +26,12 @@ public class Navegador {
             return controller;
 
         } catch (IOException e) {
-            VentanaEmergente.mostrarVentana("Error", "No se pudo cargar la vista", e.getMessage(), Alert.AlertType.ERROR).showAndWait();
+            Utils.mostrarVentana("Error de Vista", "No se pudo cargar la vista:\n" + e.getMessage(), Alert.AlertType.ERROR);
             return null;
         }
     }
 
-    public static <T> T abrirVentanaModal(String rutaFXML, Consumer<T> configurador) {
+    public static <T> T abrirVentanaModal(String rutaFXML, String titulo, Consumer<T> configurador) {
         try {
             FXMLLoader loader = new FXMLLoader(Navegador.class.getResource(rutaFXML));
             Parent vista = loader.load();
@@ -41,16 +41,17 @@ public class Navegador {
                 configurador.accept(controller);
 
             Stage ventana = new Stage();
+            ventana.setTitle(titulo);
             ventana.setScene(new Scene(vista));
             ventana.initModality(Modality.APPLICATION_MODAL);
             ventana.showAndWait();
 
             return controller;
-
         } catch (IOException e) {
-            VentanaEmergente.mostrarVentana("Error", "No se pudo abrir ventana modal", e.getMessage(), Alert.AlertType.ERROR).showAndWait();
+            Utils.mostrarVentana("Error", "No se pudo abrir la ventana modal:\n" + e.getMessage(), Alert.AlertType.ERROR);
             return null;
         }
     }
+
 }
 

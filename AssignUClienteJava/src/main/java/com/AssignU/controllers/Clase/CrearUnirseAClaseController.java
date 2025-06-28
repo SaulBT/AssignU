@@ -36,14 +36,14 @@ public class CrearUnirseAClaseController implements IFormulario{
     @FXML
     private TextField tfContenido;
 
-    public void cargarValores(MenuController menuController, Sesion sesion) {
+    public void cargarValores(MenuController menuController, Sesion sesion, boolean esDocente) {
         this.menuController = menuController;
         this.sesion = sesion;
-        if (sesion.tipoUsuario.matches("alumno")) {
-            esDocente = false;
+        if (esDocente) {
+            this.esDocente = esDocente;
             cargarVentanaAlumno();
-        } else if (sesion.tipoUsuario.matches("docente")) {
-            esDocente = true;
+        } else if (sesion.tipoUsuario.equals("docente")) {
+            this.esDocente = esDocente;
             cargarVentanaDocente();
         }
     }

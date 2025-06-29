@@ -10,7 +10,8 @@ dotenv.config();
 import {
   cargarArchivo,
   descargarArchivo,
-  eliminarArchivoAsync
+  eliminarArchivoAsync,
+  obtenerMetadatos
 } from "./controllers/archivos-controladores.js";
 
 import {
@@ -28,7 +29,8 @@ const server = new grpc.Server();
 server.addService(archivosProto.ArchivosService.service, {
 CargarArchivo: cargarArchivo,
 DescargarArchivo: descargarArchivo,
-EliminarArchivo: eliminarArchivoAsync
+EliminarArchivo: eliminarArchivoAsync,
+ObtenerMetadatos: obtenerMetadatos
 });
 
 const PORT = process.env.PORT;

@@ -137,20 +137,12 @@ services:
     ports:
       - "5005:5005"
 
-  envoy:
-    image: envoyproxy/envoy-dev:latest
-    volumes:
-      - ./ServicioArchivos/envoy.yaml:/etc/envoy/envoy.yaml
-    ports:
-      - "9090:9090"
-    depends_on:
-      - servicio_archivos
-
   apigateway:
     image: imagen_apigateway:1.0
     ports:
       - "5010:5010"
       - "5011:5011"
+
 volumes:
   volumen_mysql_usuarios:
   volumen_mysql_clases:

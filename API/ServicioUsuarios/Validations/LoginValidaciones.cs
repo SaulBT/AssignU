@@ -21,7 +21,7 @@ public class LoginValidaciones
     {
         if (string.IsNullOrEmpty(iniciarSesionDto.TipoUsuario) ||
             string.IsNullOrEmpty(iniciarSesionDto.NombreUsuarioOCorreo) ||
-            string.IsNullOrEmpty(iniciarSesionDto.Contrasena))
+            string.IsNullOrEmpty(iniciarSesionDto.Contrasenia))
         {
             throw new ArgumentNullException("Los parámetros del usuario no pueden ser nulos.");
         }
@@ -38,7 +38,7 @@ public class LoginValidaciones
         {
             throw new CampoObligatorioException("Los parámetros del usuario no pueden ser nulos: Nombre de usuario o correo es nulo");
         }
-        else if (string.IsNullOrEmpty(iniciarSesionDto.Contrasena))
+        else if (string.IsNullOrEmpty(iniciarSesionDto.Contrasenia))
         {
             throw new CampoObligatorioException("Los parámetros del usuario no pueden ser nulos: La constraseña es nula");
         }
@@ -51,7 +51,7 @@ public class LoginValidaciones
         {
             throw new UnauthorizedAccessException("Credenciales incorrectas para el alumno.");
         }
-        else if (alumno.Contrasenia != usuarioDto.Contrasena)
+        else if (alumno.Contrasenia != usuarioDto.Contrasenia)
         {
             throw new UnauthorizedAccessException("Credenciales incorrectas para el alumno: contraseña incorrecta");
         }
@@ -66,7 +66,7 @@ public class LoginValidaciones
         {
             throw new UnauthorizedAccessException("Credenciales incorrectas para el docente.");
         }
-        else if (docente.Contrasenia != usuarioDto.Contrasena)
+        else if (docente.Contrasenia != usuarioDto.Contrasenia)
         {
             throw new UnauthorizedAccessException("Credenciales incorrectas para el docente: contraseña incorrecta");
         }

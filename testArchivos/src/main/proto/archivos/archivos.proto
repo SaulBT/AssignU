@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package archivos;
+
+service ArchivosService {
+  rpc CargarArchivo(stream SubidaArchivoRequest) returns (ArchivoRespuesta);
+  rpc DescargarArchivo(IdTarea) returns (stream DescargaArchivoResponse);
+  rpc EliminarArchivo(IdTarea) returns (OperacionRespuesta);
+  rpc ObtenerMetadatos(IdTarea) returns (MetadatosArchivo);
+}
+
+message SubidaArchivoRequest {
+  string nombre = 1;
+  int32 idTarea = 2;
+  string tipo = 3;
+  bytes chunk = 4;
+  bool fin = 5;
+}
+
+message ArchivoRespuesta {
+  string id = 1;
+  string mensaje = 2;
+}
+
+message IdTarea {
+  int32 idTarea = 1;
+}
+
+message DescargaArchivoResponse {
+  bytes chunk = 1;
+}
+
+message OperacionRespuesta {
+  string mensaje = 1;
+}
+
+message MetadatosArchivo {
+  string nombre = 1;
+  string tipo = 2;
+  int32 tamano = 3;
+  string fechaSubida = 4;
+}

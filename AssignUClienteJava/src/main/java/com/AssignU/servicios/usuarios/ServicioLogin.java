@@ -13,7 +13,7 @@ public class ServicioLogin {
     
     public static HashMap<String, Object> iniciarSesion(String tipoUsuario, String nombreUsuarioOCorreo, String contrasenia) {
         
-        IniciarSesionDTO dto = new IniciarSesionDTO(tipoUsuario, nombreUsuarioOCorreo, contrasenia);
+        IniciarSesionDTO iniciarSesionDto = new IniciarSesionDTO(tipoUsuario, nombreUsuarioOCorreo, contrasenia);
         HashMap<String, Object> resultado = new HashMap<>();
         resultado.put(Constantes.KEY_ERROR, true);
 
@@ -24,7 +24,7 @@ public class ServicioLogin {
             RespuestaIniciarSesionDTO respuesta = ApiCliente.enviarSolicitud(
                 "/usuarios/login",
                 "POST",
-                dto,
+                iniciarSesionDto,
                 headers,
                 RespuestaIniciarSesionDTO.class
             );
@@ -35,15 +35,9 @@ public class ServicioLogin {
 
         } catch (ExcepcionHTTP e) {
             switch (e.getCodigo()) {
-                case 401:
-                    resultado.put(Constantes.KEY_MENSAJE, "Credenciales incorrectas.");
-                    break;
-                case 500:
-                    resultado.put(Constantes.KEY_MENSAJE, "Error interno del servidor. Intente más tarde.");
-                    break;
-                default:
-                    resultado.put(Constantes.KEY_MENSAJE, "Error del servidor (" + e.getCodigo() + "): " + e.getMessage());
-                    break;
+                case 401 -> resultado.put(Constantes.KEY_MENSAJE, "Credenciales incorrectas.");
+                case 500 -> resultado.put(Constantes.KEY_MENSAJE, "Error interno del servidor. Intente más tarde.");
+                default -> resultado.put(Constantes.KEY_MENSAJE, "Error del servidor (" + e.getCodigo() + "): " + e.getMessage());
             }
         } catch (Exception e) {
             resultado.put(Constantes.KEY_MENSAJE, e.getMessage());

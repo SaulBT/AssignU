@@ -1,10 +1,10 @@
 package com.AssignU.models.Usuarios.Catalogo;
 
-public class GradoEstudios {
+public class GradoEstudioDTO {
     public int idGradoEstudios;
     public String nombre;
 
-    public GradoEstudios(int idGradoEstudios, String nombre) {
+    public GradoEstudioDTO(int idGradoEstudios, String nombre) {
         this.idGradoEstudios = idGradoEstudios;
         this.nombre = nombre;
     }

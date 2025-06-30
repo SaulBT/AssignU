@@ -88,12 +88,12 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label fx:id="lbTextoGradoEstudios" text="Grado estudios:">
+                        <Label fx:id="lbTextoGrado" text="Grado estudios:">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
                         </Label>
-                        <Label fx:id="lbGradoEstudios" text="Grado">
+                        <Label fx:id="lbGrado" text="Grado">
                            <font>
                               <Font size="20.0" />
                            </font>

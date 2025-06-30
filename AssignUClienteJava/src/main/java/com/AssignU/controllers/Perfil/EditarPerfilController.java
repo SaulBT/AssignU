@@ -1,15 +1,14 @@
 package com.AssignU.controllers.Perfil;
 
-import com.AssignU.models.Usuarios.Alumno.ActualizarAlumnoDTO;
-import com.AssignU.models.Usuarios.Catalogo.GradoEstudios;
-import com.AssignU.models.Usuarios.Catalogo.GradoProfesional;
-import com.AssignU.models.Usuarios.Docente.ActualizarDocenteDTO;
+import com.AssignU.models.Usuarios.Catalogo.GradoEstudioDTO;
+import com.AssignU.models.Usuarios.Catalogo.GradoProfesionalDTO;
 import com.AssignU.models.Usuarios.Sesion;
-import com.AssignU.utils.ApiCliente;
+import com.AssignU.servicios.usuarios.ServicioAlumnos;
+import com.AssignU.servicios.usuarios.ServicioCatalogos;
+import com.AssignU.servicios.usuarios.ServicioDocentes;
+import com.AssignU.utils.Constantes;
 import com.AssignU.utils.IFormulario;
 import com.AssignU.utils.Utils;
-import com.AssignU.utils.VentanaEmergente;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,47 +29,43 @@ public class EditarPerfilController implements IFormulario{
     private Label lbGrado;
     
     private Sesion sesion;
-    private boolean esDocente;
     private String mensajeError;
     
-    private Map<String, String> headers = new HashMap<String, String>();
-    
     @FXML
-    private ComboBox<GradoEstudios> cbGradoEstudios;
+    private ComboBox<GradoEstudioDTO> cbGradoEstudios;
     @FXML
-    private ComboBox<GradoProfesional> cbGradoProfesional;
+    private ComboBox<GradoProfesionalDTO> cbGradoProfesional;
     
-    public void cargarValores(Sesion sesion, String nombreCompleto, String nombreUsuario, int idGrado){
-        this.sesion = sesion;
+    public void cargarValores(String nombreCompleto, String nombreUsuario, int idGrado){
+        this.sesion = Sesion.getSesion();
         tfNombreCompleto.setText(nombreCompleto);
         tfNombreUsuario.setText(nombreUsuario);
-        if (sesion.tipoUsuario.equals("alumno")) {
-            esDocente = false;
+        if (sesion.esDocente()) {
             lbGrado.setText("Grado de Estudios:");
             configurarGradoEstudios(idGrado);
-        } else if (sesion.tipoUsuario.equals("docente")) {
-            esDocente = true;
+        } else {
             lbGrado.setText("Grado Profesional:");
             configurarGradoProfesional(idGrado);
         }
-        cbGradoProfesional.setVisible(esDocente);
-        cbGradoEstudios.setVisible(!esDocente);
+        cbGradoProfesional.setVisible(sesion.esDocente());
+        cbGradoEstudios.setVisible(!sesion.esDocente());
     }
     
     private void configurarGradoEstudios(int idGrado){
-        try {
-            List<GradoEstudios> listaGradoEstudios = ApiCliente.enviarSolicitudLista("/usuarios/catalogos/grados-estudios", "GET", null, null, GradoEstudios.class);
+        HashMap<String, Object> gradosEstudios = ServicioCatalogos.obtenerGradosDeEstudios();
+        if (!(boolean) gradosEstudios.get(Constantes.KEY_ERROR)) {
+            List<GradoEstudioDTO> listaGradoEstudios = (List<GradoEstudioDTO>) gradosEstudios.get(Constantes.KEY_RESPUESTA);
             
             cbGradoEstudios.setItems(FXCollections.observableArrayList(listaGradoEstudios));
 
-            cbGradoEstudios.setConverter(new StringConverter<GradoEstudios>() {
+            cbGradoEstudios.setConverter(new StringConverter<GradoEstudioDTO>() {
                 @Override
-                public String toString(GradoEstudios grado) {
+                public String toString(GradoEstudioDTO grado) {
                     return grado != null ? grado.nombre : "";
                 }
 
                 @Override
-                public GradoEstudios fromString(String nombre) {
+                public GradoEstudioDTO fromString(String nombre) {
                     return cbGradoEstudios.getItems().stream()
                                    .filter(g -> g.nombre.equals(nombre))
                                    .findFirst()
@@ -78,32 +73,33 @@ public class EditarPerfilController implements IFormulario{
                 }
             });
 
-            for (GradoEstudios grado : listaGradoEstudios) {
+            for (GradoEstudioDTO grado : listaGradoEstudios) {
                 if (grado.idGradoEstudios == idGrado) {
                     cbGradoEstudios.getSelectionModel().select(grado);
                     break;
                 }
             }
             
-        } catch (Exception e) {
-            VentanaEmergente.mostrarVentana("Error", null, e.getMessage(), Alert.AlertType.ERROR).showAndWait();
+        } else {
+            Utils.mostrarVentana("Error", (String) gradosEstudios.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
     
     private void configurarGradoProfesional(int idGrado){
-        try {
-            List<GradoProfesional> listaGradoProfesional = ApiCliente.enviarSolicitudLista("/usuarios/catalogos/grados-profesionales", "GET", null, null, GradoProfesional.class);
+        HashMap<String, Object> gradosProfesionales = ServicioCatalogos.obtenerGradosProfesionales();
+        if (!(boolean) gradosProfesionales.get(Constantes.KEY_ERROR)) {
+            List<GradoProfesionalDTO> listaGradoProfesional = (List<GradoProfesionalDTO>) gradosProfesionales.get(Constantes.KEY_RESPUESTA);
             
             cbGradoProfesional.setItems(FXCollections.observableArrayList(listaGradoProfesional));
 
-            cbGradoProfesional.setConverter(new StringConverter<GradoProfesional>() {
+            cbGradoProfesional.setConverter(new StringConverter<GradoProfesionalDTO>() {
                 @Override
-                public String toString(GradoProfesional grado) {
+                public String toString(GradoProfesionalDTO grado) {
                     return grado != null ? grado.nombre : "";
                 }
 
                 @Override
-                public GradoProfesional fromString(String nombre) {
+                public GradoProfesionalDTO fromString(String nombre) {
                     return cbGradoProfesional.getItems().stream()
                                    .filter(g -> g.nombre.equals(nombre))
                                    .findFirst()
@@ -111,31 +107,31 @@ public class EditarPerfilController implements IFormulario{
                 }
             });
 
-            for (GradoProfesional grado : listaGradoProfesional) {
+            for (GradoProfesionalDTO grado : listaGradoProfesional) {
                 if (grado.idGradoProfesional == idGrado) {
                     cbGradoProfesional.getSelectionModel().select(grado);
                     break;
                 }
             }
             
-        } catch (Exception e) {
-            VentanaEmergente.mostrarVentana("Error", null, e.getMessage(), Alert.AlertType.ERROR).showAndWait();
+        } else {
+            Utils.mostrarVentana("Error", (String) gradosProfesionales.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
 
     @FXML
     public void btnAceptar(ActionEvent actionEvent) {
         if(verificarCampos()){
-            if(esDocente){
-                guardarPerfilDocente();
+        String nombreUsuario = tfNombreUsuario.getText();
+        String nombreCompleto = tfNombreCompleto.getText();
+            if(sesion.esDocente()){
+                guardarPerfilDocente(nombreUsuario, nombreCompleto);
             }else{
-                guardarPerfilAlumno();
+                guardarPerfilAlumno(nombreUsuario, nombreCompleto);
             }
         } else {
-            Alert ventana = VentanaEmergente.mostrarVentana("Error", "Campos inválidos", mensajeError, Alert.AlertType.ERROR);
-            ventana.showAndWait();
+            Utils.mostrarVentana("Campos inválidos", mensajeError, Alert.AlertType.ERROR);
         }
-        
     }
     
     @Override
@@ -172,36 +168,34 @@ public class EditarPerfilController implements IFormulario{
     public void restaurarCampos(){
         tfNombreUsuario.setStyle("-fx-border-color: black");
         tfNombreCompleto.setStyle("-fx-border-color: black");
-        if(esDocente){
+        if(sesion.esDocente()){
             cbGradoProfesional.setStyle("-fx-border-color: black");
         }else{
             cbGradoEstudios.setStyle("-fx-border-color: black");
         }
     }
     
-    private void guardarPerfilAlumno(){
-        GradoEstudios seleccionado = cbGradoEstudios.getValue();
-        ActualizarAlumnoDTO alumno = new ActualizarAlumnoDTO(tfNombreCompleto.getText(), tfNombreUsuario.getText(), seleccionado.idGradoEstudios);
-        try {
-            headers.put("Content-Type", "application/json");
-            headers.put("Authorization", "Bearer " + sesion.jwt);
-            String endpoint = String.format("/usuarios/alumnos/%s", sesion.idUsuario);
-            ApiCliente.enviarSolicitud(endpoint, "PUT", alumno, headers, Object.class);
-        } catch (Exception e) {
-            VentanaEmergente.mostrarVentana("Error", null, e.getMessage(), Alert.AlertType.ERROR).showAndWait();
+    private void guardarPerfilAlumno(String nombreUsuario, String nombreCompleto){
+        GradoEstudioDTO seleccionado = cbGradoEstudios.getValue();
+
+        HashMap<String, Object> respuesta = ServicioAlumnos.actualizarAlumno(nombreCompleto, nombreUsuario, seleccionado.idGradoEstudios);
+
+        if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+            Utils.mostrarVentana("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+        } else {
+            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
     
-    private void guardarPerfilDocente(){
-        GradoProfesional seleccionado = cbGradoProfesional.getValue();
-        ActualizarDocenteDTO docente = new ActualizarDocenteDTO(tfNombreUsuario.getText(), tfNombreCompleto.getText(), seleccionado.idGradoProfesional);
-        try {
-            headers.put("Content-Type", "application/json");
-            headers.put("Authorization", "Bearer " + sesion.jwt);
-            String endpoint = String.format("/usuarios/docentes/%s", sesion.idUsuario);
-            ApiCliente.enviarSolicitud(endpoint, "PUT", docente, headers, Object.class);
-        } catch (Exception e) {
-            VentanaEmergente.mostrarVentana("Error", null, e.getMessage(), Alert.AlertType.ERROR).showAndWait();
+    private void guardarPerfilDocente(String nombreUsuario, String nombreCompleto){
+        GradoProfesionalDTO seleccionado = cbGradoProfesional.getValue();
+
+        HashMap<String, Object> respuesta = ServicioDocentes.actualizarDocente(nombreCompleto, nombreUsuario,seleccionado.getIdGradoProfesional());
+
+        if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+            Utils.mostrarVentana("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+        } else {
+            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
 

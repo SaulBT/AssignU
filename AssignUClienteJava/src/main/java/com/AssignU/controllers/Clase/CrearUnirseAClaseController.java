@@ -2,11 +2,11 @@ package com.AssignU.controllers.Clase;
 
 import com.AssignU.controllers.Menu.MenuController;
 import com.AssignU.models.Clases.ClaseDTO;
-import com.AssignU.models.Clases.CrearClaseDTO;
 import com.AssignU.models.Usuarios.Sesion;
-import com.AssignU.utils.ApiCliente;
+import com.AssignU.servicios.ServicioClases;
+import com.AssignU.utils.Constantes;
 import com.AssignU.utils.IFormulario;
-import com.AssignU.utils.VentanaEmergente;
+import com.AssignU.utils.Utils;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
@@ -23,7 +23,6 @@ public class CrearUnirseAClaseController implements IFormulario{
     public MenuController menuController;
     private Sesion sesion;
     private String mensajeError;
-    private boolean esDocente;
     
     private Map<String, String> headers = new HashMap<String, String>();
     
@@ -36,14 +35,12 @@ public class CrearUnirseAClaseController implements IFormulario{
     @FXML
     private TextField tfContenido;
 
-    public void cargarValores(MenuController menuController, Sesion sesion, boolean esDocente) {
+    public void cargarValores(MenuController menuController) {
         this.menuController = menuController;
-        this.sesion = sesion;
-        if (esDocente) {
-            this.esDocente = esDocente;
+        this.sesion = Sesion.getSesion();
+        if (sesion.esDocente()) {
             cargarVentanaAlumno();
-        } else if (sesion.tipoUsuario.equals("docente")) {
-            this.esDocente = esDocente;
+        } else {
             cargarVentanaDocente();
         }
     }
@@ -63,14 +60,14 @@ public class CrearUnirseAClaseController implements IFormulario{
     @FXML
     public void btnAceptar(ActionEvent actionEvent) {
         if (verificarCampos()) {
-            if (esDocente){
+            if (sesion.esDocente()){
                 crearClase(tfContenido.getText());
             }else{
                 unirseAClase(tfContenido.getText());
             }
         } else {
             tfContenido.setStyle("-fx-border-color: red");
-            VentanaEmergente.mostrarVentana("Error", "Campo inválido.", mensajeError, Alert.AlertType.ERROR).showAndWait();
+            Utils.mostrarVentana("Campo inválido.", mensajeError, Alert.AlertType.ERROR);
         }
     }
 
@@ -81,7 +78,7 @@ public class CrearUnirseAClaseController implements IFormulario{
         boolean error = true;
         
         if (nombreClase.isEmpty()) {
-            if(esDocente){
+            if(sesion.esDocente()){
                 mensajeError = "Escribe un nombre para la clase.";
             }else{
                 mensajeError = "Ingrese el código de la clase.";
@@ -102,28 +99,23 @@ public class CrearUnirseAClaseController implements IFormulario{
     }
 
     private void crearClase(String nombreClase) {
-        try {
-            headers.put("Content-Type", "application/json");
-            headers.put("Authorization", "Bearer " + sesion.jwt);
-            CrearClaseDTO crearClaseDto = new CrearClaseDTO(nombreClase);
-            ClaseDTO claseDto = ApiCliente.enviarSolicitud("/clases/clases", "POST", crearClaseDto, headers, ClaseDTO.class);
-            menuController.enviarAClaseNueva(claseDto);
+        HashMap<String, Object> respuesta = ServicioClases.crearClase(nombreClase);
+        if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+            Utils.mostrarVentana("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
             cerrarVentana();
-        } catch (Exception e) {
-            VentanaEmergente.mostrarVentana("Error", null, e.getMessage(), Alert.AlertType.ERROR).showAndWait();
+        } else {
+            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
     
     public void unirseAClase(String codigo){
-        try {
-            headers.put("Content-Type", "application/json");
-            headers.put("Authorization", "Bearer " + sesion.jwt);
-            String endpoint = String.format("/clases/clases/%s/unirse", codigo);
-            ClaseDTO claseDto = ApiCliente.enviarSolicitud(endpoint, "POST", null, headers, ClaseDTO.class);
-            menuController.enviarAClaseNueva(claseDto);
+        HashMap<String, Object> respuesta = ServicioClases.unirseAClase(codigo);
+        if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+            Utils.mostrarVentana("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+            menuController.enviarAClaseNueva((ClaseDTO)respuesta.get(Constantes.KEY_RESPUESTA));
             cerrarVentana();
-        } catch (Exception e) {
-            VentanaEmergente.mostrarVentana("Error", null, e.getMessage(), Alert.AlertType.ERROR).showAndWait();
+        } else {
+            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
 

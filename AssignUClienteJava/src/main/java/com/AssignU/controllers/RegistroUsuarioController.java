@@ -1,8 +1,9 @@
 package com.AssignU.controllers;
 
-import com.AssignU.models.Usuarios.Catalogo.GradoEstudios;
-import com.AssignU.models.Usuarios.Catalogo.GradoProfesional;
+import com.AssignU.models.Usuarios.Catalogo.GradoEstudioDTO;
+import com.AssignU.models.Usuarios.Catalogo.GradoProfesionalDTO;
 import com.AssignU.servicios.usuarios.ServicioAlumnos;
+import com.AssignU.servicios.usuarios.ServicioCatalogos;
 import com.AssignU.servicios.usuarios.ServicioDocentes;
 import com.AssignU.utils.ApiCliente;
 import com.AssignU.utils.Constantes;
@@ -30,8 +31,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class RegistroUsuarioController implements Initializable, IFormulario {
-    private List<GradoEstudios> listaGradoEstudios;
-    private List<GradoProfesional> listaGradoProfesional;
+    private List<GradoEstudioDTO> listaGradoEstudios;
+    private List<GradoProfesionalDTO> listaGradoProfesional;
     private String mensajeError;
     
     @FXML
@@ -72,12 +73,21 @@ public class RegistroUsuarioController implements Initializable, IFormulario {
     }
 
     private void cargarCatalogos(){
-        try {
-            Type tipoLista = new TypeToken<List<GradoEstudios>>() {}.getType();
-            listaGradoEstudios = ApiCliente.enviarSolicitudLista("/usuarios/catalogos/grados-estudios", "GET", null, null, GradoEstudios.class);
-            listaGradoProfesional = ApiCliente.enviarSolicitudLista("/usuarios/catalogos/grados-profesionales", "GET", null, null, GradoProfesional.class);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        //TO CHECK
+        Type tipoLista = new TypeToken<List<GradoEstudioDTO>>() {}.getType();
+        HashMap<String, Object> gradosEstudios = ServicioCatalogos.obtenerGradosDeEstudios();
+        HashMap<String, Object> gradosProfesionales = ServicioCatalogos.obtenerGradosProfesionales();
+        
+        if (!(boolean) gradosEstudios.get(Constantes.KEY_ERROR)) {
+            listaGradoEstudios = (List<GradoEstudioDTO>) gradosEstudios.get(Constantes.KEY_RESPUESTA);
+        } else {
+            Utils.mostrarVentana("Error", (String) gradosEstudios.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+        }
+        
+        if (!(boolean) gradosProfesionales.get(Constantes.KEY_ERROR)) {
+            listaGradoProfesional = (List<GradoProfesionalDTO>) gradosProfesionales.get(Constantes.KEY_RESPUESTA);
+        } else {
+            Utils.mostrarVentana("Error", (String) gradosProfesionales.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
 
@@ -102,7 +112,7 @@ public class RegistroUsuarioController implements Initializable, IFormulario {
         lbGrado.setText("Grado de estudios:");
 
         List<String> nombreGrado = new ArrayList<>();
-        GradoEstudios[] array = listaGradoEstudios.toArray(new GradoEstudios[0]);
+        GradoEstudioDTO[] array = listaGradoEstudios.toArray(new GradoEstudioDTO[0]);
         for (int i = 0; i < array.length; i++) {
             nombreGrado.add(array[i].nombre);
         }
@@ -113,7 +123,7 @@ public class RegistroUsuarioController implements Initializable, IFormulario {
         lbGrado.setText("Grado profesional:");
 
         List<String> nombreGrado = new ArrayList<>();
-        GradoProfesional[] array = listaGradoProfesional.toArray(new GradoProfesional[0]);
+        GradoProfesionalDTO[] array = listaGradoProfesional.toArray(new GradoProfesionalDTO[0]);
         for (int i = 0; i < array.length; i++) {
             nombreGrado.add(array[i].nombre);
         }
@@ -239,15 +249,15 @@ public class RegistroUsuarioController implements Initializable, IFormulario {
 
     private int determinarGrado(String tipoUsuario, String grado) {
         if (tipoUsuario.equals("Alumno")) {
-            GradoEstudios[] arrayGradoEstudios = listaGradoEstudios.toArray(new GradoEstudios[0]);
-            for (GradoEstudios gradoEstudios : arrayGradoEstudios) {
+            GradoEstudioDTO[] arrayGradoEstudios = listaGradoEstudios.toArray(new GradoEstudioDTO[0]);
+            for (GradoEstudioDTO gradoEstudios : arrayGradoEstudios) {
                 if (gradoEstudios.getNombre().equals(grado)) {
                     return gradoEstudios.getIdGradoEstudios();
                 }
             }
         } else if (tipoUsuario.equals("Docente")) {
-            GradoProfesional[] arrayGradoProfesional = listaGradoProfesional.toArray(new GradoProfesional[0]);
-            for (GradoProfesional gradoProfesional : arrayGradoProfesional) {
+            GradoProfesionalDTO[] arrayGradoProfesional = listaGradoProfesional.toArray(new GradoProfesionalDTO[0]);
+            for (GradoProfesionalDTO gradoProfesional : arrayGradoProfesional) {
                 if (gradoProfesional.getNombre().equals(grado)) {
                     return gradoProfesional.getIdGradoProfesional();
                 }

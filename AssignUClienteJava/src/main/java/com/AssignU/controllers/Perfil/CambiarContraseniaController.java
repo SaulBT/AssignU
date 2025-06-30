@@ -1,13 +1,12 @@
 package com.AssignU.controllers.Perfil;
 
-import com.AssignU.models.Perfil.CambiarContraseniaDTO;
 import com.AssignU.models.Usuarios.Sesion;
-import com.AssignU.utils.ApiCliente;
+import com.AssignU.servicios.usuarios.ServicioAlumnos;
+import com.AssignU.servicios.usuarios.ServicioDocentes;
+import com.AssignU.utils.Constantes;
 import com.AssignU.utils.IFormulario;
 import com.AssignU.utils.Utils;
-import com.AssignU.utils.VentanaEmergente;
 import java.util.HashMap;
-import java.util.Map;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -18,31 +17,19 @@ public class CambiarContraseniaController implements IFormulario{
     private PasswordField pfContraseniaNueva;
     private PasswordField pfContraseniaActual;
     private String mensajeError;
-    private boolean esDocente;
     private Sesion sesion;
-    private Map<String, String> headers = new HashMap<String, String>();
 
-    public void cargarValores(Sesion sesion){
-        this.sesion = sesion;
-        
-        headers.put("Content-Type", "application/json");
-        headers.put("Authorization", "Bearer " + sesion.jwt);
-        
+    public void cargarValores(){
+        this.sesion = Sesion.getSesion();
         mensajeError = "";
-        if (sesion.tipoUsuario.equals("alumno")) {
-            esDocente = false;
-        } else if (sesion.tipoUsuario.equals("docente")) {
-            esDocente = true;
-        }
     }
     
     @FXML
     public void btnAceptar(ActionEvent actionEvent) {
         if (verificarCampos()) {
-            CambiarContraseniaDTO cambiarContraseniaDto = new CambiarContraseniaDTO(pfContraseniaActual.getText(), pfContraseniaNueva.getText());
-            guardarContrasenia(cambiarContraseniaDto);
+            guardarContrasenia(pfContraseniaActual.getText(), pfContraseniaNueva.getText());
         } else {
-            VentanaEmergente.mostrarVentana("Error", "Campos inválidos", mensajeError, Alert.AlertType.ERROR).showAndWait();
+            Utils.mostrarVentana("Campos inválidos", mensajeError, Alert.AlertType.ERROR);
         }
     }
     
@@ -72,19 +59,19 @@ public class CambiarContraseniaController implements IFormulario{
         pfContraseniaNueva.setStyle("-fx-border-color: black");
     }
     
-    private void guardarContrasenia(CambiarContraseniaDTO cambiarContraseniaDto){
-        try {
-            String endpoint;
-            if(esDocente){
-                endpoint = String.format("/usuarios/docentes/%s/contrasenia", sesion.idUsuario);
-            }else{
-                endpoint = String.format("/usuarios/alumnos/%s/contrasenia", sesion.idUsuario);
-            }
-            ApiCliente.enviarSolicitud(endpoint, "PUT", cambiarContraseniaDto, headers, Object.class);
-            VentanaEmergente.mostrarVentana("Éxito", null, "Contraseña guardada con éxito.", Alert.AlertType.INFORMATION).showAndWait();
+    private void guardarContrasenia(String contraseniaActual, String contraseniaNueva){
+        HashMap<String, Object> respuesta;
+        if (sesion.esDocente()) {
+            respuesta = ServicioDocentes.cambiarContrasenia(contraseniaActual, contraseniaNueva);
+        } else {
+            respuesta = ServicioAlumnos.cambiarContrasenia(contraseniaActual, contraseniaNueva);
+        }
+
+        if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+            Utils.mostrarVentana("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
             cerrarVentana();
-        } catch (Exception e) {
-            VentanaEmergente.mostrarVentana("Error", "Contraseña Incorrecta", e.getMessage(), Alert.AlertType.ERROR).showAndWait();
+        } else {
+            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
 

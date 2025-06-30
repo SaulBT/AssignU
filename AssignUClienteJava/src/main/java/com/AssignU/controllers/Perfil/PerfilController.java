@@ -2,32 +2,29 @@ package com.AssignU.controllers.Perfil;
 
 import com.AssignU.controllers.Menu.MenuController;
 import com.AssignU.models.Perfil.EstadisticasPerfilDTO;
-import com.AssignU.models.Usuarios.Catalogo.GradoEstudios;
-import com.AssignU.models.Usuarios.Catalogo.GradoProfesional;
+import com.AssignU.models.Usuarios.Catalogo.GradoEstudioDTO;
+import com.AssignU.models.Usuarios.Catalogo.GradoProfesionalDTO;
 import com.AssignU.models.Usuarios.Docente.DocenteDTO;
 import com.AssignU.models.Usuarios.Sesion;
-import com.AssignU.utils.ApiCliente;
+import com.AssignU.servicios.usuarios.ServicioAlumnos;
+import com.AssignU.servicios.usuarios.ServicioCatalogos;
+import com.AssignU.servicios.usuarios.ServicioDocentes;
+import com.AssignU.utils.Constantes;
 import com.AssignU.utils.Navegador;
-import com.AssignU.utils.VentanaEmergente;
+import com.AssignU.utils.Utils;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 public class PerfilController{
     public Label lbPerfilNombreUsuario;
     public Label lbNombreUsuario;
     public Label lbNombreCompleto;
     public Label lbCorreoElectronico;
-    public Label lbGradoEstudios;
     public ComboBox cbClase;
     @FXML
     private TableView<?> tvDatosClase;
@@ -38,7 +35,6 @@ public class PerfilController{
     public Label lbPromedio;
     public Button btnCambiarContrasenia;
     public Button btnEditarPerfil;
-    public Label lbTextoGradoEstudios;
     public ScrollPane spInformacionClase;
     
     private Sesion sesion;
@@ -49,28 +45,29 @@ public class PerfilController{
     private Map<String, String> headers = new HashMap<String, String>();
     @FXML
     private HBox hbClase;
+    @FXML
+    private Label lbTextoGrado;
+    @FXML
+    private Label lbGrado;
     
 
-    public void cargarValores(Sesion sesion){
-        this.sesion = sesion;
-        if (sesion.tipoUsuario.equals("alumno")) {
-            esDocente = false;
+    public void cargarValores(){
+        this.sesion = Sesion.getSesion();
+        if (sesion.esDocente()) {
             obtenerDatosAlumno();
-        } else if (sesion.tipoUsuario.equals("docente")) {
-            esDocente = true;
+        } else {
             obtenerDatosDocente();
         }
     }
     
     // A L U M N O
     private void obtenerDatosAlumno(){
-        try {
-            headers.put("Authorization", "Bearer " + sesion.jwt);
-            String endpoint = String.format("/usuarios/alumnos/%s/estadisticas", sesion.idUsuario);
-            EstadisticasPerfilDTO estadisticasDto = ApiCliente.enviarSolicitud(endpoint, "GET", null, headers, EstadisticasPerfilDTO.class);
+        HashMap<String, Object> respuesta = ServicioAlumnos.obtenerEstadisticasPerfil();
+        if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+            EstadisticasPerfilDTO estadisticasDto = (EstadisticasPerfilDTO) respuesta.get(Constantes.KEY_RESPUESTA);
             cargarVentanaAlumno(estadisticasDto);
-        } catch (Exception e) {
-            VentanaEmergente.mostrarVentana("Error", null, e.getMessage(), Alert.AlertType.ERROR).showAndWait();
+        } else {
+            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
     
@@ -80,19 +77,19 @@ public class PerfilController{
         lbNombreCompleto.setText(estadisticasDto.nombreCompleto);
         lbCorreoElectronico.setText(estadisticasDto.correo);
         idGrado = estadisticasDto.idGradoEstudios;
-        cargarGradoEstudios(estadisticasDto.idGradoEstudios);
+        cargarGradoEstudios(idGrado);
         //TO DO set comboBox y tableView
+        //configurarInformacionClases()
     }
     
     private void cargarGradoEstudios(int idGradoEstudios){
-        lbTextoGradoEstudios.setText("Grado estudios:");
-        try {
-            headers.put("Authorization", "Bearer " + sesion.jwt);
-            String endpoint = String.format("/usuarios/catalogos/grados-estudios/%s", idGradoEstudios);
-            GradoEstudios gradoEstudios = ApiCliente.enviarSolicitud(endpoint, "GET", null, headers, GradoEstudios.class);
-            lbGradoEstudios.setText(gradoEstudios.getNombre());
-        } catch (Exception e) {
-            VentanaEmergente.mostrarVentana("Error", null, e.getMessage(), Alert.AlertType.ERROR).showAndWait();
+        lbTextoGrado.setText("Grado estudios:");
+        HashMap<String, Object> respuesta = ServicioCatalogos.obtenerGradoEstudios(idGradoEstudios);
+        GradoEstudioDTO gradoEstudios = (GradoEstudioDTO) respuesta.get(Constantes.KEY_RESPUESTA);
+        if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+            lbGrado.setText(gradoEstudios.getNombre());
+        } else {
+            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
     
@@ -102,13 +99,12 @@ public class PerfilController{
     
     // D O C E N T E
     private void obtenerDatosDocente(){
-        try {
-            headers.put("Authorization", "Bearer " + sesion.jwt);
-            String endpoint = String.format("/usuarios/docentes/%s", sesion.idUsuario);
-            DocenteDTO docenteDto = ApiCliente.enviarSolicitud(endpoint, "GET", null, headers, DocenteDTO.class);
+        HashMap<String, Object> respuesta = ServicioDocentes.obtenerDocente();
+        if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+            DocenteDTO docenteDto = (DocenteDTO) respuesta.get(Constantes.KEY_RESPUESTA);
             cargarVentanaDocente(docenteDto);
-        } catch (Exception e) {
-            VentanaEmergente.mostrarVentana("Error", null, e.getMessage(), Alert.AlertType.ERROR).showAndWait();
+        } else {
+            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
     
@@ -116,23 +112,22 @@ public class PerfilController{
         lbPerfilNombreUsuario.setText("Perfil - " + docenteDto.nombreUsuario);
         lbNombreUsuario.setText(docenteDto.nombreUsuario);
         lbNombreCompleto.setText(docenteDto.nombreCompleto);
-        lbCorreoElectronico.setText(docenteDto.correo);
+        lbCorreoElectronico.setText(docenteDto.correoElectronico);
         idGrado = docenteDto.idGradoProfesional;
-        cargarGradoProfesional(docenteDto.idGradoProfesional);
+        cargarGradoProfesional(idGrado);
         
         hbClase.setVisible(false);
         spInformacionClase.setVisible(false);
     }
     
     private void cargarGradoProfesional(int idGradoProfesional){
-        lbTextoGradoEstudios.setText("Grado profesional:");
-        try {
-            headers.put("Authorization", "Bearer " + sesion.jwt);
-            String endpoint = String.format("/usuarios/catalogos/grados-profesionales/%s", idGradoProfesional);
-            GradoProfesional gradoProfesional = ApiCliente.enviarSolicitud(endpoint, "GET", null, headers, GradoProfesional.class);
-            lbGradoEstudios.setText(gradoProfesional.getNombre());
-        } catch (Exception e) {
-            VentanaEmergente.mostrarVentana("Error", null, e.getMessage(), Alert.AlertType.ERROR).showAndWait();
+        lbTextoGrado.setText("Grado profesional:");
+        HashMap<String, Object> respuesta = ServicioCatalogos.obtenerGradoProfesional(idGradoProfesional);
+        GradoProfesionalDTO gradoProfesional = (GradoProfesionalDTO) respuesta.get(Constantes.KEY_RESPUESTA);
+        if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+            lbGrado.setText(gradoProfesional.getNombre());
+        } else {
+            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
     
@@ -142,7 +137,7 @@ public class PerfilController{
         Navegador.abrirVentanaModal(
             "/views/Perfil/cambiarContrasenia.fxml",
             "Cambiar Contraseña",
-            controller -> ((CambiarContraseniaController) controller).cargarValores(sesion)
+            controller -> ((CambiarContraseniaController) controller).cargarValores()
         );
     }
 
@@ -152,7 +147,7 @@ public class PerfilController{
             "/views/Perfil/editarPerfil.fxml",
             "Editar Perfil",
             controller -> ((EditarPerfilController) controller).cargarValores(
-                sesion,lbNombreCompleto.getText(),lbNombreUsuario.getText(),idGrado)
+                lbNombreCompleto.getText(),lbNombreUsuario.getText(),idGrado)
         );
     }
     
@@ -161,7 +156,7 @@ public class PerfilController{
         Navegador.cambiarVentana(
             lbNombreCompleto.getScene(),
             "/views/Menu/menu.fxml",
-            controller -> ((MenuController) controller).cargarValores(sesion)
+            controller -> ((MenuController) controller).cargarValores()
         );
     }
 }

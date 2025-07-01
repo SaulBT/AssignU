@@ -6,6 +6,7 @@ service ArchivosService {
     rpc CargarArchivo(stream SubidaArchivoRequest) returns (ArchivoRespuesta);
     rpc DescargarArchivo(IdTarea) returns (stream DescargaArchivoResponse);
     rpc EliminarArchivo(IdTarea) returns (OperacionRespuesta);
+    rpc ObtenerMetadatos(IdTarea) returns (MetadatosArchivo);
 }
 
 message SubidaArchivoRequest {
@@ -31,4 +32,11 @@ message DescargaArchivoResponse {
 
 message OperacionRespuesta {
     string mensaje = 1;
+}
+
+message MetadatosArchivo {
+    string nombre = 1;
+    string tipo = 2;
+    int32 tamano = 3;
+    string fechaSubida = 4;
 }

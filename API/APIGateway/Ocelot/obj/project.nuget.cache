@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2Hg2FJxKB54=",
+  "dgSpecHash": "NBXN+RZBUU4=",
   "success": true,
-  "projectFilePath": "C:\\Users\\x\\Documents\\AsignU\\API\\APIGateway\\APIGateway.csproj",
+  "projectFilePath": "C:\\Users\\x\\Documents\\AsignU\\API\\APIGateway\\Ocelot\\APIGateway.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\x\\.nuget\\packages\\fluentvalidation\\11.11.0\\fluentvalidation.11.11.0.nupkg.sha512",
     "C:\\Users\\x\\.nuget\\packages\\ipaddressrange\\6.2.0\\ipaddressrange.6.2.0.nupkg.sha512",

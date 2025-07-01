@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\x\\Documents\\AsignU\\API\\APIGateway\\APIGateway.csproj": {}
+    "C:\\Users\\x\\Documents\\AsignU\\API\\APIGateway\\Ocelot\\APIGateway.csproj": {}
   },
   "projects": {
-    "C:\\Users\\x\\Documents\\AsignU\\API\\APIGateway\\APIGateway.csproj": {
+    "C:\\Users\\x\\Documents\\AsignU\\API\\APIGateway\\Ocelot\\APIGateway.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\x\\Documents\\AsignU\\API\\APIGateway\\APIGateway.csproj",
+        "projectUniqueName": "C:\\Users\\x\\Documents\\AsignU\\API\\APIGateway\\Ocelot\\APIGateway.csproj",
         "projectName": "APIGateway",
-        "projectPath": "C:\\Users\\x\\Documents\\AsignU\\API\\APIGateway\\APIGateway.csproj",
+        "projectPath": "C:\\Users\\x\\Documents\\AsignU\\API\\APIGateway\\Ocelot\\APIGateway.csproj",
         "packagesPath": "C:\\Users\\x\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\x\\Documents\\AsignU\\API\\APIGateway\\obj\\",
+        "outputPath": "C:\\Users\\x\\Documents\\AsignU\\API\\APIGateway\\Ocelot\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

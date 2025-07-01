@@ -56,7 +56,7 @@ public class ServicioAlumno : IServicioAlumno
             IdAlumno = alumno.IdAlumno,
             NombreCompleto = actualizarAlumnoDto.NombreCompleto,
             NombreUsuario = actualizarAlumnoDto.NombreUsuario,
-            Correo = alumno.Correo,
+            CorreoElectronico = alumno.Correo,
             IdGradoEstudios = actualizarAlumnoDto.IdGradoEstudios
         };
         _logger.LogInformation($"Alumno actualizado con la id {retornoAlumno.IdAlumno}");
@@ -82,7 +82,7 @@ public class ServicioAlumno : IServicioAlumno
             IdAlumno = alumnoObtenido.IdAlumno,
             NombreCompleto = alumnoObtenido.NombreCompleto,
             NombreUsuario = alumnoObtenido.NombreUsuario,
-            Correo = alumnoObtenido.Correo,
+            CorreoElectronico = alumnoObtenido.Correo,
             IdGradoEstudios = (int)alumnoObtenido.IdGradoEstudios
         };
 
@@ -131,7 +131,7 @@ public class ServicioAlumno : IServicioAlumno
             IdAlumno = idAlumno,
             NombreUsuario = datosPerfil.NombreUsuario,
             NombreCompleto = datosPerfil.NombreCompleto,
-            Correo = datosPerfil.Correo,
+            Correo = datosPerfil.CorreoElectronico,
             idGradoEstudios = (int)datosPerfil.IdGradoEstudios,
             Clases = resultadoClasesTareasRespuesta.Clases
         };

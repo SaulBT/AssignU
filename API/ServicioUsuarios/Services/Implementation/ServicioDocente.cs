@@ -53,7 +53,7 @@ public class SerivicioDocente : IServicioDocente
             IdDocente = docente.IdDocente,
             NombreCompleto = docente.NombreCompleto,
             NombreUsuario = docente.NombreUsuario,
-            Correo = docente.Correo,
+            CorreoElectronico = docente.Correo,
             IdGradoProfesional = (int)docente.IdGradoProfesional
         };
         _logger.LogInformation($"Se actualizó al Docente con la id {retornoDocente.IdDocente}");
@@ -78,7 +78,7 @@ public class SerivicioDocente : IServicioDocente
             IdDocente = docente.IdDocente,
             NombreCompleto = docente.NombreCompleto,
             NombreUsuario = docente.NombreUsuario,
-            Correo = docente.Correo,
+            CorreoElectronico = docente.Correo,
             IdGradoProfesional = (int)docente.IdGradoProfesional
         };
         _logger.LogInformation($"Docente encontrado con la id: {retornoDocente.IdDocente}");

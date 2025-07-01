@@ -73,14 +73,44 @@ export const eliminarArchivoAsync = async (call, callback) => {
       return callback(new Error(`No se encontró un archivo con la idTarea ${idTarea}`));
     }
 
-    await bucket.delete(archivo._id);
-
     callback(null, {
       mensaje: "Archivo eliminado correctamente"
     });
   } catch (error) {
     console.log("Error: " + error.message);
     callback(error);
+  }
+};
+
+export const obtenerMetadatos = async (call, callback) => {
+  const { idTarea } = call.request;
+
+  try {
+    const archivo = await db.collection("archivos.files").findOne({
+      "metadata.idTarea": idTarea
+    });
+
+    if (!archivo) {
+      return callback({
+        code: 5, // NOT_FOUND
+        message: `No se encontró un archivo con idTarea ${idTarea}`
+      });
+    }
+
+    const respuesta = {
+      nombre: archivo.filename,
+      tipo: archivo.metadata?.tipo || "desconocido",
+      tamano: archivo.length,
+      fechaSubida: archivo.metadata?.fecha?.toISOString() || archivo.uploadDate.toISOString()
+    };
+
+    callback(null, respuesta);
+  } catch (error) {
+    console.error("Error al obtener metadatos:", error);
+    callback({
+      code: 13, // INTERNAL
+      message: "Error interno al obtener los metadatos"
+    });
   }
 };
 

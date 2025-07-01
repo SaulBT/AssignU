@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="265.0" prefWidth="1237.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.AssignU.controllers.Tarea.TarjetaPreguntaController">
+   <children>
+      <HBox prefHeight="72.0" prefWidth="1237.0">
+         <children>
+            <Label fx:id="lbNumeroPregunta" text="1.">
+               <font>
+                  <Font name="System Bold" size="45.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Label>
+            <Label fx:id="lbTextoPregunta" text="Pregunta">
+               <font>
+                  <Font size="45.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="47.0" prefWidth="1237.0">
+         <children>
+            <RadioButton fx:id="lbRespuesta1" mnemonicParsing="false" text="Respuesta 1">
+               <HBox.margin>
+                  <Insets left="60.0" />
+               </HBox.margin>
+               <toggleGroup>
+                  <ToggleGroup fx:id="grupoRespuestas" />
+               </toggleGroup>
+            </RadioButton>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="47.0" prefWidth="1237.0">
+         <children>
+            <RadioButton fx:id="lbRespuesta2" mnemonicParsing="false" text="Respuesta 2" toggleGroup="$grupoRespuestas">
+               <HBox.margin>
+                  <Insets left="60.0" />
+               </HBox.margin>
+            </RadioButton>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="47.0" prefWidth="1237.0">
+         <children>
+            <RadioButton fx:id="lbRespuesta3" mnemonicParsing="false" text="Respuesta 3" toggleGroup="$grupoRespuestas">
+               <HBox.margin>
+                  <Insets left="60.0" />
+               </HBox.margin>
+            </RadioButton>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="47.0" prefWidth="1237.0">
+         <children>
+            <RadioButton fx:id="lbRespuesta4" mnemonicParsing="false" text="Respuesta 4" toggleGroup="$grupoRespuestas">
+               <HBox.margin>
+                  <Insets left="60.0" />
+               </HBox.margin>
+            </RadioButton>
+         </children>
+      </HBox>
+      <Separator prefWidth="200.0" style="-fx-background-color: black;" />
+   </children>
+</VBox>

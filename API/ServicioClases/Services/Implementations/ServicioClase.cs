@@ -104,7 +104,7 @@ public class ServicioClase : IServicioClase
         return claseDto;
     }
 
-    public async Task<List<Clase>?> ObtenerClasesDeAlumnoAsync(int idAlumno)
+    public async Task<List<ClaseDTO>?> ObtenerClasesDeAlumnoAsync(int idAlumno)
     {
         _logger.LogInformation("Obteniendo Clases de Alumno");
         _validacion.VerificarIdUsuario(idAlumno);
@@ -112,19 +112,45 @@ public class ServicioClase : IServicioClase
         var registros = await _registroDAO.ObtenerRegistrosPorAlumnoAsync(idAlumno);
         var clases = await _claseDAO.ObtenerClasesDeAlumnoAsync(registros);
 
+        List<ClaseDTO> listaClases = [];
+        foreach (var clase in clases)
+        {
+            ClaseDTO claseDto = new ClaseDTO
+            {
+                IdClase = clase.IdClase,
+                NombreClase = clase.Nombre,
+                CodigoClase = clase.Codigo,
+                IdDocente = clase.IdDocente
+            };
+            listaClases.Add(claseDto);
+        }
+
         _logger.LogInformation($"Clases del Alumno con id {idAlumno} recuperadas");
-        return clases;
+        return listaClases;
     }
 
-    public Task<List<Clase>?> ObtenerClasesDeDocenteAsync(int idDocente)
+    public async Task<List<ClaseDTO>?> ObtenerClasesDeDocenteAsync(int idDocente)
     {
         _logger.LogInformation("Obteniendo Clases de Docente");
         _validacion.VerificarIdUsuario(idDocente);
 
-        var clases = _claseDAO.ObtenerClasesDeDocenteAsync(idDocente);
+        var clases = await _claseDAO.ObtenerClasesDeDocenteAsync(idDocente);
+
+        List<ClaseDTO> listaClases = [];
+        foreach (var clase in clases)
+        {
+            ClaseDTO claseDto = new ClaseDTO
+            {
+                IdClase = clase.IdClase,
+                NombreClase = clase.Nombre,
+                CodigoClase = clase.Codigo,
+                IdDocente = clase.IdDocente
+            };
+            listaClases.Add(claseDto);
+        }
 
         _logger.LogInformation($"Clases del Docente con id {idDocente} recuperadas");
-        return clases;
+        return listaClases;
     }
 
     public async Task<Clase> UnirseAClaseAsync(string codigoClase, HttpContext httpContext)

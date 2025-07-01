@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="305.0" prefWidth="1237.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.AssignU.controllers.Tarea.TarjetaCrearPreguntaController">
+   <children>
+      <HBox alignment="TOP_RIGHT" prefHeight="19.0" prefWidth="1237.0">
+         <children>
+            <Label onMouseClicked="#btnLbBorrarPregunta" text="X" textFill="#ff4a4a">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+               <HBox.margin>
+                  <Insets right="20.0" top="5.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </HBox>
+      <HBox prefHeight="72.0" prefWidth="1237.0">
+         <children>
+            <Label fx:id="lbNumeroPregunta" text="1.">
+               <font>
+                  <Font name="System Bold" size="45.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="tfTextoPregunta" prefHeight="51.0" prefWidth="1139.0" promptText="Escribe la pregunta">
+               <HBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </HBox.margin>
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </TextField>
+         </children>
+      </HBox>
+      <HBox fx:id="hbRespuesta1" alignment="CENTER_LEFT" prefHeight="47.0" prefWidth="1237.0">
+         <children>
+            <RadioButton mnemonicParsing="false" selected="true" text="[Respuesta 1]">
+               <HBox.margin>
+                  <Insets left="60.0" />
+               </HBox.margin>
+            </RadioButton>
+            <TextField fx:id="tfTextoRespuesta1" prefHeight="31.0" prefWidth="288.0" promptText="Escribe la respuesta">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </TextField>
+            <CheckBox fx:id="cbCorrecta1" mnemonicParsing="false" text="Correcta">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </CheckBox>
+         </children>
+      </HBox>
+      <HBox fx:id="hbRespuesta2" alignment="CENTER_LEFT" prefHeight="47.0" prefWidth="1237.0">
+         <children>
+            <RadioButton mnemonicParsing="false" selected="true" text="[Respuesta 2]">
+               <HBox.margin>
+                  <Insets left="60.0" />
+               </HBox.margin>
+            </RadioButton>
+            <TextField fx:id="tfTextoRespuesta2" prefHeight="31.0" prefWidth="288.0" promptText="Escribe la respuesta">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </TextField>
+            <CheckBox fx:id="cbCorrecta2" mnemonicParsing="false" text="Correcta">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </CheckBox>
+         </children>
+      </HBox>
+      <HBox fx:id="hbRespuesta3" alignment="CENTER_LEFT" prefHeight="47.0" prefWidth="1237.0">
+         <children>
+            <RadioButton mnemonicParsing="false" selected="true" text="[Respuesta 3]">
+               <HBox.margin>
+                  <Insets left="60.0" />
+               </HBox.margin>
+            </RadioButton>
+            <TextField fx:id="tfTextoRespuesta3" prefHeight="31.0" prefWidth="288.0" promptText="Escribe la respuesta">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </TextField>
+            <CheckBox fx:id="cbCorrecta3" mnemonicParsing="false" text="Correcta">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </CheckBox>
+         </children>
+      </HBox>
+      <HBox fx:id="hbRespuesta4" alignment="CENTER_LEFT" prefHeight="47.0" prefWidth="1237.0">
+         <children>
+            <RadioButton mnemonicParsing="false" selected="true" text="[Respuesta 4]">
+               <HBox.margin>
+                  <Insets left="60.0" />
+               </HBox.margin>
+            </RadioButton>
+            <TextField fx:id="tfTextoRespuesta4" prefHeight="31.0" prefWidth="288.0" promptText="Escribe la respuesta">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </TextField>
+            <CheckBox fx:id="cbCorrecta4" mnemonicParsing="false" text="Correcta">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </CheckBox>
+         </children>
+      </HBox>
+      <Separator prefWidth="200.0" style="-fx-background-color: black;" />
+   </children>
+</VBox>

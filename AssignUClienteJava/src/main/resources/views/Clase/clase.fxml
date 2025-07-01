@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.AssignU.controllers.Clase.ClaseController">
+   <top>
+      <VBox prefHeight="139.0" prefWidth="1280.0" BorderPane.alignment="TOP_LEFT">
+         <children>
+            <GridPane alignment="CENTER" prefHeight="40.0" prefWidth="1280.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+                     <children>
+                        <Label fx:id="lbVerEstadisticas" onMouseClicked="#btnLbVerEstadisticas" text="Ver estadísticas" textFill="#1ce300">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="20.0" top="25.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="lbCambiarNombre" onMouseClicked="#btnLbCambiarNombre" text="Cambiar nombre" textFill="#e4b300">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="20.0" top="25.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="lbEliminarClase" onMouseClicked="#btnLbEliminarClase" text="Eliminar Clase" textFill="#d30000">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="20.0" top="25.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label onMouseClicked="#btnLbVolver" text="&lt; Volver" textFill="#37caff">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" right="20.0" top="25.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="lbCodigoClase" alignment="CENTER" contentDisplay="CENTER" prefHeight="74.0" prefWidth="385.0" text="Código: WWWWWW" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="30.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="70.0" top="25.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </GridPane>
+            <Separator prefWidth="200.0" style="-fx-background-color: #18529D; -fx-border-color: #18529D;">
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </Separator>
+            <GridPane prefHeight="67.0" prefWidth="1280.0">
+               <children>
+                  <Label fx:id="lnNombreClase" prefHeight="54.0" prefWidth="1024.0" text="Nombre de la Clase">
+                     <font>
+                        <Font name="System Bold" size="37.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets left="20.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Button fx:id="btnCrearTarea" alignment="CENTER" mnemonicParsing="false" onAction="#clicBtnCrearTarea" stylesheets="@../stylesheets/button_azul.css" text="+ Crear tarea" GridPane.columnIndex="1">
+                     <font>
+                        <Font size="27.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets right="20.0" />
+                     </GridPane.margin>
+                  </Button>
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="1137.0" minWidth="10.0" prefWidth="1059.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="635.0" minWidth="10.0" prefWidth="221.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+            </GridPane>
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+      </VBox>
+   </top>
+   <center>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #18529D;" BorderPane.alignment="CENTER">
+         <center>
+            <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets left="112.0" right="112.0" />
+               </BorderPane.margin>
+               <content>
+                  <FlowPane fx:id="fpContenedorTareas" prefHeight="595.0" prefWidth="1056.0" />
+               </content>
+            </ScrollPane>
+         </center>
+      </BorderPane>
+   </center>
+</BorderPane>

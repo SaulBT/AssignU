@@ -14,6 +14,7 @@ using ServicioUsuarios.Validations;
 using ServicioUsuarios.Data.DTOs.Alumno;
 using ServicioUsuarios.Data;
 using ServicioUsuarios.Data.DTOs.Docente;
+using ServicioUsuarios.Data.DTOs.Catalogo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +72,14 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseRouting();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    app.UseRouting();
+}
 
 //ServicioAlumno
 app.MapPost("/alumnos", async (RegistrarAlumnoDTO alumnoNuevoDto, IServicioAlumno servicio) =>
@@ -323,7 +332,7 @@ app.MapGet("/catalogos/grados-estudios", async (ServicioCatalogo servicio) =>
     "\n - Maestría" +
     "\n - Doctorado" +
     "\n - Postdoctorado")
-.Produces<List<GradoEstudiosDAO>>(200)
+.Produces<List<GradoEstudiosDTO>>(200)
 .Produces(404)
 .WithOpenApi();
 
@@ -340,7 +349,7 @@ app.MapGet("/catalogos/grados-profesionales", async (ServicioCatalogo servicio) 
     "\n - Licenciatura" +
     "\n - Maestría" +
     "\n - Doctorado")
-.Produces<List<GradoProfesionalDAO>>(200)
+.Produces<List<GradoProfesionalDTO>>(200)
 .Produces(404)
 .WithOpenApi();
 
@@ -353,7 +362,7 @@ app.MapGet("/catalogos/grado-estudio/{idGradoEstudios}", async (int idGradoEstud
 .WithTags("Catalogos")
 .WithSummary("Obtener un Grado de Estudio")
 .WithDescription("Obtener un Grado de Estudio")
-.Produces<GradoEstudiosDAO>(200)
+.Produces<GradoEstudiosDTO>(200)
 .Produces(404)
 .WithOpenApi();
 
@@ -366,7 +375,7 @@ app.MapGet("/catalogos/grado-profesional/{idGradoProfesional}", async (int idGra
 .WithTags("Catalogos")
 .WithSummary("Obtener un grado profesional")
 .WithDescription("Obtener un grado profesional")
-.Produces<GradoProfesionalDAO>(200)
+.Produces<GradoProfesionalDTO>(200)
 .Produces(404)
 .WithOpenApi();
 
@@ -389,12 +398,6 @@ app.MapPost("/login", async (IniciarSesionDTO usuarioDto, IServicioLogin servici
 .Produces(400)
 .Produces(404)
 .WithOpenApi();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 app.UseHttpsRedirection();
 

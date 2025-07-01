@@ -19,7 +19,7 @@ namespace ServicioUsuarios.Config
         public async Task InicializarServidor(IServicioAlumno servicioAlumno, string queueName = "cola_usuarios")
         {
             _servicioAlumno = servicioAlumno;
-            var factory = new ConnectionFactory() { HostName = _rabbitMqHostProduction };
+            var factory = new ConnectionFactory() { HostName = _rabbitMqHostDevelopment };
             _connection = await factory.CreateConnectionAsync();
             _channel = await _connection.CreateChannelAsync();
 

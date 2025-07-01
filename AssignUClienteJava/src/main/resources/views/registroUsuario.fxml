@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #18529D;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.AssignU.controllers.RegistroUsuarioController">
+   <center>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #E4F6FF;" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="50.0" left="300.0" right="300.0" />
+         </BorderPane.margin>
+         <children>
+            <Label text="Registro">
+               <font>
+                  <Font name="System Bold" size="44.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </Label>
+            <Label text="Tipo de cuenta:">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="cbTipoUsuario" prefHeight="41.0" prefWidth="267.0" promptText="Seleciona un tipo de usuario" style="-fx-border-color: #18529D;">
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+            </ComboBox>
+            <HBox fx:id="hbNombreCompleto" alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="680.0" visible="false">
+               <children>
+                  <Label text="Nombre completo:">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="tfNombreCompleto" nodeOrientation="LEFT_TO_RIGHT" prefHeight="20.0" prefWidth="407.0">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextField>
+               </children>
+               <padding>
+                  <Insets right="15.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="hbNombreUsuario" alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="680.0" visible="false">
+               <children>
+                  <Label text="Nombre usuario:">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="tfNombreUsuario" nodeOrientation="LEFT_TO_RIGHT" prefHeight="20.0" prefWidth="407.0">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextField>
+               </children>
+               <padding>
+                  <Insets right="15.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="hbContrasenia" alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="680.0" visible="false">
+               <children>
+                  <Label text="Contraseña:">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Label>
+                  <PasswordField fx:id="pfContrasenia" prefHeight="44.0" prefWidth="407.0" />
+               </children>
+               <padding>
+                  <Insets right="15.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="hbConfirmarContrasenia" alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="680.0" visible="false">
+               <children>
+                  <Label text="Confirmar contraseña:">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Label>
+                  <PasswordField fx:id="pfConfirmarContrasenia" prefHeight="44.0" prefWidth="407.0" />
+               </children>
+               <padding>
+                  <Insets right="15.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="hbCorreo" alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="680.0" visible="false">
+               <children>
+                  <Label text="Correo:">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="tfCorreo" nodeOrientation="LEFT_TO_RIGHT" prefHeight="20.0" prefWidth="407.0">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextField>
+               </children>
+               <padding>
+                  <Insets right="15.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="hbGrado" alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="680.0" visible="false">
+               <children>
+                  <Label fx:id="lbGrado" text="Grado:">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Label>
+                  <ComboBox fx:id="cbGrado" prefHeight="41.0" prefWidth="407.0" promptText="Selecciona un grado" style="-fx-border-color: #18529D;">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </ComboBox>
+               </children>
+               <padding>
+                  <Insets right="15.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+            </HBox>
+            <Button fx:id="btnRegistrarse" disable="true" mnemonicParsing="false" onAction="#clicBtnRegistrarse" prefHeight="47.0" prefWidth="152.0" stylesheets="@stylesheets/button_ok.css" text="Registrarse" textFill="#18529d">
+               <font>
+                  <Font name="System Bold" size="21.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
+   </center>
+   <top>
+      <Label onMouseClicked="#btnLbVolver" text="&lt; Volver" textFill="WHITE" BorderPane.alignment="TOP_LEFT">
+         <font>
+            <Font name="System Bold" size="35.0" />
+         </font>
+         <BorderPane.margin>
+            <Insets left="10.0" top="10.0" />
+         </BorderPane.margin>
+      </Label>
+   </top>
+</BorderPane>

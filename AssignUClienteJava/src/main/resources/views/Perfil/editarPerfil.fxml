@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #18529D;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.AssignU.controllers.Perfil.EditarPerfilController">
+   <top>
+      <Label text="Editar perfil" textFill="WHITE" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="System Bold" size="30.0" />
+         </font>
+         <BorderPane.margin>
+            <Insets top="10.0" />
+         </BorderPane.margin>
+      </Label>
+   </top>
+   <center>
+      <VBox prefHeight="268.0" prefWidth="560.0" BorderPane.alignment="CENTER">
+         <children>
+            <Separator prefWidth="200.0">
+               <VBox.margin>
+                  <Insets bottom="40.0" />
+               </VBox.margin>
+            </Separator>
+            <GridPane prefHeight="58.0" prefWidth="560.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Nombre Completo:" textFill="WHITE" GridPane.halignment="RIGHT">
+                     <GridPane.margin>
+                        <Insets right="10.0" />
+                     </GridPane.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tfNombreCompleto" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
+            <GridPane prefHeight="58.0" prefWidth="560.0">
+               <children>
+                  <Label text="Nombre de Usuario:" textFill="WHITE" GridPane.halignment="RIGHT">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets right="10.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <TextField fx:id="tfNombreUsuario" GridPane.columnIndex="1" />
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+            </GridPane>
+            <GridPane prefHeight="58.0" prefWidth="560.0">
+               <children>
+                  <Label fx:id="lbGrado" text="Grado de ----:" textFill="WHITE" GridPane.halignment="RIGHT">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets right="10.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <ComboBox fx:id="cbGradoEstudios" prefHeight="31.0" prefWidth="279.0" GridPane.columnIndex="1" />
+                  <ComboBox fx:id="cbGradoProfesional" prefHeight="31.0" prefWidth="279.0" GridPane.columnIndex="1" />
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+            </GridPane>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#btnCancelar" stylesheets="@../stylesheets/button_cancelar.css" text="Cancelar">
+                     <HBox.margin>
+                        <Insets right="100.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#btnAceptar" stylesheets="@../stylesheets/button_ok.css" text="Aceptar">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+         <BorderPane.margin>
+            <Insets left="20.0" right="20.0" />
+         </BorderPane.margin>
+      </VBox>
+   </center>
+</BorderPane>

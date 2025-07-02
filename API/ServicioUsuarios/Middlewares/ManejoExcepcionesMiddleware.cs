@@ -70,6 +70,12 @@ public class ManejoExcepcionesMiddleware
                 contexto.Response.StatusCode = (int)HttpStatusCode.Conflict;
                 await contexto.Response.WriteAsJsonAsync(new { error = statusConflictEx.Message });
                 break;
+            //Unauthorized
+            case UnauthorizedAccessException unauthorizedEx:
+                _logger.LogWarning(ex, "Acceso no autorizado.");
+                contexto.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                await contexto.Response.WriteAsJsonAsync(new { error = unauthorizedEx.Message });
+                break;
             default:
                 _logger.LogError(ex, "Ocurrió un error inesperado.");
                 contexto.Response.StatusCode = StatusCodes.Status500InternalServerError;

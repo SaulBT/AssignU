@@ -67,7 +67,7 @@ public class DocenteValidaciones
     {
         if (id <= 0)
         {
-            throw new ArgumentException("El ID del docente debe ser mayor que cero.", nameof(id));
+            throw new IdInvalidaException($"El id {id} es inválido.");
         }
     }
 
@@ -75,42 +75,49 @@ public class DocenteValidaciones
     {
         if (string.IsNullOrEmpty(docenteDto.NombreCompleto))
         {
-            throw new CampoObligatorioException("Los parámetros de registro del docente son inválidos: El nombre completo es nulo");
+            throw new CampoObligatorioException("El nombre completo es nulo");
         }
         else if (string.IsNullOrEmpty(docenteDto.NombreUsuario))
         {
-            throw new CampoObligatorioException("Los parámetros de registro del docente son inválidos: El nombre usuario es nulo");
+            throw new CampoObligatorioException("El nombre usuario es nulo");
         }
         else if (string.IsNullOrEmpty(docenteDto.Contrasenia))
         {
-            throw new CampoObligatorioException("Los parámetros de registro del docente son inválidos: La contraseña es nula");
+            throw new CampoObligatorioException("La contraseña es nula");
         }
         else if (string.IsNullOrEmpty(docenteDto.CorreoElectronico))
         {
-            throw new CampoObligatorioException("Los parámetros de registro del docente son inválidos: El correo electrónico es nulo");
+            throw new CampoObligatorioException("El correo electrónico es nulo");
         }
         else if (docenteDto.IdGradoProfesional <= 0)
         {
-            throw new IdInvalidaException($"Los parámetros de registro del docente son inválidos: Id del grado de estudios: {docenteDto.IdGradoProfesional}");
+            throw new IdInvalidaException($"La id {docenteDto.IdGradoProfesional} del grado profesional es inválida.");
         }
     }
 
     private void verificarParametrosDocenteActualizacion(ActualizarDocenteDTO docenteDto)
     {
-        if (docenteDto.NombreUsuario == "" ||
-            docenteDto.NombreCompleto == "" ||
-            docenteDto.IdGradoProfesional <= 0)
+        if (string.IsNullOrEmpty(docenteDto.NombreUsuario))
         {
-            throw new ArgumentException("Los parámetros del docente son inválidos.");
+            throw new CampoObligatorioException("El nombre usuario es nulo");
+        }
+        else if (string.IsNullOrEmpty(docenteDto.NombreCompleto))
+        {
+            throw new CampoObligatorioException("El nombre completo es nulo");
+        } else if (docenteDto.IdGradoProfesional <= 0)
+        {
+            throw new IdInvalidaException($"La id {docenteDto.IdGradoProfesional} del grado profesional es inválida.");
         }
     }
 
     private void verificarParametrosCambiarContrasenia(CambiarContraseniaDTO cambiarContraseniaDto)
     {
-        if (string.IsNullOrEmpty(cambiarContraseniaDto.ContraseniaActual) ||
-            string.IsNullOrEmpty(cambiarContraseniaDto.ContraseniaNueva))
+        if (string.IsNullOrEmpty(cambiarContraseniaDto.ContraseniaActual))
         {
-            throw new ArgumentException("Los parámetros para cambiar la contraseña son inválidos.");
+            throw new CampoObligatorioException("La contraseña actual es nula.");
+        } else if (string.IsNullOrEmpty(cambiarContraseniaDto.ContraseniaNueva))
+        {
+            throw new CampoObligatorioException("La nueva contraseña es nula.");
         }
     }
 
@@ -130,7 +137,7 @@ public class DocenteValidaciones
         var docenteExistente = await _docenteDAO.ObtenerDocentePorNombreUsuarioAsync(nombreUsuario);
         if (docenteExistente != null)
         {
-            throw new RecursoYaExistenteException($"El nombre de usuario '{nombreUsuario}' ya está en uso por otro docente.");
+            throw new RecursoYaExistenteException($"'{nombreUsuario}' ya está en uso.");
         }
     }
 
@@ -139,7 +146,7 @@ public class DocenteValidaciones
         var docenteExistente = await _docenteDAO.ObtenerDocentePorNombreUsuarioEIdAsync(nombreUsuario, id);
         if (docenteExistente != null)
         {
-            throw new RecursoYaExistenteException($"El nombre de usuario '{nombreUsuario}' ya está en uso por otro docente.");
+            throw new RecursoYaExistenteException($"'{nombreUsuario}' ya está en uso.");
         }
     }
 
@@ -147,7 +154,7 @@ public class DocenteValidaciones
     {
         if (id != idDocente)
         {
-            throw new DiscordanciaDeIdException("El ID del docente no coincide con el ID proporcionado.");
+            throw new DiscordanciaDeIdException("El Id del docente no coincide con el ID proporcionado.");
         }
     }
 
@@ -156,7 +163,7 @@ public class DocenteValidaciones
         var docenteExistente = await _docenteDAO.ObtenerDocentePorCorreoAsync(correo);
         if (docenteExistente != null)
         {
-            throw new RecursoYaExistenteException($"El correo '{correo}' ya está en uso por otro docente.");
+            throw new RecursoYaExistenteException($"'{correo}' ya está en uso.");
         }
     }
 

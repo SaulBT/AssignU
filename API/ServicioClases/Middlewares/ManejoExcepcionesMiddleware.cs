@@ -65,6 +65,18 @@ public class ManejoExcepcionesMiddleware
                 contexto.Response.StatusCode = (int)HttpStatusCode.Conflict;
                 await contexto.Response.WriteAsJsonAsync(new { error = conflictEx.Message });
                 break;
+            //Unauthorized
+            case UnauthorizedAccessException unauthorizedEx:
+                _logger.LogWarning(ex, "Usuario no autenticado.");
+                contexto.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                await contexto.Response.WriteAsJsonAsync(new { error = unauthorizedEx.Message });
+                break;
+            //??
+            case DataPeticionException dataEx:
+                _logger.LogWarning(ex, "Error en la petición de datos.");
+                contexto.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                await contexto.Response.WriteAsJsonAsync(new { error = dataEx.Message });
+                break;
             default:
                 _logger.LogError(ex, "Ocurrió un error inesperado.");
                 contexto.Response.StatusCode = StatusCodes.Status500InternalServerError;

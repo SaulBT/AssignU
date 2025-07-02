@@ -48,17 +48,17 @@ const validarIdTarea = (idTarea) => {
 
 const validarIdAlumno = (idAlumno) => {
     if (idAlumno <= 0) {
-        throw new CampoObligatorioError("La idAlumno es inválida: No puede ser 0 o menor");
+        throw new CampoObligatorioError("La idAlumno no puede ser 0 o menor");
     } else if (!idAlumno) {
-        throw new ValorInvalidoError("La idAlumno es inválida: Valor nulo")
+        throw new ValorInvalidoError("La idAlumno es nulo")
     }
 }
 
 const validarDatosPreguntas = (preguntas) => {
     if (preguntas == null) {
-        throw new CampoObligatorioError("Las preguntas son inválidas: Valor nulo");
+        throw new CampoObligatorioError("Las preguntas son nulas");
     } else if (!Array.isArray(preguntas)) {
-        throw new ValorInvalidoError("Las preguntas son inválidas: No es array");
+        throw new ValorInvalidoError("Las preguntas no son array");
     }
 }
 
@@ -67,11 +67,11 @@ const validarTextoPregunta = (pregunta, index) => {
     const texto = pregunta.Texto;
     
     if(!texto) {
-        throw new CampoObligatorioError(`El texto de la pregunta ${index + 1} es inválido: Valor nulo`);
+        throw new CampoObligatorioError(`El texto de una pregunta es nulo`);
     } else if (typeof texto !== 'string') {
-        throw new ValorInvalidoError(`El texto de la pregunta ${index + 1} es inválido: No es string`);
+        throw new ValorInvalidoError(`El texto de una pregunta no es una cadena`);
     } else if (texto.trim() === '') {
-        throw new CampoObligatorioError(`El texto de la pregunta ${index + 1} es inválido: Cadena vacía`);
+        throw new CampoObligatorioError(`El texto de una pregunta es una cadena vacía`);
     }
 }
 
@@ -79,9 +79,9 @@ const validarDatoCorrecta = (respuesta, index) => {
     const correcta = respuesta.Correcta;
 
     if (correcta == null) {
-        throw new CampoObligatorioError(`El valor 'correcta' de la pregunta ${index + 1} es inválido: Valor nulo`);
+        throw new CampoObligatorioError(`El valor 'correcta' de una pregunta es nulo`);
     } else if (typeof correcta !== 'boolean') {
-        throw new ValorInvalidoError(`El valor 'correcta' de la pregunta ${index + 1} es inválido: No es boolean`);
+        throw new ValorInvalidoError(`El valor 'correcta' de una pregunta no es un booleano`);
     }
 }
 
@@ -89,11 +89,11 @@ const validarTextoOpcion = (opcion, index) => {
     const texto = opcion.Texto;
     
     if(!texto) {
-        throw new CampoObligatorioError(`El texto de la opción ${index + 1} es inválido: Valor nulo`);
+        throw new CampoObligatorioError(`El texto de una opción es nulo`);
     } else if (typeof texto !== 'string') {
-        throw new ValorInvalidoError(`El texto de la opción ${index + 1} es inválido: No es string`);
+        throw new ValorInvalidoError(`El texto de una opción no es string`);
     } else if (texto.trim() === '') {
-        throw new CampoObligatorioError(`El texto de la opción ${index + 1} es inválido: Cadena vacía`);
+        throw new CampoObligatorioError(`El texto de una opción es una cadena vacía`);
     }
 }
 

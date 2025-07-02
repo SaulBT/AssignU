@@ -40,7 +40,7 @@ public class TareasValidaciones
     {
         if (idClase <= 0)
         {
-            throw new ArgumentException("La id de la clase es inválida");
+            throw new IdInvalidaException("La id de la clase es inválida");
         }
     }
 

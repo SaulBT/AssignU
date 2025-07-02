@@ -19,7 +19,7 @@ public class RpcClientRabbitMQ : IAsyncDisposable
 
     public async Task InicializarCliente()
     {
-        var factory = new ConnectionFactory() { HostName = _rabbitMqHostDevelopment };
+        var factory = new ConnectionFactory() { HostName = _rabbitMqHostProduction };
         _connection = await factory.CreateConnectionAsync();
         _channel = await _connection.CreateChannelAsync();
 

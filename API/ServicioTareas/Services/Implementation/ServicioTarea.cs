@@ -53,7 +53,7 @@ public class ServicioTarea : IServicioTarea
 
         var cuestionario = editarTareaDTO.Cuestionario;
         string mensajeJson = crearMensajeRPCConCuestionario("editarCuestionario", tarea.IdTarea, cuestionario);
-        await enviarMensajeRPCAsync(mensajeJson, "cola_cuestionario");
+        await enviarMensajeRPCAsync(mensajeJson, "cola_cuestionarios");
 
         _logger.LogInformation($"Tarea con id {tarea.IdTarea} editada");
         return new TareaDTO
@@ -74,7 +74,7 @@ public class ServicioTarea : IServicioTarea
         await _tareaDAO.EliminarTareaAsync(tarea);
 
         string mensajeJson = crearMensajeRPCConIdTarea("eliminarCuestionario", idTarea);
-        await enviarMensajeRPCAsync(mensajeJson, "cola_cuestionario");
+        await enviarMensajeRPCAsync(mensajeJson, "cola_cuestionarios");
 
         _logger.LogInformation($"Se eliminó la Tarea con la id {idTarea}");
     }
@@ -94,7 +94,7 @@ public class ServicioTarea : IServicioTarea
     {
         try
         {
-            _logger.LogInformation("Recuperndo Tareas y Respuestas de una Clase");
+            _logger.LogInformation("Recuperando Tareas y Respuestas de una Clase");
             var tareas = await ObtenerTareasDeClaseAsync(idClase);
             var listaIdTareas = generarListaIdTareas(tareas);
             var listaTareas = generarListaTareas(tareas);
@@ -296,7 +296,10 @@ public class ServicioTarea : IServicioTarea
             {
                 throw new InvalidOperationException("No hay error");
             }
-            throw LanzarExcepciones.lanzarExcepcion(respuesta.Error.Tipo, respuesta.Error.Mensaje);
+            if (respuesta.Error.Tipo != "ArchivoNoEncontrado")
+            {
+                throw LanzarExcepciones.lanzarExcepcion(respuesta.Error.Tipo, respuesta.Error.Mensaje);
+            }
         }
     }
 

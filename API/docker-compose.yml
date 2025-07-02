@@ -18,6 +18,8 @@ services:
     container_name: contenedor_mysql_usuarios
     environment:
       - MYSQL_ROOT_PASSWORD=admin123
+      - MYSQL_CHARSET=utf8mb4
+      - MYSQL_COLLATION=utf8mb4_unicode_ci
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p admin123"]
       interval: 10s
@@ -34,6 +36,8 @@ services:
     container_name: contenedor_mysql_clases
     environment:
       - MYSQL_ROOT_PASSWORD=admin123
+      - MYSQL_CHARSET=utf8mb4
+      - MYSQL_COLLATION=utf8mb4_unicode_ci
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p admin123"]
       interval: 10s
@@ -50,6 +54,8 @@ services:
     container_name: contenedor_mysql_tareas
     environment:
       - MYSQL_ROOT_PASSWORD=admin123
+      - MYSQL_CHARSET=utf8mb4
+      - MYSQL_COLLATION=utf8mb4_unicode_ci
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p admin123"]
       interval: 10s
@@ -142,6 +148,12 @@ services:
     ports:
       - "5010:5010"
       - "5011:5011"
+    depends_on:
+      - servicio_usuarios
+      - servicio_clases
+      - servicio_tareas
+      - servicio_cuestionarios
+      - servicio_archivos
 
 volumes:
   volumen_mysql_usuarios:

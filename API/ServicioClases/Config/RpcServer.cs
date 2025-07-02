@@ -19,7 +19,7 @@ namespace ServicioClases.Config
         public async Task InicializarServidor(IServicioClase ServicioClase, string queueName = "cola_clases")
         {
             _ServicioClase = ServicioClase;
-            var factory = new ConnectionFactory() { HostName = _rabbitMqHostProduction };
+            var factory = new ConnectionFactory() { HostName = _rabbitMqHostDevelopment };
             _connection = await factory.CreateConnectionAsync();
             _channel = await _connection.CreateChannelAsync();
 

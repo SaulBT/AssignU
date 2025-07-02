@@ -67,11 +67,11 @@ const validarTextoPregunta = (pregunta, index) => {
     const texto = pregunta.Texto;
     
     if(!texto) {
-        throw new CampoObligatorioError(`El tipo de la pregunta ${index + 1} es inválido: Valor nulo`);
+        throw new CampoObligatorioError(`El texto de la pregunta ${index + 1} es inválido: Valor nulo`);
     } else if (typeof texto !== 'string') {
-        throw new ValorInvalidoError(`El tipo de la pregunta ${index + 1} es inválido: No es string`);
+        throw new ValorInvalidoError(`El texto de la pregunta ${index + 1} es inválido: No es string`);
     } else if (texto.trim() === '') {
-        throw new CampoObligatorioError(`El tipo de la pregunta ${index + 1} es inválido: Cadena vacía`);
+        throw new CampoObligatorioError(`El texto de la pregunta ${index + 1} es inválido: Cadena vacía`);
     }
 }
 

@@ -6,7 +6,7 @@ async function iniciarServidorRpc() {
   const hostProduction = 'amqp://guest:guest@rabbitmq';
   
 
-  const connection = await amqp.connect(hostProduction);
+  const connection = await amqp.connect(hostDevelopment);
   const channel = await connection.createChannel();
 
   const queue = 'cola_archivos';

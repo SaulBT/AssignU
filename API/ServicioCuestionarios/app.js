@@ -13,11 +13,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(process.env.MONGODB_URI_PRODUCTION)
+mongoose.connect(process.env.MONGODB_URI_DEVELOPMENT)
   .then(() => console.log('Conectado a MongoDB'))
   .catch((err) => console.error('Error conectando a MongoDB:', err));
 
-app.use('/cuestionario', require('./routes/cuestionario-rutas'));
+app.use('/cuestionarios', require('./routes/cuestionario-rutas'));
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(manejadorErrores);

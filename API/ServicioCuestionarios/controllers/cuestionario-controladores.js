@@ -104,7 +104,7 @@ const resolverCuestionarioAsync = async (req, res = response, next) => {
         validarParametros(req);
         validarBody(req);
         const { idTarea, idAlumno } = req.params;
-        const preguntas = req.body.preguntas;
+        const preguntas = req.body.Preguntas;
         
         validarRespuesta(idTarea, idAlumno, preguntas);
 

@@ -69,10 +69,10 @@ var app = builder.Build();
 
 app.UseManejoExcepciones();
 app.UseAuthentication();
-app.UseAuthorization();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseRouting();
+app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {

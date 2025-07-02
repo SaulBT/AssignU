@@ -19,7 +19,7 @@
 								"header": [
 									{
 										"key": "Content-Type",
-										"value": "application/json"
+										"value": "application/json; charset=utf-8"
 									}
 								],
 								"body": {
@@ -315,7 +315,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNDg4IiwianRpIjoiZDNlNTMyMWYtZWQxMy00NTk3LTgwN2EtZDQxN2U2ZTViM2M1IiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAwMjozMDozOSIsInVuaXF1ZV9uYW1lIjoiQWxlRXNjYTAwIiwicm9sZSI6ImFsdW1ubyIsIm5iZiI6MTc1MTQyMzQzOSwiZXhwIjoxNzUxNDQ1MDM5LCJpYXQiOjE3NTE0MjM0Mzl9.L2n2wb8OfpPrukw_YOMbL38LlVR5Iz9mdSENyn_gqzQ",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNDg4IiwianRpIjoiNDYzZjQ4OWQtNzcyMi00NjA0LWFmYmUtNWQyZTA2MGJhMGExIiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAxMjo1Nzo0MCIsInVuaXF1ZV9uYW1lIjoiQWxlRXNjYTAwIiwicm9sZSI6ImFsdW1ubyIsIm5iZiI6MTc1MTQ4MjY2MCwiZXhwIjoxNzUxNTA0MjYwLCJpYXQiOjE3NTE0ODI2NjB9.7_wMntDXrIZayXnCgYmfHEUSs0SbrQO-DcD4mSGtYiM",
 										"type": "text"
 									}
 								],
@@ -573,7 +573,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNDg4IiwianRpIjoiZDNlNTMyMWYtZWQxMy00NTk3LTgwN2EtZDQxN2U2ZTViM2M1IiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAwMjozMDozOSIsInVuaXF1ZV9uYW1lIjoiQWxlRXNjYTAwIiwicm9sZSI6ImFsdW1ubyIsIm5iZiI6MTc1MTQyMzQzOSwiZXhwIjoxNzUxNDQ1MDM5LCJpYXQiOjE3NTE0MjM0Mzl9.L2n2wb8OfpPrukw_YOMbL38LlVR5Iz9mdSENyn_gqzQ",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNDg4IiwianRpIjoiNDYzZjQ4OWQtNzcyMi00NjA0LWFmYmUtNWQyZTA2MGJhMGExIiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAxMjo1Nzo0MCIsInVuaXF1ZV9uYW1lIjoiQWxlRXNjYTAwIiwicm9sZSI6ImFsdW1ubyIsIm5iZiI6MTc1MTQ4MjY2MCwiZXhwIjoxNzUxNTA0MjYwLCJpYXQiOjE3NTE0ODI2NjB9.7_wMntDXrIZayXnCgYmfHEUSs0SbrQO-DcD4mSGtYiM",
 										"type": "text"
 									}
 								],
@@ -860,7 +860,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiOTkiLCJqdGkiOiI4ZmIxMWQzNy0xN2FkLTQxZGUtYTU3Ny02YzU4MmZmNWMzY2EiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDAyOjMxOjQ3IiwidW5pcXVlX25hbWUiOiJlZnJhX2RjNzQiLCJyb2xlIjoiZG9jZW50ZSIsIm5iZiI6MTc1MTQyMzUwNywiZXhwIjoxNzUxNDQ1MTA3LCJpYXQiOjE3NTE0MjM1MDd9.9GlszJ5U263FfB_czGQwXoO1MtlKbqYB6mzMAsQazow",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiOTkiLCJqdGkiOiJiM2UyYmVkZS1mZTNmLTRhNjctYTRkMC1hYjY4Mjk5NzYyMTUiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU4OjEwIiwidW5pcXVlX25hbWUiOiJlZnJhX2RjNzQiLCJyb2xlIjoiZG9jZW50ZSIsIm5iZiI6MTc1MTQ4MjY5MCwiZXhwIjoxNzUxNTA0MjkwLCJpYXQiOjE3NTE0ODI2OTB9.iIZ-v3U6JhN6xG49TacjyDkpm33GbLxUd8ZZ9QG_e9E",
 										"type": "text"
 									}
 								],
@@ -1012,7 +1012,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiOTkiLCJqdGkiOiI4ZmIxMWQzNy0xN2FkLTQxZGUtYTU3Ny02YzU4MmZmNWMzY2EiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDAyOjMxOjQ3IiwidW5pcXVlX25hbWUiOiJlZnJhX2RjNzQiLCJyb2xlIjoiZG9jZW50ZSIsIm5iZiI6MTc1MTQyMzUwNywiZXhwIjoxNzUxNDQ1MTA3LCJpYXQiOjE3NTE0MjM1MDd9.9GlszJ5U263FfB_czGQwXoO1MtlKbqYB6mzMAsQazow",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiOTkiLCJqdGkiOiJiM2UyYmVkZS1mZTNmLTRhNjctYTRkMC1hYjY4Mjk5NzYyMTUiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU4OjEwIiwidW5pcXVlX25hbWUiOiJlZnJhX2RjNzQiLCJyb2xlIjoiZG9jZW50ZSIsIm5iZiI6MTc1MTQ4MjY5MCwiZXhwIjoxNzUxNTA0MjkwLCJpYXQiOjE3NTE0ODI2OTB9.iIZ-v3U6JhN6xG49TacjyDkpm33GbLxUd8ZZ9QG_e9E",
 										"type": "text"
 									}
 								],
@@ -1263,7 +1263,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiOTkiLCJqdGkiOiI4ZmIxMWQzNy0xN2FkLTQxZGUtYTU3Ny02YzU4MmZmNWMzY2EiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDAyOjMxOjQ3IiwidW5pcXVlX25hbWUiOiJlZnJhX2RjNzQiLCJyb2xlIjoiZG9jZW50ZSIsIm5iZiI6MTc1MTQyMzUwNywiZXhwIjoxNzUxNDQ1MTA3LCJpYXQiOjE3NTE0MjM1MDd9.9GlszJ5U263FfB_czGQwXoO1MtlKbqYB6mzMAsQazow",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiOTkiLCJqdGkiOiJiM2UyYmVkZS1mZTNmLTRhNjctYTRkMC1hYjY4Mjk5NzYyMTUiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU4OjEwIiwidW5pcXVlX25hbWUiOiJlZnJhX2RjNzQiLCJyb2xlIjoiZG9jZW50ZSIsIm5iZiI6MTc1MTQ4MjY5MCwiZXhwIjoxNzUxNTA0MjkwLCJpYXQiOjE3NTE0ODI2OTB9.iIZ-v3U6JhN6xG49TacjyDkpm33GbLxUd8ZZ9QG_e9E",
 										"type": "text"
 									}
 								],
@@ -1862,7 +1862,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"tipoUsuario\": \"alumno\",\n  \"nombreUsuarioOCorreo\": \"RodroSP\",\n  \"contrasenia\": \"4anaka3\"\n}",
+									"raw": "{\n  \"tipoUsuario\": \"alumno\",\n  \"nombreUsuarioOCorreo\": \"RodrigoSP\",\n  \"contrasenia\": \"4anaka3\"\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -2173,7 +2173,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNTciLCJqdGkiOiJjOWMwOGUyMC0yMmQ5LTQ4NjUtYmFkNS01ZjRlOWRjNjI3YjUiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDAyOjI5OjA5IiwidW5pcXVlX25hbWUiOiJSb2RyaWdvU1AiLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDIzMzQ5LCJleHAiOjE3NTE0NDQ5NDksImlhdCI6MTc1MTQyMzM0OX0.3xJZSN-XAhkfoMBbRQDCyTcIeihxmGBMjNDRMFyrvHs",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNTciLCJqdGkiOiJmY2YwMDQ1NS01MjYwLTRmNGYtOTU0Zi03N2MwNDEwZWQ2MTgiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU2OjQyIiwidW5pcXVlX25hbWUiOiJSb2RyaWdvU1AiLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDgyNjAyLCJleHAiOjE3NTE1MDQyMDIsImlhdCI6MTc1MTQ4MjYwMn0.s8vQyL5s2niJMBW2-4H5YJch879z7XM_4Mv8H02vho8",
 										"type": "text"
 									}
 								],
@@ -2390,18 +2390,18 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiOTkiLCJqdGkiOiI4ZmIxMWQzNy0xN2FkLTQxZGUtYTU3Ny02YzU4MmZmNWMzY2EiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDAyOjMxOjQ3IiwidW5pcXVlX25hbWUiOiJlZnJhX2RjNzQiLCJyb2xlIjoiZG9jZW50ZSIsIm5iZiI6MTc1MTQyMzUwNywiZXhwIjoxNzUxNDQ1MTA3LCJpYXQiOjE3NTE0MjM1MDd9.9GlszJ5U263FfB_czGQwXoO1MtlKbqYB6mzMAsQazow",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiOTAiLCJqdGkiOiI3OWRkMmRjYy0xNzU2LTQxNDAtOWE2Ni0zNWVhYWY1YjAwY2YiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU3OjA2IiwidW5pcXVlX25hbWUiOiJob2k0Iiwicm9sZSI6ImFsdW1ubyIsIm5iZiI6MTc1MTQ4MjYyNiwiZXhwIjoxNzUxNTA0MjI2LCJpYXQiOjE3NTE0ODI2MjZ9.W9ILIMmqwXJiS12AIYrHSRC3N1ttQp-nt9RaHQdWLjU",
 										"type": "text"
 									}
 								],
 								"url": {
-									"raw": "{{urlServicioUsuarios}}/alumnos/57/estadisticas",
+									"raw": "{{urlServicioUsuarios}}/alumnos/90/estadisticas",
 									"host": [
 										"{{urlServicioUsuarios}}"
 									],
 									"path": [
 										"alumnos",
-										"57",
+										"90",
 										"estadisticas"
 									]
 								},
@@ -2580,13 +2580,8 @@
 										"value": "application/json"
 									},
 									{
-										"key": "Accept",
-										"value": "application/json",
-										"disabled": true
-									},
-									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiOTkiLCJqdGkiOiI4ZmIxMWQzNy0xN2FkLTQxZGUtYTU3Ny02YzU4MmZmNWMzY2EiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDAyOjMxOjQ3IiwidW5pcXVlX25hbWUiOiJlZnJhX2RjNzQiLCJyb2xlIjoiZG9jZW50ZSIsIm5iZiI6MTc1MTQyMzUwNywiZXhwIjoxNzUxNDQ1MTA3LCJpYXQiOjE3NTE0MjM1MDd9.9GlszJ5U263FfB_czGQwXoO1MtlKbqYB6mzMAsQazow",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMTAiLCJqdGkiOiI5ZWVkYzRmMC1mOWZmLTQ1YWQtYThjYy03NzgyNzg0Y2UzN2EiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU5OjIxIiwidW5pcXVlX25hbWUiOiJFbG1lcm9tZXJvIiwicm9sZSI6ImRvY2VudGUiLCJuYmYiOjE3NTE0ODI3NjEsImV4cCI6MTc1MTUwNDM2MSwiaWF0IjoxNzUxNDgyNzYxfQ.-Tz9yKysFPm4oF95yWPDxKqS8SAjsf8UjwlZFroym_Y",
 										"type": "text"
 									}
 								],
@@ -2744,19 +2739,14 @@
 										"value": "application/json"
 									},
 									{
-										"key": "Accept",
-										"value": "application/json",
-										"disabled": true
-									},
-									{
 										"key": "Authorization",
-										"value": "Bearer  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMzIxIiwianRpIjoiNjllMmYzNTctMzc2Ny00MWMyLWI4YTgtMjQ4NzhkYTY0Nzk5IiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAwMjozMjoyMiIsInVuaXF1ZV9uYW1lIjoic2Fsb2NlbG90bCIsInJvbGUiOiJkb2NlbnRlIiwibmJmIjoxNzUxNDIzNTQyLCJleHAiOjE3NTE0NDUxNDIsImlhdCI6MTc1MTQyMzU0Mn0.uOJPCQQ1MR7Gy5ieD8N5x1mfb09sv9O-Xw9dUfnEdqM",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMTk4NCIsImp0aSI6IjJlY2Y3OTZmLTIxMTktNDZlOS1iMmEzLTZjNTMwYjFiMTgyYiIsImJpcnRoZGF0ZSI6IjA3LzAyLzIwMjUgMTI6NTg6NTYiLCJ1bmlxdWVfbmFtZSI6IlBlcGVTcXVhZCIsInJvbGUiOiJkb2NlbnRlIiwibmJmIjoxNzUxNDgyNzM2LCJleHAiOjE3NTE1MDQzMzYsImlhdCI6MTc1MTQ4MjczNn0.EsjfOR-A29LlPAPI62oJlgbkWjd30WJJLlPiS_RCIyI",
 										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"nombre\": \"Matemáticas Computacionales\"\n}",
+									"raw": "{\n  \"nombre\": \"Programación\"\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -2967,7 +2957,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMzIxIiwianRpIjoiNjllMmYzNTctMzc2Ny00MWMyLWI4YTgtMjQ4NzhkYTY0Nzk5IiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAwMjozMjoyMiIsInVuaXF1ZV9uYW1lIjoic2Fsb2NlbG90bCIsInJvbGUiOiJkb2NlbnRlIiwibmJmIjoxNzUxNDIzNTQyLCJleHAiOjE3NTE0NDUxNDIsImlhdCI6MTc1MTQyMzU0Mn0.uOJPCQQ1MR7Gy5ieD8N5x1mfb09sv9O-Xw9dUfnEdqM",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMTk4NCIsImp0aSI6IjJlY2Y3OTZmLTIxMTktNDZlOS1iMmEzLTZjNTMwYjFiMTgyYiIsImJpcnRoZGF0ZSI6IjA3LzAyLzIwMjUgMTI6NTg6NTYiLCJ1bmlxdWVfbmFtZSI6IlBlcGVTcXVhZCIsInJvbGUiOiJkb2NlbnRlIiwibmJmIjoxNzUxNDgyNzM2LCJleHAiOjE3NTE1MDQzMzYsImlhdCI6MTc1MTQ4MjczNn0.EsjfOR-A29LlPAPI62oJlgbkWjd30WJJLlPiS_RCIyI",
 										"type": "text"
 									}
 								],
@@ -3105,7 +3095,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMzIxIiwianRpIjoiNjllMmYzNTctMzc2Ny00MWMyLWI4YTgtMjQ4NzhkYTY0Nzk5IiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAwMjozMjoyMiIsInVuaXF1ZV9uYW1lIjoic2Fsb2NlbG90bCIsInJvbGUiOiJkb2NlbnRlIiwibmJmIjoxNzUxNDIzNTQyLCJleHAiOjE3NTE0NDUxNDIsImlhdCI6MTc1MTQyMzU0Mn0.uOJPCQQ1MR7Gy5ieD8N5x1mfb09sv9O-Xw9dUfnEdqM",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMTAiLCJqdGkiOiI5ZWVkYzRmMC1mOWZmLTQ1YWQtYThjYy03NzgyNzg0Y2UzN2EiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU5OjIxIiwidW5pcXVlX25hbWUiOiJFbG1lcm9tZXJvIiwicm9sZSI6ImRvY2VudGUiLCJuYmYiOjE3NTE0ODI3NjEsImV4cCI6MTc1MTUwNDM2MSwiaWF0IjoxNzUxNDgyNzYxfQ.-Tz9yKysFPm4oF95yWPDxKqS8SAjsf8UjwlZFroym_Y",
 										"type": "text"
 									}
 								],
@@ -3246,13 +3236,8 @@
 										"value": "application/json"
 									},
 									{
-										"key": "Accept",
-										"value": "application/json",
-										"disabled": true
-									},
-									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMzIxIiwianRpIjoiNjllMmYzNTctMzc2Ny00MWMyLWI4YTgtMjQ4NzhkYTY0Nzk5IiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAwMjozMjoyMiIsInVuaXF1ZV9uYW1lIjoic2Fsb2NlbG90bCIsInJvbGUiOiJkb2NlbnRlIiwibmJmIjoxNzUxNDIzNTQyLCJleHAiOjE3NTE0NDUxNDIsImlhdCI6MTc1MTQyMzU0Mn0.uOJPCQQ1MR7Gy5ieD8N5x1mfb09sv9O-Xw9dUfnEdqM",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMTAiLCJqdGkiOiI5ZWVkYzRmMC1mOWZmLTQ1YWQtYThjYy03NzgyNzg0Y2UzN2EiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU5OjIxIiwidW5pcXVlX25hbWUiOiJFbG1lcm9tZXJvIiwicm9sZSI6ImRvY2VudGUiLCJuYmYiOjE3NTE0ODI3NjEsImV4cCI6MTc1MTUwNDM2MSwiaWF0IjoxNzUxNDgyNzYxfQ.-Tz9yKysFPm4oF95yWPDxKqS8SAjsf8UjwlZFroym_Y",
 										"type": "text"
 									}
 								],
@@ -3412,7 +3397,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMzIxIiwianRpIjoiNjllMmYzNTctMzc2Ny00MWMyLWI4YTgtMjQ4NzhkYTY0Nzk5IiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAwMjozMjoyMiIsInVuaXF1ZV9uYW1lIjoic2Fsb2NlbG90bCIsInJvbGUiOiJkb2NlbnRlIiwibmJmIjoxNzUxNDIzNTQyLCJleHAiOjE3NTE0NDUxNDIsImlhdCI6MTc1MTQyMzU0Mn0.uOJPCQQ1MR7Gy5ieD8N5x1mfb09sv9O-Xw9dUfnEdqM",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMTAiLCJqdGkiOiI5ZWVkYzRmMC1mOWZmLTQ1YWQtYThjYy03NzgyNzg0Y2UzN2EiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU5OjIxIiwidW5pcXVlX25hbWUiOiJFbG1lcm9tZXJvIiwicm9sZSI6ImRvY2VudGUiLCJuYmYiOjE3NTE0ODI3NjEsImV4cCI6MTc1MTUwNDM2MSwiaWF0IjoxNzUxNDgyNzYxfQ.-Tz9yKysFPm4oF95yWPDxKqS8SAjsf8UjwlZFroym_Y",
 										"type": "text"
 									}
 								],
@@ -3537,7 +3522,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNTciLCJqdGkiOiJjOWMwOGUyMC0yMmQ5LTQ4NjUtYmFkNS01ZjRlOWRjNjI3YjUiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDAyOjI5OjA5IiwidW5pcXVlX25hbWUiOiJSb2RyaWdvU1AiLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDIzMzQ5LCJleHAiOjE3NTE0NDQ5NDksImlhdCI6MTc1MTQyMzM0OX0.3xJZSN-XAhkfoMBbRQDCyTcIeihxmGBMjNDRMFyrvHs",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNTciLCJqdGkiOiJmY2YwMDQ1NS01MjYwLTRmNGYtOTU0Zi03N2MwNDEwZWQ2MTgiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU2OjQyIiwidW5pcXVlX25hbWUiOiJSb2RyaWdvU1AiLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDgyNjAyLCJleHAiOjE3NTE1MDQyMDIsImlhdCI6MTc1MTQ4MjYwMn0.s8vQyL5s2niJMBW2-4H5YJch879z7XM_4Mv8H02vho8",
 										"type": "text"
 									}
 								],
@@ -3695,7 +3680,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMzIxIiwianRpIjoiNjllMmYzNTctMzc2Ny00MWMyLWI4YTgtMjQ4NzhkYTY0Nzk5IiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAwMjozMjoyMiIsInVuaXF1ZV9uYW1lIjoic2Fsb2NlbG90bCIsInJvbGUiOiJkb2NlbnRlIiwibmJmIjoxNzUxNDIzNTQyLCJleHAiOjE3NTE0NDUxNDIsImlhdCI6MTc1MTQyMzU0Mn0.uOJPCQQ1MR7Gy5ieD8N5x1mfb09sv9O-Xw9dUfnEdqM",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMzIxIiwianRpIjoiZWU3MDA2ZTktZDE2Yi00OWYwLTlkZTAtMWIyYmE2YzlhMjcxIiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAxMjo1ODozMCIsInVuaXF1ZV9uYW1lIjoic2Fsb2NlbG90bCIsInJvbGUiOiJkb2NlbnRlIiwibmJmIjoxNzUxNDgyNzEwLCJleHAiOjE3NTE1MDQzMTAsImlhdCI6MTc1MTQ4MjcxMH0.avmbt1aQhN5IwwSzuZtceg52a0PwL7PY7pRp0F0DvA8",
 										"type": "text"
 									}
 								],
@@ -3853,7 +3838,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNTciLCJqdGkiOiJjOWMwOGUyMC0yMmQ5LTQ4NjUtYmFkNS01ZjRlOWRjNjI3YjUiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDAyOjI5OjA5IiwidW5pcXVlX25hbWUiOiJSb2RyaWdvU1AiLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDIzMzQ5LCJleHAiOjE3NTE0NDQ5NDksImlhdCI6MTc1MTQyMzM0OX0.3xJZSN-XAhkfoMBbRQDCyTcIeihxmGBMjNDRMFyrvHs",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNTciLCJqdGkiOiJmY2YwMDQ1NS01MjYwLTRmNGYtOTU0Zi03N2MwNDEwZWQ2MTgiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU2OjQyIiwidW5pcXVlX25hbWUiOiJSb2RyaWdvU1AiLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDgyNjAyLCJleHAiOjE3NTE1MDQyMDIsImlhdCI6MTc1MTQ4MjYwMn0.s8vQyL5s2niJMBW2-4H5YJch879z7XM_4Mv8H02vho8",
 										"type": "text"
 									}
 								],
@@ -4023,7 +4008,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNDg4IiwianRpIjoiZDNlNTMyMWYtZWQxMy00NTk3LTgwN2EtZDQxN2U2ZTViM2M1IiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAwMjozMDozOSIsInVuaXF1ZV9uYW1lIjoiQWxlRXNjYTAwIiwicm9sZSI6ImFsdW1ubyIsIm5iZiI6MTc1MTQyMzQzOSwiZXhwIjoxNzUxNDQ1MDM5LCJpYXQiOjE3NTE0MjM0Mzl9.L2n2wb8OfpPrukw_YOMbL38LlVR5Iz9mdSENyn_gqzQ",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMTMiLCJqdGkiOiJmNjYwZTI1Mi04NmEwLTRlMWQtYjE0MS00NGI4MGViY2JlZjgiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEzOjA3OjU5IiwidW5pcXVlX25hbWUiOiJtYW5nb055YW4iLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDgzMjc5LCJleHAiOjE3NTE1MDQ4NzksImlhdCI6MTc1MTQ4MzI3OX0.JILFPenOXyM5vZEOrgTm0yLM5LDoaT_lWujD5kuVVQU",
 										"type": "text"
 									}
 								],
@@ -4195,7 +4180,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNDg4IiwianRpIjoiZDNlNTMyMWYtZWQxMy00NTk3LTgwN2EtZDQxN2U2ZTViM2M1IiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAwMjozMDozOSIsInVuaXF1ZV9uYW1lIjoiQWxlRXNjYTAwIiwicm9sZSI6ImFsdW1ubyIsIm5iZiI6MTc1MTQyMzQzOSwiZXhwIjoxNzUxNDQ1MDM5LCJpYXQiOjE3NTE0MjM0Mzl9.L2n2wb8OfpPrukw_YOMbL38LlVR5Iz9mdSENyn_gqzQ",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMTMiLCJqdGkiOiJmNjYwZTI1Mi04NmEwLTRlMWQtYjE0MS00NGI4MGViY2JlZjgiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEzOjA3OjU5IiwidW5pcXVlX25hbWUiOiJtYW5nb055YW4iLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDgzMjc5LCJleHAiOjE3NTE1MDQ4NzksImlhdCI6MTc1MTQ4MzI3OX0.JILFPenOXyM5vZEOrgTm0yLM5LDoaT_lWujD5kuVVQU",
 										"type": "text"
 									}
 								],
@@ -4367,7 +4352,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNTciLCJqdGkiOiJjOWMwOGUyMC0yMmQ5LTQ4NjUtYmFkNS01ZjRlOWRjNjI3YjUiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDAyOjI5OjA5IiwidW5pcXVlX25hbWUiOiJSb2RyaWdvU1AiLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDIzMzQ5LCJleHAiOjE3NTE0NDQ5NDksImlhdCI6MTc1MTQyMzM0OX0.3xJZSN-XAhkfoMBbRQDCyTcIeihxmGBMjNDRMFyrvHs",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNTciLCJqdGkiOiJmY2YwMDQ1NS01MjYwLTRmNGYtOTU0Zi03N2MwNDEwZWQ2MTgiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU2OjQyIiwidW5pcXVlX25hbWUiOiJSb2RyaWdvU1AiLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDgyNjAyLCJleHAiOjE3NTE1MDQyMDIsImlhdCI6MTc1MTQ4MjYwMn0.s8vQyL5s2niJMBW2-4H5YJch879z7XM_4Mv8H02vho8",
 										"type": "text"
 									}
 								],
@@ -4532,7 +4517,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiOTAiLCJqdGkiOiIxODJkOGJlOC01ZWVlLTRkYWMtYmE0NC1kN2Q1NzkxZGIyMmYiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDAyOjI5OjQ2IiwidW5pcXVlX25hbWUiOiJob2k0Iiwicm9sZSI6ImFsdW1ubyIsIm5iZiI6MTc1MTQyMzM4NiwiZXhwIjoxNzUxNDQ0OTg2LCJpYXQiOjE3NTE0MjMzODZ9.EEi7TucKjh_skwyGYbIvjFV2iezp__M9VOG287e-6II",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiOTAiLCJqdGkiOiI3OWRkMmRjYy0xNzU2LTQxNDAtOWE2Ni0zNWVhYWY1YjAwY2YiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU3OjA2IiwidW5pcXVlX25hbWUiOiJob2k0Iiwicm9sZSI6ImFsdW1ubyIsIm5iZiI6MTc1MTQ4MjYyNiwiZXhwIjoxNzUxNTA0MjI2LCJpYXQiOjE3NTE0ODI2MjZ9.W9ILIMmqwXJiS12AIYrHSRC3N1ttQp-nt9RaHQdWLjU",
 										"type": "text"
 									}
 								],
@@ -4697,7 +4682,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNTciLCJqdGkiOiJjOWMwOGUyMC0yMmQ5LTQ4NjUtYmFkNS01ZjRlOWRjNjI3YjUiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDAyOjI5OjA5IiwidW5pcXVlX25hbWUiOiJSb2RyaWdvU1AiLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDIzMzQ5LCJleHAiOjE3NTE0NDQ5NDksImlhdCI6MTc1MTQyMzM0OX0.3xJZSN-XAhkfoMBbRQDCyTcIeihxmGBMjNDRMFyrvHs",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNTciLCJqdGkiOiJmY2YwMDQ1NS01MjYwLTRmNGYtOTU0Zi03N2MwNDEwZWQ2MTgiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU2OjQyIiwidW5pcXVlX25hbWUiOiJSb2RyaWdvU1AiLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDgyNjAyLCJleHAiOjE3NTE1MDQyMDIsImlhdCI6MTc1MTQ4MjYwMn0.s8vQyL5s2niJMBW2-4H5YJch879z7XM_4Mv8H02vho8",
 										"type": "text"
 									}
 								],
@@ -4862,7 +4847,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiOTAiLCJqdGkiOiIxODJkOGJlOC01ZWVlLTRkYWMtYmE0NC1kN2Q1NzkxZGIyMmYiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDAyOjI5OjQ2IiwidW5pcXVlX25hbWUiOiJob2k0Iiwicm9sZSI6ImFsdW1ubyIsIm5iZiI6MTc1MTQyMzM4NiwiZXhwIjoxNzUxNDQ0OTg2LCJpYXQiOjE3NTE0MjMzODZ9.EEi7TucKjh_skwyGYbIvjFV2iezp__M9VOG287e-6II",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiOTAiLCJqdGkiOiI3OWRkMmRjYy0xNzU2LTQxNDAtOWE2Ni0zNWVhYWY1YjAwY2YiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU3OjA2IiwidW5pcXVlX25hbWUiOiJob2k0Iiwicm9sZSI6ImFsdW1ubyIsIm5iZiI6MTc1MTQ4MjYyNiwiZXhwIjoxNzUxNTA0MjI2LCJpYXQiOjE3NTE0ODI2MjZ9.W9ILIMmqwXJiS12AIYrHSRC3N1ttQp-nt9RaHQdWLjU",
 										"type": "text"
 									}
 								],
@@ -5162,7 +5147,7 @@
 					"name": "PruebasTareas",
 					"item": [
 						{
-							"name": "P-34 Crear una Tarea",
+							"name": "P-33 Crear una Tarea",
 							"request": {
 								"method": "POST",
 								"header": [
@@ -5171,19 +5156,14 @@
 										"value": "application/json"
 									},
 									{
-										"key": "Accept",
-										"value": "application/json",
-										"disabled": true
-									},
-									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMzIxIiwianRpIjoiNjllMmYzNTctMzc2Ny00MWMyLWI4YTgtMjQ4NzhkYTY0Nzk5IiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAwMjozMjoyMiIsInVuaXF1ZV9uYW1lIjoic2Fsb2NlbG90bCIsInJvbGUiOiJkb2NlbnRlIiwibmJmIjoxNzUxNDIzNTQyLCJleHAiOjE3NTE0NDUxNDIsImlhdCI6MTc1MTQyMzU0Mn0.uOJPCQQ1MR7Gy5ieD8N5x1mfb09sv9O-Xw9dUfnEdqM",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMzIxIiwianRpIjoiZWU3MDA2ZTktZDE2Yi00OWYwLTlkZTAtMWIyYmE2YzlhMjcxIiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAxMjo1ODozMCIsInVuaXF1ZV9uYW1lIjoic2Fsb2NlbG90bCIsInJvbGUiOiJkb2NlbnRlIiwibmJmIjoxNzUxNDgyNzEwLCJleHAiOjE3NTE1MDQzMTAsImlhdCI6MTc1MTQ4MjcxMH0.avmbt1aQhN5IwwSzuZtceg52a0PwL7PY7pRp0F0DvA8",
 										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"idClase\": 200,\n  \"nombre\": \"Culturas del Valle de México\",\n  \"fechaLimite\": \"2025-01-07T23.59.59.999Z\",\n  \"cuestionario\": {\n    \"idTarea\": 0,\n    \"preguntas\": [\n      {\n        \"texto\": \"¿Cuál de las siguientes culturas se estableció en el Valle de México y fundó la ciudad de Tenochtitlán?\",\n        \"tipo\": \"opcion_multiple\",\n        \"opciones\": [\n          {\n            \"texto\": \"Olmeca\",\n            \"esCorrecta\": false\n          },\n          {\n            \"texto\": \"Maya\",\n            \"esCorrecta\": false\n          },\n          {\n            \"texto\": \"Mexica (Azteca)\",\n            \"esCorrecta\": true\n          },\n          {\n            \"texto\": \"Zapoteca\",\n            \"esCorrecta\": false\n          }\n        ]\n      },\n      {\n        \"texto\": \"La cultura teotihuacana fue una de las más influyentes del Valle de México antes de la llegada de los mexicas.\",\n        \"tipo\": \"verdadero_falso\",\n        \"opciones\": [\n          {\n            \"texto\": \"Verdadero\",\n            \"esCorrecta\": true\n          },\n          {\n            \"texto\": \"Falso\",\n            \"esCorrecta\": false\n          }\n        ]\n      }\n    ]\n  }\n}",
+									"raw": "{\n  \"idClase\": 200,\n  \"nombre\": \"Culturas del Valle de México\",\n  \"fechaLimite\": \"2025-07-01T23:59:59.999Z\",\n  \"cuestionario\": {\n    \"idTarea\": 0,\n    \"preguntas\": [\n      {\n        \"texto\": \"¿Cuál de las siguientes culturas se estableció en el Valle de México y fundó la ciudad de Tenochtitlán?\",\n        \"tipo\": \"opcion_multiple\",\n        \"opciones\": [\n          {\n            \"texto\": \"Olmeca\",\n            \"esCorrecta\": false\n          },\n          {\n            \"texto\": \"Maya\",\n            \"esCorrecta\": false\n          },\n          {\n            \"texto\": \"Mexica (Azteca)\",\n            \"esCorrecta\": true\n          },\n          {\n            \"texto\": \"Zapoteca\",\n            \"esCorrecta\": false\n          }\n        ]\n      },\n      {\n        \"texto\": \"La cultura teotihuacana fue una de las más influyentes del Valle de México antes de la llegada de los mexicas.\",\n        \"tipo\": \"verdadero_falso\",\n        \"opciones\": [\n          {\n            \"texto\": \"Verdadero\",\n            \"esCorrecta\": true\n          },\n          {\n            \"texto\": \"Falso\",\n            \"esCorrecta\": false\n          }\n        ]\n      }\n    ]\n  }\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -5363,7 +5343,7 @@
 							]
 						},
 						{
-							"name": "P-35 Obtener Tareas",
+							"name": "P-34 Obtener Tareas",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -5486,7 +5466,7 @@
 							]
 						},
 						{
-							"name": "P-36 Editar una Tarea",
+							"name": "P-35 Editar una Tarea",
 							"request": {
 								"method": "PUT",
 								"header": [
@@ -5495,19 +5475,14 @@
 										"value": "application/json"
 									},
 									{
-										"key": "Accept",
-										"value": "application/json",
-										"disabled": true
-									},
-									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMzIxIiwianRpIjoiNjllMmYzNTctMzc2Ny00MWMyLWI4YTgtMjQ4NzhkYTY0Nzk5IiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAwMjozMjoyMiIsInVuaXF1ZV9uYW1lIjoic2Fsb2NlbG90bCIsInJvbGUiOiJkb2NlbnRlIiwibmJmIjoxNzUxNDIzNTQyLCJleHAiOjE3NTE0NDUxNDIsImlhdCI6MTc1MTQyMzU0Mn0.uOJPCQQ1MR7Gy5ieD8N5x1mfb09sv9O-Xw9dUfnEdqM",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMzIxIiwianRpIjoiZWU3MDA2ZTktZDE2Yi00OWYwLTlkZTAtMWIyYmE2YzlhMjcxIiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAxMjo1ODozMCIsInVuaXF1ZV9uYW1lIjoic2Fsb2NlbG90bCIsInJvbGUiOiJkb2NlbnRlIiwibmJmIjoxNzUxNDgyNzEwLCJleHAiOjE3NTE1MDQzMTAsImlhdCI6MTc1MTQ4MjcxMH0.avmbt1aQhN5IwwSzuZtceg52a0PwL7PY7pRp0F0DvA8",
 										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"idTarea\": 74,\n  \"idClase\": 200,\n  \"nombre\": \"Mayas\",\n  \"fechaLimite\": \"2025-07-01T23.59.59.999Z\",\n  \"cuestionario\": {\n    \"idTarea\": 0,\n    \"preguntas\": [\n      {\n        \"texto\": \"¿Cuál de los siguientes logros se atribuye a la civilización maya?\",\n        \"tipo\": \"opcion_multiple\",\n        \"opciones\": [\n          {\n            \"texto\": \"Construcción de chinampas en lagos\",\n            \"esCorrecta\": false\n          },\n          {\n            \"texto\": \"Uso del calendario solar y lunar con gran precisión\",\n            \"esCorrecta\": true\n          },\n          {\n            \"texto\": \"Domesticación del caballo\",\n            \"esCorrecta\": false\n          },\n          {\n            \"texto\": \"Construcción de pirámides redondas\",\n            \"esCorrecta\": false\n          }\n        ]\n      },\n      {\n        \"texto\": \"Los mayas desaparecieron completamente antes de la llegada de los españoles.\",\n        \"tipo\": \"verdadero_falso\",\n        \"opciones\": [\n          {\n            \"texto\": \"Verdadero\",\n            \"esCorrecta\": false\n          },\n          {\n            \"texto\": \"Falso\",\n            \"esCorrecta\": true\n          }\n        ]\n      }\n    ]\n  }\n}",
+									"raw": "{\n  \"idTarea\": 74,\n  \"idClase\": 200,\n  \"nombre\": \"Mayas\",\n  \"fechaLimite\": \"2025-07-01T23:59:59.999Z\",\n  \"cuestionario\": {\n    \"idTarea\": 0,\n    \"preguntas\": [\n      {\n        \"texto\": \"¿Cuál de los siguientes logros se atribuye a la civilización maya?\",\n        \"tipo\": \"opcion_multiple\",\n        \"opciones\": [\n          {\n            \"texto\": \"Construcción de chinampas en lagos\",\n            \"esCorrecta\": false\n          },\n          {\n            \"texto\": \"Uso del calendario solar y lunar con gran precisión\",\n            \"esCorrecta\": true\n          },\n          {\n            \"texto\": \"Domesticación del caballo\",\n            \"esCorrecta\": false\n          },\n          {\n            \"texto\": \"Construcción de pirámides redondas\",\n            \"esCorrecta\": false\n          }\n        ]\n      },\n      {\n        \"texto\": \"Los mayas desaparecieron completamente antes de la llegada de los españoles.\",\n        \"tipo\": \"verdadero_falso\",\n        \"opciones\": [\n          {\n            \"texto\": \"Verdadero\",\n            \"esCorrecta\": false\n          },\n          {\n            \"texto\": \"Falso\",\n            \"esCorrecta\": true\n          }\n        ]\n      }\n    ]\n  }\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -5755,13 +5730,13 @@
 							]
 						},
 						{
-							"name": "P-37 Eliminar una Tarea",
+							"name": "P-36 Eliminar una Tarea",
 							"request": {
 								"method": "DELETE",
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMzIxIiwianRpIjoiNjllMmYzNTctMzc2Ny00MWMyLWI4YTgtMjQ4NzhkYTY0Nzk5IiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAwMjozMjoyMiIsInVuaXF1ZV9uYW1lIjoic2Fsb2NlbG90bCIsInJvbGUiOiJkb2NlbnRlIiwibmJmIjoxNzUxNDIzNTQyLCJleHAiOjE3NTE0NDUxNDIsImlhdCI6MTc1MTQyMzU0Mn0.uOJPCQQ1MR7Gy5ieD8N5x1mfb09sv9O-Xw9dUfnEdqM",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMzIxIiwianRpIjoiZWU3MDA2ZTktZDE2Yi00OWYwLTlkZTAtMWIyYmE2YzlhMjcxIiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAxMjo1ODozMCIsInVuaXF1ZV9uYW1lIjoic2Fsb2NlbG90bCIsInJvbGUiOiJkb2NlbnRlIiwibmJmIjoxNzUxNDgyNzEwLCJleHAiOjE3NTE1MDQzMTAsImlhdCI6MTc1MTQ4MjcxMH0.avmbt1aQhN5IwwSzuZtceg52a0PwL7PY7pRp0F0DvA8",
 										"type": "text"
 									}
 								],
@@ -5893,7 +5868,7 @@
 							]
 						},
 						{
-							"name": "P-38 Crear una Tarea con datos inválidos",
+							"name": "P-37 Crear una Tarea con datos inválidos",
 							"request": {
 								"method": "POST",
 								"header": [
@@ -5902,19 +5877,14 @@
 										"value": "application/json"
 									},
 									{
-										"key": "Accept",
-										"value": "application/json",
-										"disabled": true
-									},
-									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMzIxIiwianRpIjoiNjllMmYzNTctMzc2Ny00MWMyLWI4YTgtMjQ4NzhkYTY0Nzk5IiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAwMjozMjoyMiIsInVuaXF1ZV9uYW1lIjoic2Fsb2NlbG90bCIsInJvbGUiOiJkb2NlbnRlIiwibmJmIjoxNzUxNDIzNTQyLCJleHAiOjE3NTE0NDUxNDIsImlhdCI6MTc1MTQyMzU0Mn0.uOJPCQQ1MR7Gy5ieD8N5x1mfb09sv9O-Xw9dUfnEdqM",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiMzIxIiwianRpIjoiZWU3MDA2ZTktZDE2Yi00OWYwLTlkZTAtMWIyYmE2YzlhMjcxIiwiYmlydGhkYXRlIjoiMDcvMDIvMjAyNSAxMjo1ODozMCIsInVuaXF1ZV9uYW1lIjoic2Fsb2NlbG90bCIsInJvbGUiOiJkb2NlbnRlIiwibmJmIjoxNzUxNDgyNzEwLCJleHAiOjE3NTE1MDQzMTAsImlhdCI6MTc1MTQ4MjcxMH0.avmbt1aQhN5IwwSzuZtceg52a0PwL7PY7pRp0F0DvA8",
 										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"idClase\": 200,\n  \"nombre\": \"\",\n  \"fechaLimite\": \"\",\n  \"cuestionario\": {\n    \"idTarea\": 0,\n    \"preguntas\": [\n      {\n        \"texto\": \"¿Cuál de las siguientes culturas se estableció en el Valle de México y fundó la ciudad de Tenochtitlán?\",\n        \"tipo\": \"opcion_multiple\",\n        \"opciones\": [\n          {\n            \"texto\": \"Olmeca\",\n            \"esCorrecta\": false\n          },\n          {\n            \"texto\": \"Maya\",\n            \"esCorrecta\": false\n          },\n          {\n            \"texto\": \"Mexica (Azteca)\",\n            \"esCorrecta\": true\n          },\n          {\n            \"texto\": \"Zapoteca\",\n            \"esCorrecta\": false\n          }\n        ]\n      },\n      {\n        \"texto\": \"La cultura teotihuacana fue una de las más influyentes del Valle de México antes de la llegada de los mexicas.\",\n        \"tipo\": \"verdadero_falso\",\n        \"opciones\": [\n          {\n            \"texto\": \"Verdadero\",\n            \"esCorrecta\": true\n          },\n          {\n            \"texto\": \"Falso\",\n            \"esCorrecta\": false\n          }\n        ]\n      }\n    ]\n  }\n}",
+									"raw": "{\n  \"idClase\": 200,\n  \"nombre\": \"\",\n  \"fechaLimite\": \"0001-01-01\",\n  \"cuestionario\": {\n    \"idTarea\": 0,\n    \"preguntas\": [\n      {\n        \"texto\": \"¿Cuál de las siguientes culturas se estableció en el Valle de México y fundó la ciudad de Tenochtitlán?\",\n        \"tipo\": \"opcion_multiple\",\n        \"opciones\": [\n          {\n            \"texto\": \"Olmeca\",\n            \"esCorrecta\": false\n          },\n          {\n            \"texto\": \"Maya\",\n            \"esCorrecta\": false\n          },\n          {\n            \"texto\": \"Mexica (Azteca)\",\n            \"esCorrecta\": true\n          },\n          {\n            \"texto\": \"Zapoteca\",\n            \"esCorrecta\": false\n          }\n        ]\n      },\n      {\n        \"texto\": \"La cultura teotihuacana fue una de las más influyentes del Valle de México antes de la llegada de los mexicas.\",\n        \"tipo\": \"verdadero_falso\",\n        \"opciones\": [\n          {\n            \"texto\": \"Verdadero\",\n            \"esCorrecta\": true\n          },\n          {\n            \"texto\": \"Falso\",\n            \"esCorrecta\": false\n          }\n        ]\n      }\n    ]\n  }\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -6094,7 +6064,7 @@
 							]
 						},
 						{
-							"name": "P-39 Obtener una Tarea de una Clase con idClase inválida",
+							"name": "P-38 Obtener una Tarea de una Clase con idClase inválida",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -6217,7 +6187,7 @@
 							]
 						},
 						{
-							"name": "P-40 Obtener estadísticas de una Tarea",
+							"name": "P-39 Obtener estadísticas de una Tarea",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -6227,12 +6197,12 @@
 									}
 								],
 								"url": {
-									"raw": "{{urlServicioTareas}}/tarea/2025/estadisticas",
+									"raw": "{{urlServicioTareas}}/tareas/2025/estadisticas",
 									"host": [
 										"{{urlServicioTareas}}"
 									],
 									"path": [
-										"tarea",
+										"tareas",
 										"2025",
 										"estadisticas"
 									]
@@ -6345,7 +6315,7 @@
 					"name": "PruebasCuestionarios",
 					"item": [
 						{
-							"name": "P-41 Obtener un Cuestionario",
+							"name": "P-40 Obtener un Cuestionario",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -6363,19 +6333,19 @@
 							"response": []
 						},
 						{
-							"name": "P-42 Enviar una Respuesta para ser guardada",
+							"name": "P-41 Enviar una Respuesta para ser guardada",
 							"request": {
 								"method": "POST",
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNTciLCJqdGkiOiJjOWMwOGUyMC0yMmQ5LTQ4NjUtYmFkNS01ZjRlOWRjNjI3YjUiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDAyOjI5OjA5IiwidW5pcXVlX25hbWUiOiJSb2RyaWdvU1AiLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDIzMzQ5LCJleHAiOjE3NTE0NDQ5NDksImlhdCI6MTc1MTQyMzM0OX0.3xJZSN-XAhkfoMBbRQDCyTcIeihxmGBMjNDRMFyrvHs",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNTciLCJqdGkiOiJmY2YwMDQ1NS01MjYwLTRmNGYtOTU0Zi03N2MwNDEwZWQ2MTgiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU2OjQyIiwidW5pcXVlX25hbWUiOiJSb2RyaWdvU1AiLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDgyNjAyLCJleHAiOjE3NTE1MDQyMDIsImlhdCI6MTc1MTQ4MjYwMn0.s8vQyL5s2niJMBW2-4H5YJch879z7XM_4Mv8H02vho8",
 										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"preguntas\": [\r\n    {\r\n      \"texto\": \"Los mayas utilizaron un sistema de escritura jeroglífica altamente desarrollado\",\r\n      \"opcion\": {\r\n        \"texto\": \"Verdadera\"\r\n      },\r\n      \"correcta\": true\r\n    },\r\n    {\r\n      \"texto\": \"La cultura mexica se estableció originalmente en la península de Yucatán.\",\r\n      \"opcion\": {\r\n        \"texto\": \"Falso\"\r\n      },\r\n      \"correcta\": true\r\n    },\r\n    {\r\n      \"texto\": \"Teotihuacán fue una de las ciudades más grandes de Mesoamérica y su origen sigue siendo en gran parte un misterio\",\r\n      \"opcion\": {\r\n        \"texto\": \"Falso\"\r\n      },\r\n      \"correcta\": false\r\n    },\r\n    {\r\n      \"texto\": \"Todas las culturas prehispánicas hablaban el mismo idioma.\",\r\n      \"opcion\": {\r\n        \"texto\": \"Verdadero\"\r\n      },\r\n      \"correcta\": false\r\n    },\r\n    {\r\n      \"texto\": \"Los olmecas son considerados una de las culturas madre de Mesoamérica.\",\r\n      \"opcion\": {\r\n        \"texto\": \"Verdadero\"\r\n      },\r\n      \"correcta\": false\r\n    }\r\n  ]\r\n}",
+									"raw": "{\r\n  \"Preguntas\": [\r\n    {\r\n      \"Texto\": \"Los mayas utilizaron un sistema de escritura jeroglífica altamente desarrollado\",\r\n      \"Opcion\": {\r\n        \"Texto\": \"Verdadera\"\r\n      },\r\n      \"Correcta\": true\r\n    },\r\n    {\r\n      \"Texto\": \"La cultura mexica se estableció originalmente en la península de Yucatán.\",\r\n      \"Opcion\": {\r\n        \"Texto\": \"Falso\"\r\n      },\r\n      \"Correcta\": true\r\n    },\r\n    {\r\n      \"Texto\": \"Teotihuacán fue una de las ciudades más grandes de Mesoamérica y su origen sigue siendo en gran parte un misterio\",\r\n      \"Opcion\": {\r\n        \"Texto\": \"Falso\"\r\n      },\r\n      \"Correcta\": false\r\n    },\r\n    {\r\n      \"Texto\": \"Todas las culturas prehispánicas hablaban el mismo idioma.\",\r\n      \"Opcion\": {\r\n        \"Texto\": \"Verdadero\"\r\n      },\r\n      \"Correcta\": false\r\n    },\r\n    {\r\n      \"Texto\": \"Los olmecas son considerados una de las culturas madre de Mesoamérica.\",\r\n      \"Opcion\": {\r\n        \"Texto\": \"Verdadero\"\r\n      },\r\n      \"Correcta\": false\r\n    }\r\n  ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -6398,19 +6368,19 @@
 							"response": []
 						},
 						{
-							"name": "P-43 Enviar  una Respuesta para ser Evaluada",
+							"name": "P-42 Enviar  una Respuesta para ser Evaluada",
 							"request": {
 								"method": "POST",
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNTciLCJqdGkiOiJjOWMwOGUyMC0yMmQ5LTQ4NjUtYmFkNS01ZjRlOWRjNjI3YjUiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDAyOjI5OjA5IiwidW5pcXVlX25hbWUiOiJSb2RyaWdvU1AiLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDIzMzQ5LCJleHAiOjE3NTE0NDQ5NDksImlhdCI6MTc1MTQyMzM0OX0.3xJZSN-XAhkfoMBbRQDCyTcIeihxmGBMjNDRMFyrvHs",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNTciLCJqdGkiOiJmY2YwMDQ1NS01MjYwLTRmNGYtOTU0Zi03N2MwNDEwZWQ2MTgiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU2OjQyIiwidW5pcXVlX25hbWUiOiJSb2RyaWdvU1AiLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDgyNjAyLCJleHAiOjE3NTE1MDQyMDIsImlhdCI6MTc1MTQ4MjYwMn0.s8vQyL5s2niJMBW2-4H5YJch879z7XM_4Mv8H02vho8",
 										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"preguntas\": [\r\n    {\r\n      \"texto\": \"Los mayas utilizaron un sistema de escritura jeroglífica altamente desarrollado\",\r\n      \"opcion\": {\r\n        \"texto\": \"Verdadera\"\r\n      },\r\n      \"correcta\": true\r\n    },\r\n    {\r\n      \"texto\": \"La cultura mexica se estableció originalmente en la península de Yucatán.\",\r\n      \"opcion\": {\r\n        \"texto\": \"Falso\"\r\n      },\r\n      \"correcta\": true\r\n    },\r\n    {\r\n      \"texto\": \"Teotihuacán fue una de las ciudades más grandes de Mesoamérica y su origen sigue siendo en gran parte un misterio\",\r\n      \"opcion\": {\r\n        \"texto\": \"Falso\"\r\n      },\r\n      \"correcta\": false\r\n    },\r\n    {\r\n      \"texto\": \"Todas las culturas prehispánicas hablaban el mismo idioma.\",\r\n      \"opcion\": {\r\n        \"texto\": \"Verdadero\"\r\n      },\r\n      \"correcta\": false\r\n    },\r\n    {\r\n      \"texto\": \"Los olmecas son considerados una de las culturas madre de Mesoamérica.\",\r\n      \"opcion\": {\r\n        \"texto\": \"Verdadero\"\r\n      },\r\n      \"correcta\": false\r\n    }\r\n  ]\r\n}",
+									"raw": "{\r\n  \"Preguntas\": [\r\n    {\r\n      \"Texto\": \"Los mayas utilizaron un sistema de escritura jeroglífica altamente desarrollado\",\r\n      \"Opcion\": {\r\n        \"Texto\": \"Verdadera\"\r\n      },\r\n      \"Correcta\": true\r\n    },\r\n    {\r\n      \"Texto\": \"La cultura mexica se estableció originalmente en la península de Yucatán.\",\r\n      \"Opcion\": {\r\n        \"Texto\": \"Falso\"\r\n      },\r\n      \"Correcta\": true\r\n    },\r\n    {\r\n      \"Texto\": \"Teotihuacán fue una de las ciudades más grandes de Mesoamérica y su origen sigue siendo en gran parte un misterio\",\r\n      \"Opcion\": {\r\n        \"Texto\": \"Falso\"\r\n      },\r\n      \"Correcta\": false\r\n    },\r\n    {\r\n      \"Texto\": \"Todas las culturas prehispánicas hablaban el mismo idioma.\",\r\n      \"Opcion\": {\r\n        \"Texto\": \"Verdadero\"\r\n      },\r\n      \"Correcta\": false\r\n    },\r\n    {\r\n      \"Texto\": \"Los olmecas son considerados una de las culturas madre de Mesoamérica.\",\r\n      \"Opcion\": {\r\n        \"Texto\": \"Verdadero\"\r\n      },\r\n      \"Correcta\": false\r\n    }\r\n  ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -6433,7 +6403,7 @@
 							"response": []
 						},
 						{
-							"name": "P-44 Obtener una Respuesta",
+							"name": "P-43 Obtener una Respuesta",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -6452,7 +6422,7 @@
 							"response": []
 						},
 						{
-							"name": "P-45 Obtener un Cuestionario que no existe",
+							"name": "P-44 Obtener un Cuestionario que no existe",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -6471,19 +6441,19 @@
 							"response": []
 						},
 						{
-							"name": "P-46 Enviar una Respuesta con datos inválidos",
+							"name": "P-45 Enviar una Respuesta con datos inválidos",
 							"request": {
 								"method": "POST",
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNTciLCJqdGkiOiJjOWMwOGUyMC0yMmQ5LTQ4NjUtYmFkNS01ZjRlOWRjNjI3YjUiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDAyOjI5OjA5IiwidW5pcXVlX25hbWUiOiJSb2RyaWdvU1AiLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDIzMzQ5LCJleHAiOjE3NTE0NDQ5NDksImlhdCI6MTc1MTQyMzM0OX0.3xJZSN-XAhkfoMBbRQDCyTcIeihxmGBMjNDRMFyrvHs",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlcnZpY2lvX3VzdWFyaW9zIiwiYXVkIjoiaHR0cHM6Ly9hcGlnYXRld2F5IiwiaWRVc3VhcmlvIjoiNTciLCJqdGkiOiJmY2YwMDQ1NS01MjYwLTRmNGYtOTU0Zi03N2MwNDEwZWQ2MTgiLCJiaXJ0aGRhdGUiOiIwNy8wMi8yMDI1IDEyOjU2OjQyIiwidW5pcXVlX25hbWUiOiJSb2RyaWdvU1AiLCJyb2xlIjoiYWx1bW5vIiwibmJmIjoxNzUxNDgyNjAyLCJleHAiOjE3NTE1MDQyMDIsImlhdCI6MTc1MTQ4MjYwMn0.s8vQyL5s2niJMBW2-4H5YJch879z7XM_4Mv8H02vho8",
 										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"preguntas\": [\r\n    {\r\n      \"texto\": \"Los mayas utilizaron un sistema de escritura jeroglífica altamente desarrollado\",\r\n      \"opcion\": {},\r\n      \"correcta\": true\r\n    },\r\n    {\r\n      \"texto\": \"La cultura mexica se estableció originalmente en la península de Yucatán.\",\r\n      \"opcion\": {},\r\n      \"correcta\": true\r\n    },\r\n    {\r\n      \"texto\": \"Teotihuacán fue una de las ciudades más grandes de Mesoamérica y su origen sigue siendo en gran parte un misterio\",\r\n      \"opcion\": {},\r\n      \"correcta\": false\r\n    },\r\n    {\r\n      \"texto\": \"Todas las culturas prehispánicas hablaban el mismo idioma.\",\r\n      \"opcion\": {},\r\n      \"correcta\": false\r\n    },\r\n    {\r\n      \"texto\": \"Los olmecas son considerados una de las culturas madre de Mesoamérica.\",\r\n      \"opcion\": {},\r\n      \"correcta\": false\r\n    }\r\n  ]\r\n}",
+									"raw": "{\r\n  \"Preguntas\": [\r\n    {\r\n      \"Texto\": \"Los mayas utilizaron un sistema de escritura jeroglífica altamente desarrollado\",\r\n      \"Opcion\": {},\r\n      \"Correcta\": true\r\n    },\r\n    {\r\n      \"Texto\": \"La cultura mexica se estableció originalmente en la península de Yucatán.\",\r\n      \"Opcion\": {},\r\n      \"Correcta\": true\r\n    },\r\n    {\r\n      \"Texto\": \"Teotihuacán fue una de las ciudades más grandes de Mesoamérica y su origen sigue siendo en gran parte un misterio\",\r\n      \"Opcion\": {},\r\n      \"Correcta\": false\r\n    },\r\n    {\r\n      \"Texto\": \"Todas las culturas prehispánicas hablaban el mismo idioma.\",\r\n      \"Opcion\": {},\r\n      \"Correcta\": false\r\n    },\r\n    {\r\n      \"Texto\": \"Los olmecas son considerados una de las culturas madre de Mesoamérica.\",\r\n      \"Opcion\": {},\r\n      \"Correcta\": false\r\n    }\r\n  ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -6506,7 +6476,7 @@
 							"response": []
 						},
 						{
-							"name": "P-47 Obtener una Respuesta que no existe",
+							"name": "P-46 Obtener una Respuesta que no existe",
 							"request": {
 								"method": "GET",
 								"header": [],

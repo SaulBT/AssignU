@@ -1,7 +1,9 @@
 package com.AssignU.controllers.Perfil;
 
 import com.AssignU.controllers.Menu.MenuController;
+import com.AssignU.models.Perfil.ClaseEstadisticaPerfilDTO;
 import com.AssignU.models.Perfil.EstadisticasPerfilDTO;
+import com.AssignU.models.Perfil.TareaEstadisticaPerfilDTO;
 import com.AssignU.models.Usuarios.Catalogo.GradoEstudioDTO;
 import com.AssignU.models.Usuarios.Catalogo.GradoProfesionalDTO;
 import com.AssignU.models.Usuarios.Docente.DocenteDTO;
@@ -14,9 +16,14 @@ import com.AssignU.utils.Navegador;
 import com.AssignU.utils.Utils;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
@@ -27,11 +34,13 @@ public class PerfilController{
     public Label lbCorreoElectronico;
     public ComboBox cbClase;
     @FXML
-    private TableView<?> tvDatosClase;
-    public TableColumn tcNombre;
-    public TableColumn tcPregunta;
-    public TableColumn tcTotal;
-    public TableColumn tcCalificacion;
+    private TableView<TareaEstadisticaPerfilDTO> tvDatosClase;
+    @FXML
+    private TableColumn tcIdTarea;
+    @FXML
+    private TableColumn tcNombre;
+    @FXML
+    private TableColumn tcCalificacion;
     public Label lbPromedio;
     public Button btnCambiarContrasenia;
     public Button btnEditarPerfil;
@@ -39,10 +48,8 @@ public class PerfilController{
     
     private Sesion sesion;
     private String mensajeError;
-    private boolean esDocente;
     private int idGrado;
     
-    private Map<String, String> headers = new HashMap<String, String>();
     @FXML
     private HBox hbClase;
     @FXML
@@ -53,11 +60,49 @@ public class PerfilController{
 
     public void cargarValores(){
         this.sesion = Sesion.getSesion();
-        if (sesion.esDocente()) {
+        if (!sesion.esDocente()) {
+            configurarTabla();
             obtenerDatosAlumno();
         } else {
             obtenerDatosDocente();
         }
+    }
+    
+    private void configurarTabla(){
+        tcIdTarea.setCellFactory(columna -> new TableCell<TareaEstadisticaPerfilDTO, Void>() {
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(String.valueOf(getIndex() + 1));
+                }
+            }
+        });
+        tcNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        tcCalificacion.setCellValueFactory(new PropertyValueFactory<>("calificacion"));
+        tcCalificacion.setCellFactory(columna -> new TableCell<TareaEstadisticaPerfilDTO, Integer>() {
+            @Override
+            protected void updateItem(Integer calificacion, boolean empty) {
+                super.updateItem(calificacion, empty);
+                if (empty || calificacion == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(String.valueOf(calificacion));
+                    if (calificacion >= 90) {
+                        //setStyle("-fx-background-color: limegreen;");
+                        setStyle("-fx-fill: limegreen;");
+                    } else if (calificacion < 60) {
+                        //setStyle("-fx-background-color: crimson;");
+                        setStyle("-fx-fill: crimson;");
+                    } else {
+                        setStyle("");
+                    }
+                }
+            }
+        });
     }
     
     // A L U M N O
@@ -77,16 +122,16 @@ public class PerfilController{
         lbNombreCompleto.setText(estadisticasDto.nombreCompleto);
         lbCorreoElectronico.setText(estadisticasDto.correo);
         idGrado = estadisticasDto.idGradoEstudios;
-        cargarGradoEstudios(idGrado);
-        //TO DO set comboBox y tableView
-        //configurarInformacionClases()
+        hbClase.setVisible(true);
+        spInformacionClase.setVisible(true);
+        cargarGradoEstudios(idGrado);configurarInformacionClases(estadisticasDto);
     }
     
     private void cargarGradoEstudios(int idGradoEstudios){
         lbTextoGrado.setText("Grado estudios:");
         HashMap<String, Object> respuesta = ServicioCatalogos.obtenerGradoEstudios(idGradoEstudios);
-        GradoEstudioDTO gradoEstudios = (GradoEstudioDTO) respuesta.get(Constantes.KEY_RESPUESTA);
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+            GradoEstudioDTO gradoEstudios = (GradoEstudioDTO) respuesta.get(Constantes.KEY_RESPUESTA);
             lbGrado.setText(gradoEstudios.getNombre());
         } else {
             Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
@@ -94,7 +139,39 @@ public class PerfilController{
     }
     
     private void configurarInformacionClases(EstadisticasPerfilDTO estadisticasDto){
-        cbClase.getItems().setAll(estadisticasDto.getClases());
+        ObservableList<ClaseEstadisticaPerfilDTO> clases = FXCollections.observableArrayList(estadisticasDto.clases);
+        cbClase.setItems(clases);
+        
+        cbClase.valueProperty().addListener(new ChangeListener<ClaseEstadisticaPerfilDTO>(){
+            @Override
+            public void changed(ObservableValue<? extends ClaseEstadisticaPerfilDTO> observable, ClaseEstadisticaPerfilDTO ov, ClaseEstadisticaPerfilDTO nv) {
+                if(nv != null){
+                    mostrarTareasDeClase(nv);
+                }
+            }
+        });
+        
+        if (!clases.isEmpty()) {
+            cbClase.getSelectionModel().selectFirst();
+        }
+    }
+    
+    private void mostrarTareasDeClase(ClaseEstadisticaPerfilDTO clase) {
+        ObservableList<TareaEstadisticaPerfilDTO> tareas = FXCollections.observableArrayList();
+        if (clase.tareas != null) {
+            tareas.addAll(clase.tareas);
+        }
+        tvDatosClase.setItems(tareas);
+        mostrarPromedio(tareas);
+    }
+    
+    private void mostrarPromedio(ObservableList<TareaEstadisticaPerfilDTO> tareas) {
+        if (tareas.isEmpty()) {
+            lbPromedio.setText("N/A");
+            return;
+        }
+        double promedio = tareas.stream().mapToInt(TareaEstadisticaPerfilDTO::getCalificacion).average().orElse(0);
+        lbPromedio.setText(String.format("%.2f", promedio));
     }
     
     // D O C E N T E
@@ -123,8 +200,8 @@ public class PerfilController{
     private void cargarGradoProfesional(int idGradoProfesional){
         lbTextoGrado.setText("Grado profesional:");
         HashMap<String, Object> respuesta = ServicioCatalogos.obtenerGradoProfesional(idGradoProfesional);
-        GradoProfesionalDTO gradoProfesional = (GradoProfesionalDTO) respuesta.get(Constantes.KEY_RESPUESTA);
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+            GradoProfesionalDTO gradoProfesional = (GradoProfesionalDTO) respuesta.get(Constantes.KEY_RESPUESTA);
             lbGrado.setText(gradoProfesional.getNombre());
         } else {
             Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
@@ -156,6 +233,7 @@ public class PerfilController{
         Navegador.cambiarVentana(
             lbNombreCompleto.getScene(),
             "/views/Menu/menu.fxml",
+            "Clases",
             controller -> ((MenuController) controller).cargarValores()
         );
     }

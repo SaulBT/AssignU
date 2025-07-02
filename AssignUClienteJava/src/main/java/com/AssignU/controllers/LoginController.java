@@ -99,6 +99,7 @@ public class LoginController implements Initializable, IFormulario {
             Navegador.cambiarVentana(
                 lbContraseniaError.getScene(),
                 "/views/Menu/menu.fxml",
+                "Clases", 
                 controller -> ((MenuController) controller).cargarValores()
             );
         } else {
@@ -115,6 +116,7 @@ public class LoginController implements Initializable, IFormulario {
         Navegador.cambiarVentana(
             lbContraseniaError.getScene(),
             "/views/registroUsuario.fxml",
+            "Registro",
             null
         );
     }

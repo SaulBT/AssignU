@@ -1,5 +1,6 @@
 package com.AssignU.controllers.Menu;
 
+import com.AssignU.controllers.Clase.ClaseController;
 import com.AssignU.controllers.Clase.CrearUnirseAClaseController;
 import com.AssignU.controllers.Perfil.PerfilController;
 import com.AssignU.models.Clases.ClaseDTO;
@@ -59,11 +60,11 @@ public class MenuController {
                 StackPane tarjeta = loader.load();
                 TarjetaClaseController controller = loader.getController();
                 if(sesion.esDocente()){
-                    controller.cargarDatos(clase.getNombreClase(), "Código: " + clase.codigoClase, clase.getIdClase());
+                    controller.cargarDatos(clase, "Código: " + clase.codigoClase);
                 } else {
                     HashMap<String, Object> respuesta = ServicioDocentes.obtenerNombreDocente(clase.idDocente);
                     if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
-                        controller.cargarDatos(clase.getNombreClase(), (String) respuesta.get(Constantes.KEY_MENSAJE), clase.getIdClase());
+                        controller.cargarDatos(clase, (String) respuesta.get(Constantes.KEY_MENSAJE));
                     } else {
                         Utils.mostrarVentana("Error", 
                                 "Ocurrió un error obteniendo al docente: " + (String) respuesta.get(Constantes.KEY_MENSAJE), 
@@ -86,6 +87,7 @@ public class MenuController {
         Navegador.cambiarVentana(
             btnAccionClase.getScene(),
             "/views/login.fxml",
+            "Inicio de Sesión",
             null
         );
     }
@@ -95,6 +97,7 @@ public class MenuController {
         Navegador.cambiarVentana(
             btnAccionClase.getScene(),
             "/views/Perfil/perfil.fxml",
+            "Mi Perfil",
             controller -> ((PerfilController) controller).cargarValores()
         );
     }
@@ -115,6 +118,11 @@ public class MenuController {
     }
 
     public void enviarAClaseNueva(ClaseDTO claseDto){
-        Utils.mostrarVentana("¡BIEN!", "La clase " + claseDto.getNombreClase() + " fue creada.", Alert.AlertType.INFORMATION);
+        Navegador.cambiarVentana(
+            btnAccionClase.getScene(),
+            "/views/Clase/clase.fxml",
+            claseDto.nombreClase,
+            controller -> ((ClaseController) controller).cargarValoresDeMenu(claseDto)
+        );
     }
 }

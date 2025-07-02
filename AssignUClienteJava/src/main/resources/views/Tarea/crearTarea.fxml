@@ -113,7 +113,7 @@
             <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
          </VBox.margin>
       </Separator>
-      <ComboBox onAction="#cbAgregarPregunta" prefHeight="38.0" prefWidth="205.0" promptText="Agregar pregunta">
+      <ComboBox fx:id="cbTipoPregunta" onAction="#cbAagregarPregunta" prefHeight="38.0" prefWidth="205.0" promptText="Agregar pregunta">
          <VBox.margin>
             <Insets />
          </VBox.margin>
@@ -128,7 +128,7 @@
       </ScrollPane>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#btnEliminar" prefHeight="52.0" prefWidth="161.0" stylesheets="@../stylesheets/button_cancelar.css" text="Eliminar">
+            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#btnEliminar" prefHeight="52.0" prefWidth="161.0" stylesheets="@../stylesheets/button_cancelar.css" text="Cancelar">
                <font>
                   <Font name="System Bold" size="23.0" />
                </font>
@@ -136,7 +136,7 @@
                   <Insets right="60.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#btnCrear" prefHeight="52.0" prefWidth="159.0" stylesheets="@../stylesheets/button_ok.css" text="Crear">
+            <Button fx:id="btnAceptar" mnemonicParsing="false" onAction="#btnCrear" prefHeight="52.0" prefWidth="159.0" stylesheets="@../stylesheets/button_ok.css" text="Crear">
                <font>
                   <Font name="System Bold" size="23.0" />
                </font>

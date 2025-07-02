@@ -1,14 +1,9 @@
 package com.AssignU.controllers.Tarea;
 
-import com.AssignU.utils.VentanaEmergente;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 
 public class EstadisticasTareaController {
     public Label lbNombreClase;
@@ -23,7 +18,7 @@ public class EstadisticasTareaController {
     public TableColumn tcCalificacion;
 
     public void btnLbVolver(MouseEvent mouseEvent) {
-        try {
+        /*try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Tarea/tarea.fxml"));
             Parent verTarea = loader.load();
             Stage escenario = (Stage) lbNumeroRespuestas.getScene().getWindow();
@@ -32,11 +27,11 @@ public class EstadisticasTareaController {
             escenario.setScene(nuevaEscena);
         } catch (Exception ex) {
             VentanaEmergente.mostrarVentana("Error al cambiar la vista", null, ex.getMessage(), Alert.AlertType.ERROR).showAndWait();
-        }
+        }*/
     }
 
     public void btnVerPerfil(ActionEvent actionEvent) {
-        try {
+        /*try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Perfil/perfil.fxml"));
             Parent vistaPerfil = loader.load();
             Stage escenario = (Stage) lbNumeroAlumnos.getScene().getWindow();
@@ -45,6 +40,6 @@ public class EstadisticasTareaController {
             escenario.setScene(nuevaEscena);
         } catch (Exception ex) {
             VentanaEmergente.mostrarVentana("Error al cambiar la vista", null, ex.getMessage(), Alert.AlertType.ERROR).showAndWait();
-        }
+        }*/
     }
 }

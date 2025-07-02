@@ -5,7 +5,6 @@ import com.AssignU.models.Usuarios.Catalogo.GradoProfesionalDTO;
 import com.AssignU.servicios.usuarios.ServicioAlumnos;
 import com.AssignU.servicios.usuarios.ServicioCatalogos;
 import com.AssignU.servicios.usuarios.ServicioDocentes;
-import com.AssignU.utils.ApiCliente;
 import com.AssignU.utils.Constantes;
 import com.AssignU.utils.IFormulario;
 import com.AssignU.utils.Navegador;
@@ -14,15 +13,10 @@ import com.google.common.reflect.TypeToken;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.ArrayList;
@@ -276,6 +270,7 @@ public class RegistroUsuarioController implements Initializable, IFormulario {
         Navegador.cambiarVentana(
             cbTipoUsuario.getScene(),
             "/views/login.fxml",
+            "Inicio de Sesión",
             null
         );
     }

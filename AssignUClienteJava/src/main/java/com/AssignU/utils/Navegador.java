@@ -11,7 +11,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Navegador {
-    public static <T> T cambiarVentana(Scene escenaActual, String rutaFXML, Consumer<T> configurador) {
+    public static <T> T cambiarVentana(Scene escenaActual, String rutaFXML, String nuevoTitulo, Consumer<T> configurador) {
         try {
             FXMLLoader loader = new FXMLLoader(Navegador.class.getResource(rutaFXML));
             Parent vista = loader.load();
@@ -21,6 +21,7 @@ public class Navegador {
                 configurador.accept(controller);
 
             Stage stage = (Stage) escenaActual.getWindow();
+            stage.setTitle("AssignU - " + nuevoTitulo);
             stage.setScene(new Scene(vista));
 
             return controller;

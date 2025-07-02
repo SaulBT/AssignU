@@ -13,18 +13,15 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.util.HashMap;
-import java.util.Map;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 public class CrearUnirseAClaseController implements IFormulario{
     
-    public MenuController menuController;
+    private MenuController menuController;
     private Sesion sesion;
     private String mensajeError;
-    
-    private Map<String, String> headers = new HashMap<String, String>();
     
     @FXML
     private Label lbTitulo;
@@ -59,7 +56,7 @@ public class CrearUnirseAClaseController implements IFormulario{
 
     @FXML
     public void btnAceptar(ActionEvent actionEvent) {
-        if (verificarCampos()) {
+        if(verificarCampos()){
             if (sesion.esDocente()){
                 crearClase(tfContenido.getText());
             }else{
@@ -77,18 +74,16 @@ public class CrearUnirseAClaseController implements IFormulario{
         String nombreClase = tfContenido.getText();
         boolean error = true;
         
-        if (nombreClase.isEmpty()) {
+        if(nombreClase.isEmpty()){
             if(sesion.esDocente()){
                 mensajeError = "Escribe un nombre para la clase.";
             }else{
                 mensajeError = "Ingrese el código de la clase.";
             }
             error = false;
-            tfContenido.setStyle("-fx-border-color: red");
-        } else if (nombreClase.toCharArray().length > 45) {
+        } else if (!Utils.verificarTamanioCampo(nombreClase, 44)){
             mensajeError = "El nombre debe de ser menor a 45 caracteres.";
             error = false;
-            tfContenido.setStyle("-fx-border-color: red");
         }
         return error;
     }
@@ -102,6 +97,7 @@ public class CrearUnirseAClaseController implements IFormulario{
         HashMap<String, Object> respuesta = ServicioClases.crearClase(nombreClase);
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
             Utils.mostrarVentana("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+            menuController.enviarAClaseNueva((ClaseDTO)respuesta.get(Constantes.KEY_RESPUESTA));
             cerrarVentana();
         } else {
             Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);

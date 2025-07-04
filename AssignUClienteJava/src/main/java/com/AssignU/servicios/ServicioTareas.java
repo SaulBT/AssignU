@@ -115,6 +115,7 @@ public class ServicioTareas {
             }
         } catch (Exception e) {
             resultado.put(Constantes.KEY_MENSAJE, "Error de red o inesperado: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         return resultado;

@@ -131,11 +131,8 @@ public class ServicioClases {
         resultado.put(Constantes.KEY_ERROR, true);
 
         Sesion sesion = Sesion.getSesion();
-        
-        String fechaFormateada = fechaVisualizacion.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        String fechaParam = URLEncoder.encode(fechaFormateada, StandardCharsets.UTF_8);
 
-        String endpoint = "/clases/" + idClase + "/ultima-conexion?fechaVisualizacion=" + fechaParam;
+        String endpoint = "/clases/clases/" + idClase + "/ultima-conexion?fechaVisualizacion=" + fechaVisualizacion;
 
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");

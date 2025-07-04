@@ -38,10 +38,14 @@ public class ClaseController {
     private ClaseDTO claseDto;
     
     public void cargarValoresDeMenu(ClaseDTO claseDto){
-        HashMap<String, Object> respuesta = ServicioClases.actualizarUltimaConexion(claseDto.idClase, LocalDateTime.now());
-        if ((boolean) respuesta.get(Constantes.KEY_ERROR)) {
-            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+
+        if (!Sesion.getSesion().esDocente()) {
+            HashMap<String, Object> respuesta = ServicioClases.actualizarUltimaConexion(claseDto.idClase, LocalDateTime.now());
+            if ((boolean) respuesta.get(Constantes.KEY_ERROR)) {
+                Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            }
         }
+
         cargarValores(claseDto);
     }
     

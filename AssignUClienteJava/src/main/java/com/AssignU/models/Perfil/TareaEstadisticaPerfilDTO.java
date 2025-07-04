@@ -4,7 +4,7 @@ package com.AssignU.models.Perfil;
 public class TareaEstadisticaPerfilDTO {
     public int idTarea;
     public String nombre;
-    public int calificacion;
+    public float calificacion;
 
     public TareaEstadisticaPerfilDTO(int idTarea, String nombre, int calificacion) {
         this.idTarea = idTarea;
@@ -28,11 +28,11 @@ public class TareaEstadisticaPerfilDTO {
         this.nombre = nombre;
     }
 
-    public int getCalificacion() {
+    public float getCalificacion() {
         return calificacion;
     }
 
-    public void setCalificacion(int calificacion) {
+    public void setCalificacion(float calificacion) {
         this.calificacion = calificacion;
     }
 }

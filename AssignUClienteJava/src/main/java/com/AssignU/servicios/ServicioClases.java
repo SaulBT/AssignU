@@ -3,6 +3,7 @@ package com.AssignU.servicios;
 
 import com.AssignU.models.Clases.ClaseDTO;
 import com.AssignU.models.Clases.CrearClaseDTO;
+import com.AssignU.models.Clases.Estadisticas.EstadisticasClaseDTO;
 import com.AssignU.models.Clases.RegistroDTO;
 import com.AssignU.models.Usuarios.Sesion;
 import com.AssignU.utils.ApiCliente;
@@ -130,11 +131,8 @@ public class ServicioClases {
         resultado.put(Constantes.KEY_ERROR, true);
 
         Sesion sesion = Sesion.getSesion();
-        
-        String fechaFormateada = fechaVisualizacion.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        String fechaParam = URLEncoder.encode(fechaFormateada, StandardCharsets.UTF_8);
 
-        String endpoint = "/clases/" + idClase + "/ultima-conexion?fechaVisualizacion=" + fechaParam;
+        String endpoint = "/clases/clases/" + idClase + "/ultima-conexion?fechaVisualizacion=" + fechaVisualizacion;
 
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
@@ -162,15 +160,11 @@ public class ServicioClases {
         return resultado;
     }
     
-    //No contiene el bearer jwt
     public static HashMap<String, Object> obtenerClase(int idClase) {
         HashMap<String, Object> resultado = new HashMap<>();
         resultado.put(Constantes.KEY_ERROR, true);
         
         String endpoint = "/clases/clases/" + idClase;
-        
-        //Map<String, String> headers = new HashMap<>();
-        //headers.put("Authorization", "Bearer " + sesion.getJwt());
         
         try {
             ClaseDTO clase = ApiCliente.enviarSolicitud(endpoint, "GET", null, null, ClaseDTO.class);
@@ -340,5 +334,33 @@ public class ServicioClases {
         return resultado;
     }
     
-    
+    public static HashMap<String, Object> obtenerEstadisticasClase(int idClase) {
+        HashMap<String, Object> resultado = new HashMap<>();
+        resultado.put(Constantes.KEY_ERROR, true);
+        
+        String endpoint = "/clases/clases/" + idClase + "/estadisticas";
+        
+        try {
+            EstadisticasClaseDTO respuesta = ApiCliente.enviarSolicitud(endpoint, 
+                    "GET",
+                    null, 
+                    null, 
+                    EstadisticasClaseDTO.class);
+            
+            resultado.put(Constantes.KEY_ERROR, false);
+            resultado.put(Constantes.KEY_MENSAJE, "Estadisticas de clase obtenidas exitosamente.");
+            resultado.put(Constantes.KEY_RESPUESTA, respuesta);
+            
+        } catch (ExcepcionHTTP e) {
+            switch (e.getCodigo()) {
+                case 401 -> resultado.put(Constantes.KEY_MENSAJE, "No autorizado. Su sesión puede haber expirado.");
+                case 403 -> resultado.put(Constantes.KEY_MENSAJE, "Acceso denegado.");
+                case 500 -> resultado.put(Constantes.KEY_MENSAJE, "Error interno del servidor.");
+                default -> resultado.put(Constantes.KEY_MENSAJE, "Error HTTP (" + e.getCodigo() + "): " + e.getMessage());
+            }
+        } catch (Exception e) {
+            resultado.put(Constantes.KEY_MENSAJE, "Error de red o inesperado: " + e.getMessage());
+        }
+        return resultado;
+    }
 }

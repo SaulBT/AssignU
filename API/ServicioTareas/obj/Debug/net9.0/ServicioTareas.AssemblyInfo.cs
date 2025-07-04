@@ -13,7 +13,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ServicioTareas")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+72aa0a80b98e9feeb7e9aa0f893ff036f090a498")]
+
+
+
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1b59d48b7ea3440b298650710c83489ef2506bd4")]
+
 [assembly: System.Reflection.AssemblyProductAttribute("ServicioTareas")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ServicioTareas")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

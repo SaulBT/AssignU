@@ -8,7 +8,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="305.0" prefWidth="1237.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.AssignU.controllers.Tarea.TarjetaCrearPreguntaController">
    <children>
       <HBox alignment="TOP_RIGHT" prefHeight="19.0" prefWidth="1237.0">
@@ -48,7 +47,7 @@
       </HBox>
       <HBox fx:id="hbRespuesta1" alignment="CENTER_LEFT" prefHeight="47.0" prefWidth="1237.0">
          <children>
-            <RadioButton mnemonicParsing="false" selected="true" text="[Respuesta 1]">
+            <RadioButton disable="true" mnemonicParsing="false" selected="true" text="[Respuesta 1]">
                <HBox.margin>
                   <Insets left="60.0" />
                </HBox.margin>
@@ -67,7 +66,7 @@
       </HBox>
       <HBox fx:id="hbRespuesta2" alignment="CENTER_LEFT" prefHeight="47.0" prefWidth="1237.0">
          <children>
-            <RadioButton mnemonicParsing="false" selected="true" text="[Respuesta 2]">
+            <RadioButton disable="true" mnemonicParsing="false" selected="true" text="[Respuesta 2]">
                <HBox.margin>
                   <Insets left="60.0" />
                </HBox.margin>
@@ -86,7 +85,7 @@
       </HBox>
       <HBox fx:id="hbRespuesta3" alignment="CENTER_LEFT" prefHeight="47.0" prefWidth="1237.0">
          <children>
-            <RadioButton mnemonicParsing="false" selected="true" text="[Respuesta 3]">
+            <RadioButton disable="true" mnemonicParsing="false" selected="true" text="[Respuesta 3]">
                <HBox.margin>
                   <Insets left="60.0" />
                </HBox.margin>
@@ -105,7 +104,7 @@
       </HBox>
       <HBox fx:id="hbRespuesta4" alignment="CENTER_LEFT" prefHeight="47.0" prefWidth="1237.0">
          <children>
-            <RadioButton mnemonicParsing="false" selected="true" text="[Respuesta 4]">
+            <RadioButton disable="true" mnemonicParsing="false" selected="true" text="[Respuesta 4]">
                <HBox.margin>
                   <Insets left="60.0" />
                </HBox.margin>

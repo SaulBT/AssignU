@@ -23,7 +23,9 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 public class EditarPerfilController implements IFormulario{
+    @FXML
     private TextField tfNombreCompleto;
+    @FXML
     private TextField tfNombreUsuario;
     @FXML
     private Label lbGrado;
@@ -40,7 +42,7 @@ public class EditarPerfilController implements IFormulario{
         this.sesion = Sesion.getSesion();
         tfNombreCompleto.setText(nombreCompleto);
         tfNombreUsuario.setText(nombreUsuario);
-        if (sesion.esDocente()) {
+        if (!sesion.esDocente()) {
             lbGrado.setText("Grado de Estudios:");
             configurarGradoEstudios(idGrado);
         } else {
@@ -81,7 +83,7 @@ public class EditarPerfilController implements IFormulario{
             }
             
         } else {
-            Utils.mostrarVentana("Error", (String) gradosEstudios.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) gradosEstudios.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
     
@@ -115,7 +117,7 @@ public class EditarPerfilController implements IFormulario{
             }
             
         } else {
-            Utils.mostrarVentana("Error", (String) gradosProfesionales.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) gradosProfesionales.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
 
@@ -130,7 +132,7 @@ public class EditarPerfilController implements IFormulario{
                 guardarPerfilAlumno(nombreUsuario, nombreCompleto);
             }
         } else {
-            Utils.mostrarVentana("Campos inválidos", mensajeError, Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Campos inválidos", mensajeError, Alert.AlertType.ERROR);
         }
     }
     
@@ -140,11 +142,20 @@ public class EditarPerfilController implements IFormulario{
         boolean bandera = true;
         String mensaje = "";
 
-        if (cbGradoEstudios.getValue() == null || cbGradoProfesional.getValue() == null ) {
-            bandera = false;
-            cbGradoEstudios.setStyle("-fx-border-color: red");
-            cbGradoProfesional.setStyle("-fx-border-color: red");
-            mensajeError = "Selecciona un Grado";
+        if (sesion.esDocente()){
+            if (cbGradoProfesional.getValue() == null ) {
+                bandera = false;
+                cbGradoEstudios.setStyle("-fx-border-color: red");
+                cbGradoProfesional.setStyle("-fx-border-color: red");
+                mensajeError = "Selecciona un Grado";
+            }
+        } else {
+            if (cbGradoEstudios.getValue() == null) {
+                bandera = false;
+                cbGradoEstudios.setStyle("-fx-border-color: red");
+                cbGradoProfesional.setStyle("-fx-border-color: red");
+                mensajeError = "Selecciona un Grado";
+            }
         }
 
         mensaje = Utils.verificarNombreUsuario(tfNombreUsuario.getText(), 45);
@@ -181,9 +192,9 @@ public class EditarPerfilController implements IFormulario{
         HashMap<String, Object> respuesta = ServicioAlumnos.actualizarAlumno(nombreCompleto, nombreUsuario, seleccionado.idGradoEstudios);
 
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
-            Utils.mostrarVentana("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+            Utils.mostrarAlerta("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
         } else {
-            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
     
@@ -193,9 +204,9 @@ public class EditarPerfilController implements IFormulario{
         HashMap<String, Object> respuesta = ServicioDocentes.actualizarDocente(nombreCompleto, nombreUsuario,seleccionado.getIdGradoProfesional());
 
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
-            Utils.mostrarVentana("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+            Utils.mostrarAlerta("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
         } else {
-            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
 

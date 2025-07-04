@@ -1,13 +1,154 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.AssignU.servicios;
 
-/**
- *
- * @author Usuario
- */
+import com.AssignU.models.Tareas.CrearTareaDTO;
+import com.AssignU.models.Tareas.EditarTareaDTO;
+import com.AssignU.models.Tareas.TareaDTO;
+import com.AssignU.models.Usuarios.Sesion;
+import com.AssignU.utils.ApiCliente;
+import com.AssignU.utils.Constantes;
+import com.AssignU.utils.ExcepcionHTTP;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class ServicioTareas {
+    public static HashMap<String, Object> crearTarea(CrearTareaDTO crearTarea) {
+        HashMap<String, Object> resultado = new HashMap<>();
+        resultado.put(Constantes.KEY_ERROR, true);
+
+        Sesion sesion = Sesion.getSesion();
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        headers.put("Authorization", "Bearer " + sesion.getJwt());
+
+        try {
+            TareaDTO tarea = ApiCliente.enviarSolicitud("/tareas/tareas", 
+                    "POST", 
+                    crearTarea, 
+                    headers, 
+                    TareaDTO.class);
+
+            resultado.put(Constantes.KEY_ERROR, false);
+            resultado.put(Constantes.KEY_MENSAJE, "Tarea creada exitosamente.");
+            resultado.put(Constantes.KEY_RESPUESTA, tarea);
+
+        } catch (ExcepcionHTTP e) {
+            switch (e.getCodigo()) {
+                case 401 -> resultado.put(Constantes.KEY_MENSAJE, "No autorizado. Su sesión puede haber expirado.");
+                case 403 -> resultado.put(Constantes.KEY_MENSAJE, "Acceso denegado.");
+                case 500 -> resultado.put(Constantes.KEY_MENSAJE, "Error interno del servidor.");
+                default -> resultado.put(Constantes.KEY_MENSAJE, "Error HTTP (" + e.getCodigo() + "): " + e.getMessage());
+            }
+        } catch (Exception e) {
+            resultado.put(Constantes.KEY_MENSAJE, "Error de red o inesperado: " + e.getMessage());
+        }
+
+        return resultado;
+    }
     
+    //Editar Tarea
+    public static HashMap<String, Object> editarTarea(EditarTareaDTO editarTarea, int idTarea) {
+        HashMap<String, Object> resultado = new HashMap<>();
+        resultado.put(Constantes.KEY_ERROR, true);
+
+        Sesion sesion = Sesion.getSesion();
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        headers.put("Authorization", "Bearer " + sesion.getJwt());
+        
+        String endpoint = "/tareas/tareas/" + idTarea;
+
+        try {
+            TareaDTO tarea = ApiCliente.enviarSolicitud(endpoint, 
+                    "PUT", 
+                    editarTarea, 
+                    headers, 
+                    TareaDTO.class);
+
+            resultado.put(Constantes.KEY_ERROR, false);
+            resultado.put(Constantes.KEY_MENSAJE, "Tarea editada exitosamente.");
+            resultado.put(Constantes.KEY_RESPUESTA, tarea);
+
+        } catch (ExcepcionHTTP e) {
+            switch (e.getCodigo()) {
+                case 401 -> resultado.put(Constantes.KEY_MENSAJE, "No autorizado. Su sesión puede haber expirado.");
+                case 403 -> resultado.put(Constantes.KEY_MENSAJE, "Acceso denegado.");
+                case 500 -> resultado.put(Constantes.KEY_MENSAJE, "Error interno del servidor.");
+                default -> resultado.put(Constantes.KEY_MENSAJE, "Error HTTP (" + e.getCodigo() + "): " + e.getMessage());
+            }
+        } catch (Exception e) {
+            resultado.put(Constantes.KEY_MENSAJE, "Error de red o inesperado: " + e.getMessage());
+        }
+
+        return resultado;
+    }
+    
+    public static HashMap<String, Object> borrarTarea(int idTarea){
+        HashMap<String, Object> resultado = new HashMap<>();
+        resultado.put(Constantes.KEY_ERROR, true);
+        
+        Sesion sesion = Sesion.getSesion();
+        
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + sesion.getJwt());
+        
+        String endpoint = "/tareas/tareas/" + idTarea;
+        
+        try {
+            ApiCliente.enviarSolicitud(endpoint, 
+                    "DELETE", 
+                    null, 
+                    headers, 
+                    Object.class);
+            
+            resultado.put(Constantes.KEY_ERROR, false);
+            resultado.put(Constantes.KEY_MENSAJE, "Tarea borrada exitosamente.");
+            
+        } catch (ExcepcionHTTP e) {
+            switch (e.getCodigo()) {
+                case 401 -> resultado.put(Constantes.KEY_MENSAJE, "No autorizado. Su sesión puede haber expirado.");
+                case 403 -> resultado.put(Constantes.KEY_MENSAJE, "Acceso denegado.");
+                case 500 -> resultado.put(Constantes.KEY_MENSAJE, "Error interno del servidor.");
+                default -> resultado.put(Constantes.KEY_MENSAJE, "Error HTTP (" + e.getCodigo() + "): " + e.getMessage());
+            }
+        } catch (Exception e) {
+            resultado.put(Constantes.KEY_MENSAJE, "Error de red o inesperado: " + e.getMessage());
+        }
+        return resultado;
+    }
+    
+    public static HashMap<String, Object> obtenerTareas(int idClase) {
+        HashMap<String, Object> resultado = new HashMap<>();
+        resultado.put(Constantes.KEY_ERROR, true);
+        
+        String endpoint = "/tareas/clases/" + idClase + "/tareas";
+
+        try {
+            List<TareaDTO> tareas = ApiCliente.enviarSolicitudLista(endpoint, 
+                    "GET", 
+                    null, 
+                    null, 
+                    TareaDTO.class);
+
+            resultado.put(Constantes.KEY_ERROR, false);
+            resultado.put(Constantes.KEY_MENSAJE, "Lista de tareas obtenida exitosamente.");
+            resultado.put(Constantes.KEY_RESPUESTA, tareas);
+
+        } catch (ExcepcionHTTP e) {
+            switch (e.getCodigo()) {
+                case 401 -> resultado.put(Constantes.KEY_MENSAJE, "No autorizado. Su sesión puede haber expirado.");
+                case 403 -> resultado.put(Constantes.KEY_MENSAJE, "Acceso denegado.");
+                case 500 -> resultado.put(Constantes.KEY_MENSAJE, "Error interno del servidor.");
+                default -> resultado.put(Constantes.KEY_MENSAJE, "Error HTTP (" + e.getCodigo() + "): " + e.getMessage());
+            }
+        } catch (Exception e) {
+            resultado.put(Constantes.KEY_MENSAJE, "Error de red o inesperado: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return resultado;
+    }
 }

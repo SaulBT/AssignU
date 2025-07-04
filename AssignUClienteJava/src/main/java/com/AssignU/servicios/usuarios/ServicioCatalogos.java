@@ -68,7 +68,7 @@ public class ServicioCatalogos {
 
         try {
             GradoEstudioDTO grado = ApiCliente.enviarSolicitud(
-                "/usuarios/catalogos/grados-estudios/" + idGrado,
+                "/usuarios/catalogos/grado-estudio/" + idGrado,
                 "GET",
                 null,
                 null,
@@ -98,7 +98,7 @@ public class ServicioCatalogos {
 
         try {
             GradoProfesionalDTO grado = ApiCliente.enviarSolicitud(
-                "/usuarios/catalogos/grados-profesionales/" + idGrado,
+                "/usuarios/catalogos/grado-profesional/" + idGrado,
                 "GET",
                 null,
                 null,

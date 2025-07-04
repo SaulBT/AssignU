@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.AssignU.controllers.Tarea.CargarArchivoController">
+   <children>
+      <ImageView fx:id="ivArchivo" fitHeight="200.0" fitWidth="200.0" layoutX="200.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="lbTextoArchivo" alignment="CENTER" contentDisplay="CENTER" layoutY="239.0" prefHeight="35.0" prefWidth="420.0" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <font>
+            <Font name="System Italic" size="24.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="90.0" layoutY="280.0" prefHeight="35.0" prefWidth="420.0" text="Sube tu archivo aquí" textAlignment="CENTER">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Button layoutX="441.0" layoutY="331.0" mnemonicParsing="false" onAction="#btnClicSubir" prefHeight="44.0" prefWidth="124.0" stylesheets="@../stylesheets/button_ok.css" text="Subir">
+         <font>
+            <Font name="System Bold" size="17.0" />
+         </font>
+      </Button>
+      <Button layoutX="36.0" layoutY="331.0" mnemonicParsing="false" onAction="#btnClicVolver" prefHeight="44.0" prefWidth="108.0" stylesheets="@../stylesheets/button_cancelar.css" text="Volver">
+         <font>
+            <Font name="System Bold" size="17.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnDescargar" disable="true" layoutX="238.0" layoutY="331.0" mnemonicParsing="false" onAction="#btnClicDescargar" prefHeight="44.0" prefWidth="124.0" stylesheets="@../stylesheets/button_azul.css" text="Descargar" visible="false">
+         <font>
+            <Font name="System Bold" size="17.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

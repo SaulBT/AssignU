@@ -78,7 +78,7 @@
             </Separator>
             <GridPane prefHeight="67.0" prefWidth="1280.0">
                <children>
-                  <Label fx:id="lnNombreClase" prefHeight="54.0" prefWidth="1024.0" text="Nombre de la Clase">
+                  <Label fx:id="lbNombreClase" prefHeight="54.0" prefWidth="1024.0" text="Nombre de la Clase">
                      <font>
                         <Font name="System Bold" size="37.0" />
                      </font>

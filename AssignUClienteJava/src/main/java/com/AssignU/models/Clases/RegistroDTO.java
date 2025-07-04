@@ -1,15 +1,15 @@
 
 package com.AssignU.models.Clases;
 
-import com.google.type.DateTime;
+import java.time.LocalDateTime;
 
 public class RegistroDTO {
     public int idRegistro;
     public int idAlumno;
     public int idClase;
-    public DateTime ultimoInicio;
+    public LocalDateTime ultimoInicio;
 
-    public RegistroDTO(int idRegistro, int idAlumno, int idClase, DateTime ultimoInicio) {
+    public RegistroDTO(int idRegistro, int idAlumno, int idClase, LocalDateTime ultimoInicio) {
         this.idRegistro = idRegistro;
         this.idAlumno = idAlumno;
         this.idClase = idClase;
@@ -40,11 +40,11 @@ public class RegistroDTO {
         this.idClase = idClase;
     }
 
-    public DateTime getUltimoInicio() {
+    public LocalDateTime getUltimoInicio() {
         return ultimoInicio;
     }
 
-    public void setUltimoInicio(DateTime ultimoInicio) {
+    public void setUltimoInicio(LocalDateTime ultimoInicio) {
         this.ultimoInicio = ultimoInicio;
     }
 }

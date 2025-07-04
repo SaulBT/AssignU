@@ -28,7 +28,7 @@
       </Label>
       <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button fx:id="btnAccionTarea" mnemonicParsing="false" onAction="#clicBtnAccionTarea" stylesheets="@../stylesheets/button_azul.css" text="Editar / Responder">
+            <Button fx:id="btnAccionTarea" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#clicBtnAccionTarea" stylesheets="@../stylesheets/button_azul.css" text="Editar / Responder">
                <HBox.margin>
                   <Insets bottom="10.0" right="10.0" />
                </HBox.margin>

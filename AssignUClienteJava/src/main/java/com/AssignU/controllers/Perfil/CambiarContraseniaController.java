@@ -14,7 +14,9 @@ import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 
 public class CambiarContraseniaController implements IFormulario{
+    @FXML
     private PasswordField pfContraseniaNueva;
+    @FXML
     private PasswordField pfContraseniaActual;
     private String mensajeError;
     private Sesion sesion;
@@ -29,7 +31,7 @@ public class CambiarContraseniaController implements IFormulario{
         if (verificarCampos()) {
             guardarContrasenia(pfContraseniaActual.getText(), pfContraseniaNueva.getText());
         } else {
-            Utils.mostrarVentana("Campos inválidos", mensajeError, Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Campos inválidos", mensajeError, Alert.AlertType.ERROR);
         }
     }
     
@@ -68,10 +70,10 @@ public class CambiarContraseniaController implements IFormulario{
         }
 
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
-            Utils.mostrarVentana("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+            Utils.mostrarAlerta("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
             cerrarVentana();
         } else {
-            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
 

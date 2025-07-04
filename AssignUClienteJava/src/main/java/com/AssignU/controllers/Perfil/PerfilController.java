@@ -82,9 +82,9 @@ public class PerfilController{
         });
         tcNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         tcCalificacion.setCellValueFactory(new PropertyValueFactory<>("Calificacion"));
-        tcCalificacion.setCellFactory(columna -> new TableCell<TareaEstadisticaPerfilDTO, Integer>() {
+        tcCalificacion.setCellFactory(columna -> new TableCell<TareaEstadisticaPerfilDTO, Float>() {
             @Override
-            protected void updateItem(Integer calificacion, boolean empty) {
+            protected void updateItem(Float calificacion, boolean empty) {
                 super.updateItem(calificacion, empty);
                 if (empty || calificacion == null) {
                     setText(null);

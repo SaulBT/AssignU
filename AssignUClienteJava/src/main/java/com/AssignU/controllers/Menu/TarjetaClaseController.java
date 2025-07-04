@@ -16,6 +16,7 @@ public class TarjetaClaseController {
         lbNombreClase.setText(claseDto.nombreClase);
         lbNombreDocente.setText(nombreDocente);
         this.idClase = claseDto.idClase;
+        this.claseDto = claseDto;
     }
 
     public void btnVerClase(ActionEvent actionEvent) {

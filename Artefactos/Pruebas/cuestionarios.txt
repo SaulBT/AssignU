@@ -1,0 +1,267 @@
+db.cuestionarios.insertMany([
+  {
+    IdTarea: 784,
+    Preguntas: [
+      {
+        Texto: "¿Cuál de los siguientes es un principio clave de la Programación Orientada a Objetos?",
+        Tipo: "opcion_multiple",
+        Opciones: [
+          { Texto: "Compilación", EsCorrecta: false },
+          { Texto: "Herencia", EsCorrecta: true },
+          { Texto: "Recursividad", EsCorrecta: false },
+          { Texto: "Indexación", EsCorrecta: false }
+        ]
+      },
+      {
+        Texto: "¿Qué representa una clase en la Programación Orientada a Objetos?",
+        Tipo: "opcion_multiple",
+        Opciones: [
+          { Texto: "Una ejecución de programa", EsCorrecta: false },
+          { Texto: "Un tipo de estructura condicional", EsCorrecta: false },
+          { Texto: "Un modelo o plantilla para crear objetos", EsCorrecta: true },
+          { Texto: "Un archivo de texto plano", EsCorrecta: false }
+        ]
+      },
+      {
+        Texto: "¿Cuál es el propósito principal de la encapsulación?",
+        Tipo: "opcion_multiple",
+        Opciones: [
+          { Texto: "Crear múltiples versiones de un mismo método", EsCorrecta: false },
+          { Texto: "Permitir que los objetos compartan comportamiento", EsCorrecta: false },
+          { Texto: "Ocultar detalles internos y proteger los datos", EsCorrecta: true },
+          { Texto: "Permitir que una clase herede de otra", EsCorrecta: false }
+        ]
+      },
+      {
+        Texto: "¿Qué significa \"polimorfismo\" en el contexto de POO?",
+        Tipo: "opcion_multiple",
+        Opciones: [
+          { Texto: "Capacidad de un objeto para cambiar su clase", EsCorrecta: false },
+          { Texto: "Capacidad de ejecutar múltiples hilos", EsCorrecta: false },
+          { Texto: "Capacidad de una función o método de comportarse de diferentes maneras según el contexto", EsCorrecta: true },
+          { Texto: "Capacidad de acceder a datos privados desde otra clase", EsCorrecta: false }
+        ]
+      },
+      {
+        Texto: "¿Qué palabra clave se suele usar para permitir que una clase derive de otra en muchos lenguajes OOP como Java o C#?",
+        Tipo: "opcion_multiple",
+        Opciones: [
+          { Texto: "derive", EsCorrecta: false },
+          { Texto: "super", EsCorrecta: false },
+          { Texto: "inherit", EsCorrecta: false },
+          { Texto: "extends", EsCorrecta: true }
+        ]
+      },
+      {
+        Texto: "En la POO, un objeto es una instancia de una clase.",
+        Tipo: "opcion_multiple",
+        Opciones: [
+          { Texto: "Verdadero", EsCorrecta: true },
+          { Texto: "Falso", EsCorrecta: false }
+        ]
+      },
+      {
+        Texto: "El polimorfismo impide que se puedan sobrescribir métodos.",
+        Tipo: "opcion_multiple",
+        Opciones: [
+          { Texto: "Verdadero", EsCorrecta: false },
+          { Texto: "Falso", EsCorrecta: true }
+        ]
+      },
+      {
+        Texto: "La herencia múltiple (una clase con más de una superclase) está permitida en Java.",
+        Tipo: "opcion_multiple",
+        Opciones: [
+          { Texto: "Verdadero", EsCorrecta: false },
+          { Texto: "Falso", EsCorrecta: true }
+        ]
+      },
+      {
+        Texto: "La encapsulación contribuye a la seguridad del software al restringir el acceso directo a los datos.",
+        Tipo: "opcion_multiple",
+        Opciones: [
+          { Texto: "Verdadero", EsCorrecta: true },
+          { Texto: "Falso", EsCorrecta: false }
+        ]
+      },
+      {
+        Texto: "Todos los atributos de una clase deben ser públicos para que otros objetos los usen.",
+        Tipo: "opcion_multiple",
+        Opciones: [
+          { Texto: "Verdadero", EsCorrecta: false },
+          { Texto: "Falso", EsCorrecta: true }
+        ]
+      }
+    ]
+  }
+]);
+db.cuestionarios.insertOne({
+  IdTarea: 2025,
+  Preguntas: [
+    {
+      Texto: "Los mayas utilizaron un sistema de escritura jeroglífica altamente desarrollado.",
+      Tipo: "verdadero_falso",
+      Opciones: [
+        { Texto: "Verdadero", EsCorrecta: true },
+        { Texto: "Falso", EsCorrecta: false }
+      ]
+    },
+    {
+      Texto: "La cultura mexica se estableció originalmente en la península de Yucatán.",
+      Tipo: "verdadero_falso",
+      Opciones: [
+        { Texto: "Verdadero", EsCorrecta: false },
+        { Texto: "Falso", EsCorrecta: true }
+      ]
+    },
+    {
+      Texto: "Teotihuacán fue una de las ciudades más grandes de Mesoamérica y su origen sigue siendo en gran parte un misterio.",
+      Tipo: "verdadero_falso",
+      Opciones: [
+        { Texto: "Verdadero", EsCorrecta: true },
+        { Texto: "Falso", EsCorrecta: false }
+      ]
+    },
+    {
+      Texto: "Todas las culturas prehispánicas hablaban el mismo idioma.",
+      Tipo: "verdadero_falso",
+      Opciones: [
+        { Texto: "Verdadero", EsCorrecta: false },
+        { Texto: "Falso", EsCorrecta: true }
+      ]
+    },
+    {
+      Texto: "Los olmecas son considerados una de las culturas madre de Mesoamérica.",
+      Tipo: "verdadero_falso",
+      Opciones: [
+        { Texto: "Verdadero", EsCorrecta: true },
+        { Texto: "Falso", EsCorrecta: false }
+      ]
+    }
+  ]
+});
+db.cuestionarios.insertOne({
+  IdTarea: 74,
+  Preguntas: [
+    {
+      Texto: "¿Cuál de los siguientes logros se atribuye a la civilización maya?",
+      Tipo: "opcion_multiple",
+      Opciones: [
+        { Texto: "Construcción de chinampas en lagos", EsCorrecta: false },
+        { Texto: "Uso del calendario solar y lunar con gran precisión", EsCorrecta: true },
+        { Texto: "Domesticación del caballo", EsCorrecta: false },
+        { Texto: "Construcción de pirámides redondas", EsCorrecta: false }
+      ]
+    },
+    {
+      Texto: "Los mayas desaparecieron completamente antes de la llegada de los españoles.",
+      Tipo: "verdadero_falso",
+      Opciones: [
+        { Texto: "Verdadero", EsCorrecta: false },
+        { Texto: "Falso", EsCorrecta: true }
+      ]
+    }
+  ]
+});
+
+
+db.respuestas.insertOne({
+  IdAlumno: 57,
+  IdTarea: 784,
+  Estado: "resuelta",
+  Calificacion: 7.0,
+  Preguntas: [
+    {
+      Texto: "¿Cuál de los siguientes es un principio clave de la Programación Orientada a Objetos?",
+      Opcion: { Texto: "Compilación" },
+      Correcta: false
+    },
+    {
+      Texto: "¿Qué representa una clase en la Programación Orientada a Objetos?",
+      Opcion: { Texto: "Un modelo o plantilla para crear objetos" },
+      Correcta: true
+    },
+    {
+      Texto: "¿Cuál es el propósito principal de la encapsulación?",
+      Opcion: { Texto: "Ocultar detalles internos y proteger los datos" },
+      Correcta: true
+    },
+    {
+      Texto: "¿Qué significa \"polimorfismo\" en el contexto de POO?",
+      Opcion: { Texto: "Capacidad de una función o método de comportarse de diferentes maneras según el contexto" },
+      Correcta: true
+    },
+    {
+      Texto: "¿Qué palabra clave se suele usar para permitir que una clase derive de otra en muchos lenguajes OOP como Java o C#?",
+      Opcion: { Texto: "inherit" },
+      Correcta: false
+    },
+    {
+      Texto: "En la POO, un objeto es una instancia de una clase.",
+      Opcion: { Texto: "Verdadero" },
+      Correcta: true
+    },
+    {
+      Texto: "El polimorfismo impide que se puedan sobrescribir métodos.",
+      Opcion: { Texto: "Falso" },
+      Correcta: true
+    },
+    {
+      Texto: "La herencia múltiple (una clase con más de una superclase) está permitida en Java.",
+      Opcion: { Texto: "falso" },
+      Correcta: true
+    },
+    {
+      Texto: "La encapsulación contribuye a la seguridad del software al restringir el acceso directo a los datos.",
+      Opcion: { Texto: "Verdadero" },
+      Correcta: true
+    },
+    {
+      Texto: "Todos los atributos de una clase deben ser públicos para que otros objetos los usen.",
+      Opcion: { Texto: "Verdadero" },
+      Correcta: false
+    }
+  ]
+});
+db.respuestas.insertOne({
+  IdAlumno: 90,
+  IdTarea: 2025,
+  Estado: "resuelta",
+  Calificacion: 10,
+  Preguntas: [
+    {
+      Texto: "Los mayas utilizaron un sistema de escritura jeroglífica altamente desarrollado",
+      Opcion: { Texto: "Verdadera" },
+      Correcta: true
+    },
+    {
+      Texto: "La cultura mexica se estableció originalmente en la península de Yucatán.",
+      Opcion: { Texto: "Falso" },
+      Correcta: true
+    },
+    {
+      Texto: "Teotihuacán fue una de las ciudades más grandes de Mesoamérica y su origen sigue siendo en gran parte un misterio",
+      Opcion: { Texto: "Verdadero" },
+      Correcta: true
+    },
+    {
+      Texto: "Todas las culturas prehispánicas hablaban el mismo idioma.",
+      Opcion: { Texto: "Falso" },
+      Correcta: true
+    },
+    {
+      Texto: "Los olmecas son considerados una de las culturas madre de Mesoamérica.",
+      Opcion: { Texto: "Verdadero" },
+      Correcta: true
+    }
+  ]
+});
+
+
+
+db.cuestionarios.deleteMany({
+  IdTarea: { $in: [784, 2025, 74, 2026] }
+});
+db.respuestas.deleteMany({
+  IdTarea: { $in: [784, 2025] }
+});

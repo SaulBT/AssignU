@@ -23,7 +23,9 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 public class EditarPerfilController implements IFormulario{
+    @FXML
     private TextField tfNombreCompleto;
+    @FXML
     private TextField tfNombreUsuario;
     @FXML
     private Label lbGrado;
@@ -40,7 +42,7 @@ public class EditarPerfilController implements IFormulario{
         this.sesion = Sesion.getSesion();
         tfNombreCompleto.setText(nombreCompleto);
         tfNombreUsuario.setText(nombreUsuario);
-        if (sesion.esDocente()) {
+        if (!sesion.esDocente()) {
             lbGrado.setText("Grado de Estudios:");
             configurarGradoEstudios(idGrado);
         } else {
@@ -140,11 +142,20 @@ public class EditarPerfilController implements IFormulario{
         boolean bandera = true;
         String mensaje = "";
 
-        if (cbGradoEstudios.getValue() == null || cbGradoProfesional.getValue() == null ) {
-            bandera = false;
-            cbGradoEstudios.setStyle("-fx-border-color: red");
-            cbGradoProfesional.setStyle("-fx-border-color: red");
-            mensajeError = "Selecciona un Grado";
+        if (sesion.esDocente()){
+            if (cbGradoProfesional.getValue() == null ) {
+                bandera = false;
+                cbGradoEstudios.setStyle("-fx-border-color: red");
+                cbGradoProfesional.setStyle("-fx-border-color: red");
+                mensajeError = "Selecciona un Grado";
+            }
+        } else {
+            if (cbGradoEstudios.getValue() == null) {
+                bandera = false;
+                cbGradoEstudios.setStyle("-fx-border-color: red");
+                cbGradoProfesional.setStyle("-fx-border-color: red");
+                mensajeError = "Selecciona un Grado";
+            }
         }
 
         mensaje = Utils.verificarNombreUsuario(tfNombreUsuario.getText(), 45);

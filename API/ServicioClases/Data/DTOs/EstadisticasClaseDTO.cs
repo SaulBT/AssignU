@@ -10,7 +10,7 @@ public class EstadisticasClaseDTO
 public class AlumnoEstadisticasClaseDTO
 {
     public int IdAlumno { get; set; } = 0;
-    public string NombreComeplto { get; set; } = string.Empty;
+    public string NombreCompleto { get; set; } = string.Empty;
     public List<RespuestasEstadisticaClaseDTO> Respuestas { get; set; }
     public DateTime UltimaConexion { get; set; }
 }

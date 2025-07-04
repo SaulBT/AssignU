@@ -31,7 +31,7 @@ public class Utils {
             mensaje = "campo vacío";
         } else if (!verificarTamanioCampo(campo, tamanioMaximo)) {
             mensaje = "no debe sobrepasar de los " + tamanioMaximo + " caracteres";
-        } else if (contieneEspacios(campo)) {
+        } else if (campo.isBlank()) {
             mensaje = "no se permiten espacios";
         } else {
             mensaje = "ok";

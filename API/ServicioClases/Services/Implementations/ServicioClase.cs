@@ -153,7 +153,7 @@ public class ServicioClase : IServicioClase
         return listaClases;
     }
 
-    public async Task<Clase> UnirseAClaseAsync(string codigoClase, HttpContext httpContext)
+    public async Task<ClaseDTO> UnirseAClaseAsync(string codigoClase, HttpContext httpContext)
     {
         _logger.LogInformation("Uniendose a una Clase");
         var claseExistente = await _validacion.VerificarUnirseAClaseAsync(codigoClase, httpContext);
@@ -166,8 +166,17 @@ public class ServicioClase : IServicioClase
         };
 
         await _registroDAO.CrearRegistroAsync(registro);
+
+        ClaseDTO retorno = new ClaseDTO
+        {
+            IdClase = claseExistente.IdClase,
+            NombreClase = claseExistente.Nombre,
+            CodigoClase = claseExistente.Codigo,
+            IdDocente = claseExistente.IdDocente
+        };
+
         _logger.LogInformation($"Alumno con id {idAlumno} registrado en la Clase con id {registro.IdClase}");
-        return claseExistente;
+        return retorno;
     }
 
     public async Task SalirDeClaseAsync(int idAlumno, int idClase, HttpContext httpContext)
@@ -288,7 +297,7 @@ public class ServicioClase : IServicioClase
             var alumnoDto = new AlumnoEstadisticasClaseDTO
             {
                 IdAlumno = alumno.IdAlumno,
-                NombreComeplto = alumno.NombreCompleto,
+                NombreCompleto = alumno.NombreCompleto,
                 Respuestas = listaRespuestas,
                 UltimaConexion = ultimaConexion
             };

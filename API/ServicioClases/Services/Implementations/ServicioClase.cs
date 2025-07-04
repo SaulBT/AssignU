@@ -293,7 +293,7 @@ public class ServicioClase : IServicioClase
         foreach (var alumno in alumnos)
         {
             var listaRespuestas = generarListaRespuestas(respuestas, alumno);
-            var ultimaConexion = obtenerUltimaConexion(registros, alumno.IdAlumno);
+            var ultimaConexion = obtenerUltimaConexionPorIdAlumno(registros, alumno.IdAlumno);
             var alumnoDto = new AlumnoEstadisticasClaseDTO
             {
                 IdAlumno = alumno.IdAlumno,
@@ -346,12 +346,26 @@ public class ServicioClase : IServicioClase
         return listaTareas;
     }
 
-    private DateTime obtenerUltimaConexion(List<Registro> registros, int id)
+    private DateTime obtenerUltimaConexionPorIdAlumno(List<Registro> registros, int idAlumno)
     {
         DateTime ultimaConexion = new DateTime();
         foreach (var registro in registros)
         {
-            if (registro.IdAlumno == id)
+            if (registro.IdAlumno == idAlumno)
+            {
+                ultimaConexion = registro.UltimoInicio ?? default(DateTime);
+            }
+        }
+
+        return ultimaConexion;
+    }
+
+    private DateTime obtenerUltimaConexionPorIdClase(List<Registro> registros, int idClase)
+    {
+        DateTime ultimaConexion = new DateTime();
+        foreach (var registro in registros)
+        {
+            if (registro.IdClase == idClase)
             {
                 ultimaConexion = registro.UltimoInicio ?? default(DateTime);
             }
@@ -366,7 +380,7 @@ public class ServicioClase : IServicioClase
         foreach (var clase in clases)
         {
             int idClase = clase.IdClase;
-            var ultimaConexion = obtenerUltimaConexion(registros, idClase);
+            var ultimaConexion = obtenerUltimaConexionPorIdClase(registros, idClase);
 
             var claseInscrita = new ClaseEstadisticaPerfilDTO
             {
@@ -378,6 +392,7 @@ public class ServicioClase : IServicioClase
             string mensajeJsonTareas = crearMensajeRPC("obtenerTareasYRespuestasDeClase", new List<int>(), idClase);
             var resultadoTareasRespuestas = await enviarMensajeRPCAsync(mensajeJsonTareas, "cola_tareas");
             var tareas = resultadoTareasRespuestas.Tareas;
+            Console.WriteLine($"Tareas obtenidas para la Clase {idClase}: {tareas.Count}");
             var respuestas = resultadoTareasRespuestas.Respuestas;
 
             var listaTareas = generarListaTareas(tareas, respuestas, idAlumno);

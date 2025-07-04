@@ -34,17 +34,17 @@ const validarExistenciaCuestionarioAsync = async (idTarea) => {
 
 const validarIdTarea = (idTarea) => {
     if (idTarea <= 0) {
-        throw new IdInvalidaError("La idTarea es inválida: No puede ser 0 o menor");
+        throw new IdInvalidaError("La idTarea no puede ser 0 o menor");
     } else if (!idTarea) {
-        throw new IdInvalidaError("La idTarea es inválida: Valor nulo")
+        throw new IdInvalidaError("La idTarea es nula")
     }
 }
 
 const validarDatosPreguntas = (preguntas) => {
     if (preguntas == null) {
-        throw new CampoObligatorioError("Las preguntas son inválidas: Valor nulo");
+        throw new CampoObligatorioError("Las preguntas son nulas");
     } else if (!Array.isArray(preguntas)) {
-        throw new ValorInvalidoError("Las preguntas son inválidas: No es array");
+        throw new ValorInvalidoError("Las preguntas no son array");
     }
 }
 
@@ -64,13 +64,13 @@ const validarTipoPregunta = (pregunta, index) => {
     const tipo = pregunta.Tipo;
 
     if(!tipo) {
-        throw new CampoObligatorioError(`El tipo de la pregunta ${index + 1} es inválido: Valor nulo`);
+        throw new CampoObligatorioError(`El tipo de una pregunta es nulo`);
     } else if (typeof tipo !== 'string') {
-        throw new ValorInvalidoError(`El tipo de la pregunta ${index + 1} es inválido: No es string`);
+        throw new ValorInvalidoError(`El tipo de una pregunta no es una cadena`);
     } else if (tipo.trim() === '') {
-        throw new CampoObligatorioError(`El tipo de la pregunta ${index + 1} es inválido: Cadena vacía`);
+        throw new CampoObligatorioError(`El tipo de una pregunta es una cadena vacía`);
     } else if (!tiposValidos.includes(tipo)) {
-        throw new PreguntaInvalidaError(`El tipo de la pregunta ${index + 1} es inválido: Tipo desconocido`);
+        throw new PreguntaInvalidaError(`El tipo de una pregunta es desconocido`);
     }
 }
 
@@ -78,11 +78,11 @@ const validarTextoPregunta = (pregunta, index) => {
     const texto = pregunta.Texto;
 
     if(!texto) {
-        throw new CampoObligatorioError(`El texto de la pregunta ${index + 1} es inválido: Valor nulo`);
+        throw new CampoObligatorioError(`El texto de una pregunta es nulo`);
     } else if (typeof texto !== 'string') {
-        throw new ValorInvalidoError(`El texto de la pregunta ${index + 1} es inválido: No es string`);
+        throw new ValorInvalidoError(`El texto de una pregunta no es una cadena`);
     } else if (texto.trim() === '') {
-        throw new CampoObligatorioError(`El texto de la pregunta ${index + 1} es inválido: Cadena vacía`);
+        throw new CampoObligatorioError(`El texto de una pregunta está vacío`);
     }
 }
 
@@ -90,9 +90,9 @@ const validarCantidadOpciones = (pregunta, index) => {
     const numeroOpciones = pregunta.Opciones.length;
 
     if (numeroOpciones < 2) {
-        throw new PreguntaInvalidaError(`La pregunta ${index + 1} debe tener mínimo dos opciones`);
+        throw new PreguntaInvalidaError(`Todas las preguntas deben tener al menos dos opciones`);
     } else if (numeroOpciones > 4) {
-        throw new PreguntaInvalidaError(`La pregunta ${index + 1} debe tener máximo cuatro opciones`);
+        throw new PreguntaInvalidaError(`Todas las preguntas deben tener como máximo cuatro opciones`);
     }
 }
 

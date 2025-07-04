@@ -140,7 +140,7 @@ app.MapGet("/clases/{idClase}/tareas", async (IServicioTarea servicio, int idCla
 .Produces(404)
 .WithOpenApi();
 
-app.MapGet("/tarea/{idTarea}/estadisticas/", async (IServicioTarea servicio, int idTarea) =>
+app.MapGet("/tareas/{idTarea}/estadisticas/", async (IServicioTarea servicio, int idTarea) =>
 {
     var estadisticas = await servicio.ObtenerEstadisticasTareaAsync(idTarea);
     return Results.Ok(estadisticas);

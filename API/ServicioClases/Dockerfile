@@ -12,5 +12,10 @@ RUN dotnet publish -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
+
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+ENV TZ=America/Mexico_City
+
 COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "ServicioClases.dll"]

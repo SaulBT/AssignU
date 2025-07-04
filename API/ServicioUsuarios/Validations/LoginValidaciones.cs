@@ -49,11 +49,11 @@ public class LoginValidaciones
         var alumno = await _alumnoDAO.ObtenerPorNombreUsuarioOCorreoAsync(usuarioDto.NombreUsuarioOCorreo);
         if (alumno == null)
         {
-            throw new UnauthorizedAccessException("Credenciales incorrectas para el alumno.");
+            throw new UnauthorizedAccessException("No se encontró al alumno.");
         }
         else if (alumno.Contrasenia != usuarioDto.Contrasenia)
         {
-            throw new UnauthorizedAccessException("Credenciales incorrectas para el alumno: contraseña incorrecta");
+            throw new UnauthorizedAccessException("Contraseña incorrecta");
         }
 
         return alumno;
@@ -64,11 +64,11 @@ public class LoginValidaciones
         var docente = await _docenteDAO.ObtenerDocentePorNombreUsuarioOCorreoAsync(usuarioDto.NombreUsuarioOCorreo);
         if (docente == null)
         {
-            throw new UnauthorizedAccessException("Credenciales incorrectas para el docente.");
+            throw new UnauthorizedAccessException("No se encontró al docente.");
         }
         else if (docente.Contrasenia != usuarioDto.Contrasenia)
         {
-            throw new UnauthorizedAccessException("Credenciales incorrectas para el docente: contraseña incorrecta");
+            throw new UnauthorizedAccessException("Contraseña incorrecta");
         }
 
         return docente;

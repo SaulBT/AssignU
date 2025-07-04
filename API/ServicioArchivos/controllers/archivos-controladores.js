@@ -128,7 +128,10 @@ const eliminarArchivoViaRPCAsync = async (data) => {
 
     if (!resultado) {
       return {
-        Success: false
+        Success: false,
+        Error: {
+          Tipo: "ArchivoNoEncontrado",
+        }
       }
     }
     return {

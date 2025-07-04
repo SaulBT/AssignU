@@ -14,10 +14,12 @@ services:
       retries: 5
   
   mysql_usuarios:
-    image: mysql:latest
+    image: imagen_mysql_custom:1.0
     container_name: contenedor_mysql_usuarios
     environment:
-      - MYSQL_ROOT_PASSWORD=admin123
+      MYSQL_ROOT_PASSWORD: admin123
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: sutf8mb4_unicode_ci
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p admin123"]
       interval: 10s
@@ -26,14 +28,17 @@ services:
     volumes:
       - ./ServicioUsuarios/database/usuarios_bd_assignu.sql:/docker-entrypoint-initdb.d/usuarios_db_assignu.sql
       - volumen_mysql_usuarios:/var/lib/mysql
+      - ./mycustom.cnf:/etc/mysql/conf.d/mycustom.cnf:ro
     ports:
       - "3307:3306"
   
   mysql_clases:
-    image: mysql:latest
+    image: imagen_mysql_custom:1.0
     container_name: contenedor_mysql_clases
     environment:
       - MYSQL_ROOT_PASSWORD=admin123
+      - MYSQL_CHARSET=utf8mb4
+      - MYSQL_COLLATION=utf8mb4_unicode_ci
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p admin123"]
       interval: 10s
@@ -46,10 +51,12 @@ services:
       - "3308:3306"
   
   mysql_tareas:
-    image: mysql:latest
+    image: imagen_mysql_custom:1.0
     container_name: contenedor_mysql_tareas
     environment:
       - MYSQL_ROOT_PASSWORD=admin123
+      - MYSQL_CHARSET=utf8mb4
+      - MYSQL_COLLATION=utf8mb4_unicode_ci
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p admin123"]
       interval: 10s
@@ -142,6 +149,12 @@ services:
     ports:
       - "5010:5010"
       - "5011:5011"
+    depends_on:
+      - servicio_usuarios
+      - servicio_clases
+      - servicio_tareas
+      - servicio_cuestionarios
+      - servicio_archivos
 
 volumes:
   volumen_mysql_usuarios:

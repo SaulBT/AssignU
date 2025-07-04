@@ -14,7 +14,7 @@ async function iniciarServidorRpc() {
   const hostDevelopment = 'amqp://localhost';
   const hostProduction = 'amqp://guest:guest@rabbitmq';
   
-  const connection = await amqp.connect(hostProduction);
+  const connection = await amqp.connect(hostProduction); // Cambia a hostDevelopment si estás en desarrollo
   const channel = await connection.createChannel();
 
   const queue = 'cola_cuestionarios';

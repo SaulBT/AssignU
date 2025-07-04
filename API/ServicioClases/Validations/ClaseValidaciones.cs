@@ -121,7 +121,7 @@ public class ClaseValidaciones
     {
         if (idUsuario <= 0)
         {
-            throw new IdInvalidaException("La id del usuario no es válida: idUsuario " + idUsuario);
+            throw new IdInvalidaException($"La id {idUsuario} no es válida");
         }
     }
 
@@ -129,7 +129,7 @@ public class ClaseValidaciones
     {
         if (idClase <= 0)
         {
-            throw new IdInvalidaException($"La id de la clase no es válida: idClase {idClase}");
+            throw new IdInvalidaException($"La id {idClase} no es válida");
         }
     }
 
@@ -181,7 +181,7 @@ public class ClaseValidaciones
     {
         if (idAlumno <= 0)
         {
-            throw new IdInvalidaException($"La id del alumno no es válida: idAlumno: {idAlumno}");
+            throw new IdInvalidaException($"La id {idAlumno} no es válida");
         }
     }
 
@@ -189,7 +189,7 @@ public class ClaseValidaciones
     {
         if (string.IsNullOrWhiteSpace(crearClaseDto.Nombre))
         {
-            throw new CampoObligatorioException("Los datos para crear la clase son inválidos: el nombre es nulo");
+            throw new CampoObligatorioException("El nombre de la clase es nulo");
         }
     }
 
@@ -197,7 +197,7 @@ public class ClaseValidaciones
     {
         if (string.IsNullOrWhiteSpace(actualizarClaseDto.Nombre))
         {
-            throw new CampoObligatorioException("Los datos para actualizar la clase son inválidos: el nombre es nulo");
+            throw new CampoObligatorioException("El nombre de la clase es nulo");
         }
     }
 
@@ -205,16 +205,16 @@ public class ClaseValidaciones
     {
         if (string.IsNullOrWhiteSpace(codigoClase) || codigoClase.Length != 6)
         {
-            throw new ArgumentException("El código de la clase es inválido");
+            throw new CodigoClaseInvalidoException("El código de la clase es inválido");
         }
 
         if (string.IsNullOrWhiteSpace(codigoClase))
         {
-            throw new CampoObligatorioException("El código de la clase no es válido: el código es nulo");
+            throw new CampoObligatorioException("El código de la clase es nulo");
         }
         else if (codigoClase.Length != 6)
         {
-            throw new CodigoClaseInvalidoException($"El código de la clase no es válido: el código es menor a 6 dígitos: {codigoClase}");
+            throw new CodigoClaseInvalidoException($"El código de la clase es menor a 6 dígitos: {codigoClase}");
         }
     }
 

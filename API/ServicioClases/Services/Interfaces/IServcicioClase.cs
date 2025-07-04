@@ -13,7 +13,7 @@ public interface IServicioClase
     Task<List<ClaseDTO>?> ObtenerClasesDeAlumnoAsync(int idAlumno);
     Task<List<ClaseDTO>?> ObtenerClasesDeDocenteAsync(int idDocente);
     Task EnviarFechaVisualizacionAsync(int idClase, DateTime fechaVisualizacion, HttpContext httpContext);
-    Task<Clase> UnirseAClaseAsync(string codigoClase, HttpContext httpContext);
+    Task<ClaseDTO> UnirseAClaseAsync(string codigoClase, HttpContext httpContext);
     Task SalirDeClaseAsync(int idAlumno, int idClase, HttpContext httpContext);
     Task<Registro> ObtenerRegistroAlumno(int idAlumno, int idClase, HttpContext httpContext);
     Task<EstadisticasClaseDTO> ObtenerEstadisticasDeLaClase(int idClase);

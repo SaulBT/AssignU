@@ -23,6 +23,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 public class ClaseController {
     @FXML
@@ -84,7 +85,7 @@ public class ClaseController {
             fpContenedorTareas.getChildren().clear();
             for (TareaDTO tarea : listaTareas) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Clase/tarjetaTarea.fxml"));
-                StackPane tarjeta = loader.load();
+                VBox tarjeta = loader.load();
                 TarjetaTareaController controller = loader.getController();
                 controller.cargarTarea(sesion.esDocente(), tarea);
                 fpContenedorTareas.getChildren().add(tarjeta);
@@ -121,16 +122,18 @@ public class ClaseController {
                 HashMap<String, Object> respuesta = ServicioClases.borrarClase(claseDto.idClase, claseDto.nombreClase);
                 if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
                     Utils.mostrarAlerta("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+                    cerrarVentana();
                 } else {
                     Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
                 }
             }
         } else {
-            if(Utils.mostrarAlertaConfirmacion("Salir de Clase", "¿Está seguro de que salir de la clase " 
+            if(Utils.mostrarAlertaConfirmacion("Salir de Clase", "¿Está seguro de que desea salir de la clase "
                     + claseDto.nombreClase + "?\nSus datos se borrarán permanentemente.")){
                 HashMap<String, Object> respuesta = ServicioClases.salirDeClase(claseDto.idClase, claseDto.nombreClase);
                 if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
                     Utils.mostrarAlerta("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+                    cerrarVentana();
                 } else {
                     Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
                 }
@@ -153,26 +156,30 @@ public class ClaseController {
 
     @FXML
     public void btnLbVerEstadisticas(MouseEvent mouseEvent) {
-        /*if(sesion.esDocente()){
+        if(sesion.esDocente()){
             Navegador.cambiarVentana(
                 lbNombreClase.getScene(),
                 "/views/Clase/estadisticasClase.fxml",
                 "Estadísticas Clase",
-                controller -> ((EstadisticasClaseController) controller).cargarValores()
+                controller -> ((EstadisticasClaseController) controller).cargarValores(this.claseDto)
             );
         } else {
             Utils.mostrarAlerta("Advertencia", "No estás autorizado para cambiar el nombre de la clase.", Alert.AlertType.WARNING);
-        }*/
+        }
     }
     
     // U S U A R I O
     @FXML
     public void btnLbVolver(MouseEvent mouseEvent) {
+        cerrarVentana();
+    }
+
+    public void cerrarVentana() {
         Navegador.cambiarVentana(
-            lbNombreClase.getScene(),
-            "/views/Menu/menu.fxml",
-            "Clases",
-            controller -> ((MenuController) controller).cargarValores()
+                lbNombreClase.getScene(),
+                "/views/Menu/menu.fxml",
+                "Clases",
+                controller -> ((MenuController) controller).cargarValores()
         );
     }
 }

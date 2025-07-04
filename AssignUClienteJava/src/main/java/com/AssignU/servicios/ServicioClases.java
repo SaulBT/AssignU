@@ -342,7 +342,7 @@ public class ServicioClases {
         
         try {
             EstadisticasClaseDTO respuesta = ApiCliente.enviarSolicitud(endpoint, 
-                    "POST", 
+                    "GET",
                     null, 
                     null, 
                     EstadisticasClaseDTO.class);

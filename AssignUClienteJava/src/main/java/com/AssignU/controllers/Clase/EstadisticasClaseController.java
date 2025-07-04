@@ -7,7 +7,11 @@ import com.AssignU.servicios.ServicioClases;
 import com.AssignU.utils.Constantes;
 import com.AssignU.utils.Navegador;
 import com.AssignU.utils.Utils;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -42,6 +46,7 @@ public class EstadisticasClaseController {
     
     public void cargarValores(ClaseDTO claseDto){
         this.claseDto = claseDto;
+        obtenerEstadisticasClase();
     }
     
     public void obtenerEstadisticasClase(){
@@ -61,12 +66,13 @@ public class EstadisticasClaseController {
         lbNumeroAlumnos.setText("" + numeroAlumnos);
         int numeroTareas = estadisticasClase.tareas.size();
         lbNumeroTareas.setText("" + numeroTareas);
-        configurarEstadisticasTabla(estadisticasClase);
+        configurarEstadisticasTabla(estadisticasClase, numeroAlumnos);
     }
     
-    public void configurarEstadisticasTabla(EstadisticasClaseDTO estadisticasClase){
-        tcAlumno.setCellValueFactory(cellData -> 
-            new SimpleStringProperty(cellData.getValue().getNombreCompleto())
+    public void configurarEstadisticasTabla(EstadisticasClaseDTO estadisticasClase, int numeroAlumnos){
+
+        tcAlumno.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getNombreCompleto())
         );
 
         tcUltimaConexion.setCellValueFactory(cellData -> 

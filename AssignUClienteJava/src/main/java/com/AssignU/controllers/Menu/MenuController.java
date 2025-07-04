@@ -4,6 +4,7 @@ import com.AssignU.controllers.Clase.ClaseController;
 import com.AssignU.controllers.Clase.CrearUnirseAClaseController;
 import com.AssignU.controllers.Perfil.PerfilController;
 import com.AssignU.models.Clases.ClaseDTO;
+import com.AssignU.models.Usuarios.Docente.DocenteDTO;
 import com.AssignU.models.Usuarios.Sesion;
 import com.AssignU.servicios.ServicioClases;
 import com.AssignU.servicios.usuarios.ServicioDocentes;
@@ -63,7 +64,8 @@ public class MenuController {
                 } else {
                     HashMap<String, Object> respuesta = ServicioDocentes.obtenerNombreDocente(clase.idDocente);
                     if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
-                        controller.cargarDatos(clase, (String) respuesta.get(Constantes.KEY_MENSAJE));
+                        String nombreDocente = (String) respuesta.get(Constantes.KEY_RESPUESTA);
+                        controller.cargarDatos(clase, nombreDocente);
                     } else {
                         Utils.mostrarAlerta("Error", 
                                 "Ocurrió un error obteniendo al docente: " + (String) respuesta.get(Constantes.KEY_MENSAJE), 

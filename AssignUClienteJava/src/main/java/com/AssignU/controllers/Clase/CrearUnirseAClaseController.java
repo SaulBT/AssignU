@@ -36,7 +36,7 @@ public class CrearUnirseAClaseController implements IFormulario{
         this.menuController = menuController;
         this.sesion = Sesion.getSesion();
         this.mensajeError = "";
-        if (sesion.esDocente()) {
+        if (!sesion.esDocente()) {
             cargarVentanaAlumno();
         } else {
             cargarVentanaDocente();

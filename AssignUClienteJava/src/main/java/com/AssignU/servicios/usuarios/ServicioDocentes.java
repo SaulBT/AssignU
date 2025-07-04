@@ -130,7 +130,7 @@ public class ServicioDocentes {
         headers.put("Authorization", "Bearer " + sesion.getJwt());
 
         try {
-            ActualizarDocenteDTO actualizarDocenteDto = new ActualizarDocenteDTO(nombreCompleto, nombreUsuario, idGrado);
+            ActualizarDocenteDTO actualizarDocenteDto = new ActualizarDocenteDTO(nombreUsuario, nombreCompleto, idGrado);
             
             ApiCliente.enviarSolicitud(endpoint, 
                     "PUT", 

@@ -14,7 +14,9 @@ import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 
 public class CambiarContraseniaController implements IFormulario{
+    @FXML
     private PasswordField pfContraseniaNueva;
+    @FXML
     private PasswordField pfContraseniaActual;
     private String mensajeError;
     private Sesion sesion;

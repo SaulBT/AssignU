@@ -5,24 +5,24 @@ import com.AssignU.models.Cuestionarios.CuestionarioDTO;
 import java.time.LocalDateTime;
 
 public class EditarTareaDTO {
-    public int idClase;
+    public int idTarea;
     public String nombre;
     public LocalDateTime fechaLimite;
-    public CuestionarioDTO cuestionarioDto;
+    public CuestionarioDTO Cuestionario;
 
-    public EditarTareaDTO(int idClase, String nombre, LocalDateTime fechaLimite, CuestionarioDTO cuestionarioDto) {
-        this.idClase = idClase;
+    public EditarTareaDTO(int idTarea, String nombre, LocalDateTime fechaLimite, CuestionarioDTO Cuestionario) {
+        this.idTarea = idTarea;
         this.nombre = nombre;
         this.fechaLimite = fechaLimite;
-        this.cuestionarioDto = cuestionarioDto;
+        this.Cuestionario = Cuestionario;
     }
 
-    public int getIdClase() {
-        return idClase;
+    public int getIdTarea() {
+        return idTarea;
     }
 
-    public void setIdClase(int idClase) {
-        this.idClase = idClase;
+    public void setIdTarea(int idTarea) {
+        this.idTarea = idTarea;
     }
 
     public String getNombre() {
@@ -41,11 +41,11 @@ public class EditarTareaDTO {
         this.fechaLimite = fechaLimite;
     }
 
-    public CuestionarioDTO getCuestionarioDto() {
-        return cuestionarioDto;
+    public CuestionarioDTO getCuestionario() {
+        return Cuestionario;
     }
 
-    public void setCuestionarioDto(CuestionarioDTO cuestionarioDto) {
-        this.cuestionarioDto = cuestionarioDto;
+    public void setCuestionario(CuestionarioDTO cuestionario) {
+        this.Cuestionario = cuestionario;
     }
 }

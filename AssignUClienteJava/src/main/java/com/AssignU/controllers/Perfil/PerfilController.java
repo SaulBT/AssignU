@@ -81,7 +81,7 @@ public class PerfilController{
             }
         });
         tcNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        tcCalificacion.setCellValueFactory(new PropertyValueFactory<>("calificacion"));
+        tcCalificacion.setCellValueFactory(new PropertyValueFactory<>("Calificacion"));
         tcCalificacion.setCellFactory(columna -> new TableCell<TareaEstadisticaPerfilDTO, Integer>() {
             @Override
             protected void updateItem(Integer calificacion, boolean empty) {
@@ -170,7 +170,7 @@ public class PerfilController{
             lbPromedio.setText("N/A");
             return;
         }
-        double promedio = tareas.stream().mapToInt(TareaEstadisticaPerfilDTO::getCalificacion).average().orElse(0);
+        double promedio = tareas.stream().mapToDouble(TareaEstadisticaPerfilDTO::getCalificacion).average().orElse(0);
         lbPromedio.setText(String.format("%.2f", promedio));
     }
     

@@ -2,37 +2,37 @@
 package com.AssignU.models.Cuestionarios;
 
 public class PreguntaRespuestaDTO {
-    public String texto;
-    public OpcionRespuestaDTO opcion;
-    public boolean correcta;
+    public String Texto;
+    public OpcionRespuestaDTO Opcion;
+    public boolean Correcta;
 
     public PreguntaRespuestaDTO(String texto, OpcionRespuestaDTO opcion, boolean correcta) {
-        this.texto = texto;
-        this.opcion = opcion;
-        this.correcta = correcta;
+        this.Texto = texto;
+        this.Opcion = opcion;
+        this.Correcta = correcta;
     }
 
     public String getTexto() {
-        return texto;
+        return Texto;
     }
 
     public void setTexto(String texto) {
-        this.texto = texto;
+        this.Texto = texto;
     }
 
     public OpcionRespuestaDTO getOpcion() {
-        return opcion;
+        return Opcion;
     }
 
     public void setOpcion(OpcionRespuestaDTO opcion) {
-        this.opcion = opcion;
+        this.Opcion = opcion;
     }
 
     public boolean isCorrecta() {
-        return correcta;
+        return Correcta;
     }
 
     public void setCorrecta(boolean correcta) {
-        this.correcta = correcta;
+        this.Correcta = correcta;
     }
 }

@@ -20,6 +20,7 @@ public class ServicioTareas {
         Sesion sesion = Sesion.getSesion();
 
         Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
         headers.put("Authorization", "Bearer " + sesion.getJwt());
 
         try {
@@ -55,6 +56,7 @@ public class ServicioTareas {
         Sesion sesion = Sesion.getSesion();
 
         Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
         headers.put("Authorization", "Bearer " + sesion.getJwt());
         
         String endpoint = "/tareas/tareas/" + idTarea;
@@ -93,7 +95,7 @@ public class ServicioTareas {
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + sesion.getJwt());
         
-        String endpoint = "/tareas/" + idTarea;
+        String endpoint = "/tareas/tareas/" + idTarea;
         
         try {
             ApiCliente.enviarSolicitud(endpoint, 

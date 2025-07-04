@@ -2,8 +2,10 @@
 package com.AssignU.controllers.Tarea;
 
 import com.AssignU.controllers.Tarea.CrearTareaController;
+import com.AssignU.servicios.ServicioArchivos;
 import com.AssignU.utils.Utils;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -27,37 +29,53 @@ public class CargarArchivoController {
     private Button btnDescargar;
     
     private String nombreArchivoPath;
+    private String tipoArchivo = "";
     private CrearTareaController controladorPadre;
+    private ServicioArchivos servicioArchivos = new ServicioArchivos();
+    private boolean esEdicion = false;
+    private int idTarea = 0;
     
-    public void cargarValores(String nombreArchivoPath, boolean esEdicion, CrearTareaController controladorPadre){
+    public void cargarValores(String nombreArchivoPath, boolean esEdicion, int idTarea, CrearTareaController controladorPadre){
         this.nombreArchivoPath = nombreArchivoPath;
         this.controladorPadre = controladorPadre;
-        btnDescargar.setDisable(!esEdicion);
-        btnDescargar.setVisible(esEdicion);
+        this.esEdicion = esEdicion;
+        configurarEdicion(idTarea);
         lbTextoArchivo.setText(Utils.obtenerNombreArchivo(nombreArchivoPath));
-        cargarImagen(Utils.obtenerNombreArchivo(nombreArchivoPath));
+    }
+
+    public void configurarEdicion(int idTarea){
+        if (esEdicion){
+            this.idTarea = idTarea;
+            btnDescargar.setVisible(true);
+            btnDescargar.setDisable(false);
+            cargarImagen(Utils.obtenerNombreArchivo(nombreArchivoPath));
+        } else {
+            btnDescargar.setVisible(false);
+            btnDescargar.setDisable(true);
+        }
     }
     
     private void cargarImagen(String nombreArchivo){
         Image imagen;
-        switch(obtenerExtensionArchivo(nombreArchivo)){
+        obtenerExtensionArchivo(nombreArchivo);
+        switch(tipoArchivo){
             case "doc":
-                imagen = new Image(getClass().getResource("/Resources/recursos/DOC File Icon.png").toString());
+                imagen = new Image(getClass().getResource("/recursos/DOC File Icon.png").toString());
                 ivArchivo.setImage(imagen);
                 lbTextoArchivo.setText(nombreArchivo);
                 break;
             case "docx":
-                imagen = new Image(getClass().getResource("/Resources/recursos/DOCX File Icon.png").toString());
+                imagen = new Image(getClass().getResource("/recursos/DOCX File Icon.png").toString());
                 ivArchivo.setImage(imagen);
                 lbTextoArchivo.setText(nombreArchivo);
                 break;
             case "pdf":
-                imagen = new Image(getClass().getResource("/Resources/recursos/PDF File Icon.png").toString());
+                imagen = new Image(getClass().getResource("/recursos/PDF File Icon.png").toString());
                 ivArchivo.setImage(imagen);
                 lbTextoArchivo.setText(nombreArchivo);
                 break;
             case "":
-                imagen = new Image(getClass().getResource("/Resources/recursos/Upload File Icon.png").toString());
+                imagen = new Image(getClass().getResource("/recursos/Upload File Icon.png").toString());
                 ivArchivo.setImage(imagen);
                 break;
             default:
@@ -66,22 +84,22 @@ public class CargarArchivoController {
         }
     }
     
-    public String obtenerExtensionArchivo(String nombreArchivo){
+    public void obtenerExtensionArchivo(String nombreArchivo){
         if(nombreArchivo == null || nombreArchivo.isEmpty()){
-            return "";
+            tipoArchivo = "";
         }
         int posicionUltimoPunto = nombreArchivo.lastIndexOf(".");
         if(posicionUltimoPunto == -1 || posicionUltimoPunto == nombreArchivo.length() -1){
-            return "";
+            tipoArchivo = "";
         }
-        return nombreArchivo.substring(posicionUltimoPunto + 1);
+        tipoArchivo = nombreArchivo.substring(posicionUltimoPunto + 1);
     }
 
     @FXML
     private void btnClicSubir(ActionEvent event) {
         FileChooser dialogoSeleccion = new FileChooser();
         dialogoSeleccion.setTitle("Seleccionar Archivo");
-        String etiquetaTipoDato = "Archivos de texto(*.pdf, *.doc, *.docx)";
+        String etiquetaTipoDato = "Archivos de Texto(*.pdf, *.doc, *.docx)";
         FileChooser.ExtensionFilter filtroDocumentos = new FileChooser.ExtensionFilter(etiquetaTipoDato, "*.pdf", "*.doc", "*.docx");
         dialogoSeleccion.getExtensionFilters().add(filtroDocumentos);
         
@@ -97,8 +115,12 @@ public class CargarArchivoController {
 
     @FXML
     private void btnClicDescargar(ActionEvent event) {
-        //pendiente
-        //Llamar servicio o guardar archivo que ya tenía?
+        try {
+            servicioArchivos.descargarArchivo(idTarea, "downloads/" + nombreArchivoPath);
+        } catch (IOException e) {
+            Utils.mostrarAlerta("Descarga fallida", "No se pudo descargar el archivo", Alert.AlertType.ERROR);
+        }
+
     }
 
     @FXML
@@ -108,6 +130,8 @@ public class CargarArchivoController {
 
     private void cerrarVentana() {
         controladorPadre.setPathArchivo(nombreArchivoPath);
+        controladorPadre.setTipoArchivo(tipoArchivo);
+        System.out.println("Tipo: " + tipoArchivo);
         Stage stage = (Stage) lbTextoArchivo.getScene().getWindow();
         stage.close();
     }

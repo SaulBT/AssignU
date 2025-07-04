@@ -7,6 +7,7 @@ import com.AssignU.models.Cuestionarios.PreguntaDTO;
 import com.AssignU.models.Tareas.CrearTareaDTO;
 import com.AssignU.models.Tareas.EditarTareaDTO;
 import com.AssignU.models.Tareas.TareaDTO;
+import com.AssignU.servicios.ServicioArchivos;
 import com.AssignU.servicios.ServicioClases;
 import com.AssignU.servicios.ServicioCuestionarios;
 import com.AssignU.servicios.ServicioTareas;
@@ -20,6 +21,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -35,7 +38,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class CrearTareaController implements IFormulario{
@@ -45,6 +47,8 @@ public class CrearTareaController implements IFormulario{
     public DatePicker dpFechaLimite;
     @FXML
     public Label lbNombreArchivo;
+    @FXML
+    public Label lbTituloVentana;
     @FXML
     private Button btnCancelar;
     @FXML
@@ -59,13 +63,17 @@ public class CrearTareaController implements IFormulario{
     
     private boolean esEdicion;
     private String nombreArchivoPath;
+    private String tipoArchivo;
     private TareaDTO tareaDto;
+    private ServicioArchivos servicioArchivos = new ServicioArchivos();
 
     // C R E A C I Ó N
     public void cargarValores(int idClase){
         this.tareaDto = null;
         this.idClase = idClase;
         this.esEdicion = false;
+        lbTituloVentana.setText("Crear Tarea");
+        btnAceptar.setText("Crear");
         this.nombreArchivoPath = ""; 
         lbNombreArchivo.setText("Ningún archivo seleccionado");
         btnAceptar.setText("Crear");
@@ -80,10 +88,12 @@ public class CrearTareaController implements IFormulario{
         LocalDateTime fecha = fechaDatePicker.plusDays(1).atStartOfDay().minusNanos(1);
         List<PreguntaDTO> preguntas = new ArrayList<>();
         for (int i = 0; i < listaControladoresPreguntas.size(); i++) {
-            TarjetaCrearPreguntaController controlador = listaControladoresPreguntas.get(i);
+            TarjetaCrearPreguntaController[] preguntasArray = listaControladoresPreguntas.toArray(new TarjetaCrearPreguntaController[0]);
+            TarjetaCrearPreguntaController controlador = preguntasArray[i];
             PreguntaDTO pregunta = controlador.obtenerInformacionPregunta();
             preguntas.add(pregunta);
         }
+        System.out.println("Preguntas: " + preguntas.size());
         CuestionarioDTO cuestionario = new CuestionarioDTO(1, preguntas);
         CrearTareaDTO tarea = new CrearTareaDTO(idClase, tfNombreTarea.getText(), fecha,cuestionario);
         return tarea;
@@ -91,9 +101,16 @@ public class CrearTareaController implements IFormulario{
     
     public void crearTarea(){
         HashMap<String, Object> respuesta = ServicioTareas.crearTarea(obtenerTarea());
-        //llamar a servicio archivos? enviar nombreArchivoPath
+
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
             TareaDTO tarea = (TareaDTO) respuesta.get(Constantes.KEY_RESPUESTA);
+            try {
+                System.out.println("Tipo en controlador: " + tipoArchivo);
+                servicioArchivos.cargarArchivo(nombreArchivoPath,tarea.getIdTarea(),tipoArchivo);
+            } catch (IOException ex) {
+                Utils.mostrarAlerta("Error", "Fallo al subir el archivo", Alert.AlertType.ERROR);
+            }
+
             Utils.mostrarAlerta("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
             volverAClase();
         } else {
@@ -106,17 +123,26 @@ public class CrearTareaController implements IFormulario{
         this.tareaDto = tarea;
         this.idClase = tarea.idClase;
         this.esEdicion = true;
+        lbTituloVentana.setText("Editar Tarea");
+        btnAceptar.setText("Editar");
+        this.tfNombreTarea.setText(tarea.getNombre());
         listaControladoresPreguntas  = new ArrayList<>();
         configurarDatePicker();
         LocalDateTime fechaLimite = tarea.fechaLimite;
         LocalDate fechaDatePicker = fechaLimite.toLocalDate();
         dpFechaLimite.setValue(fechaDatePicker);
-        //this.nombreArchivoPath = obtenerNombreArchivo; SERVICIO ARCHIVOS
-        //lbNombreArchivo.setText(nombreArchivoPath)
+
+        servicioArchivos.obtenerMetadatos(tarea.getIdTarea(), nombre -> {
+            nombreArchivoPath = nombre;
+            Platform.runLater(() -> {
+                lbNombreArchivo.setText(nombre);
+            });
+        });
+
         HashMap<String, Object> respuesta = ServicioCuestionarios.obtenerCuestionario(tarea.idTarea);
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
             CuestionarioDTO cuestionario = (CuestionarioDTO) respuesta.get(Constantes.KEY_RESPUESTA);
-            desplegarPreguntas(cuestionario.preguntas);
+            desplegarPreguntas(cuestionario.Preguntas);
         } else {
             Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
@@ -154,12 +180,27 @@ public class CrearTareaController implements IFormulario{
             preguntas.add(pregunta);
         }
         CuestionarioDTO cuestionario = new CuestionarioDTO(1, preguntas);
-        EditarTareaDTO tareaEdicion = new EditarTareaDTO(idClase, tfNombreTarea.getText(), fecha,cuestionario);
+        EditarTareaDTO tareaEdicion = new EditarTareaDTO(tareaDto.idTarea, tfNombreTarea.getText(), fecha,cuestionario);
         return tareaEdicion;
     }
     
     public void guardarTarea(){
         HashMap<String, Object> respuesta = ServicioTareas.editarTarea(obtenerTareaEdicion(), tareaDto.idTarea);
+        boolean noHuboCambios = lbNombreArchivo.getText().equals(Utils.obtenerNombreArchivo(nombreArchivoPath));
+        System.out.println("¿Hubo cambios? " + noHuboCambios);
+        if (noHuboCambios) {
+            servicioArchivos.eliminarArchivo(tareaDto.getIdTarea(), listo -> {
+                if (listo) {
+                    try {
+                        System.out.println("Tipo en controlador: " + tipoArchivo);
+                        servicioArchivos.cargarArchivo(nombreArchivoPath,tareaDto.getIdTarea(),tipoArchivo);
+                    } catch (IOException ex) {
+                        Utils.mostrarAlerta("Error", "Fallo al subir el archivo", Alert.AlertType.ERROR);
+                    }
+                }
+            });
+
+        }
         //Si nombreArchivoPath cambió...
         //llamar a servicio archivos? enviar nombreArchivoPath
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
@@ -182,7 +223,7 @@ public class CrearTareaController implements IFormulario{
                     crearTarea();
                 }
             } else {
-                Utils.mostrarAlerta("Selección Vacía", "Seleccione al menos una respuesta correcta por pregunta.", Alert.AlertType.ERROR);
+                Utils.mostrarAlerta("Selección Vacía", "Seleccione al menos una respuesta Correcta por pregunta.", Alert.AlertType.ERROR);
             }
         } else {
             Utils.mostrarAlerta("Campos Vacíos", "Favor de llenar todos los campos.", Alert.AlertType.ERROR);
@@ -212,19 +253,37 @@ public class CrearTareaController implements IFormulario{
     
     @FXML
     public void btnSeleccionarArchivo(ActionEvent actionEvent) {
-        Navegador.abrirVentanaModal(
-            "/views/Tarea/cargarArchivo.fxml", 
-            "Cargar Archivos", 
-            controller -> ((CargarArchivoController) controller).cargarValores(
-                    lbNombreArchivo.getText(), 
-                    esEdicion,
-                    this)
-        );
+        if (esEdicion) {
+            Navegador.abrirVentanaModal(
+                    "/views/Tarea/cargarArchivo.fxml",
+                    "Cargar Archivos",
+                    controller -> ((CargarArchivoController) controller).cargarValores(
+                            lbNombreArchivo.getText(),
+                            esEdicion,
+                            tareaDto.getIdTarea(),
+                            this)
+            );
+        } else {
+            Navegador.abrirVentanaModal(
+                    "/views/Tarea/cargarArchivo.fxml",
+                    "Cargar Archivos",
+                    controller -> ((CargarArchivoController) controller).cargarValores(
+                            lbNombreArchivo.getText(),
+                            esEdicion,
+                            0,
+                            this)
+            );
+        }
+
     }
     
     public void setPathArchivo(String pathArchivo){
         nombreArchivoPath = pathArchivo;
         lbNombreArchivo.setText(Utils.obtenerNombreArchivo(pathArchivo));
+    }
+
+    public void setTipoArchivo(String tipoArchivo) {
+        this.tipoArchivo = tipoArchivo;
     }
 
     @FXML
@@ -265,15 +324,14 @@ public class CrearTareaController implements IFormulario{
         }
         
         boolean esNombreVacio = lbNombreArchivo.getText().equals("Ningún archivo seleccionado");
-        boolean noHuboCambios = lbNombreArchivo.getText().equals(Utils.obtenerNombreArchivo(nombreArchivoPath));
-        if (esNombreVacio || (!esEdicion && noHuboCambios)) {
+        if (esNombreVacio) {
             lbNombreArchivo.setStyle("-fx-border-color: red");
             error = false;
         }
         
         for (int i = 0; i < listaControladoresPreguntas.size(); i++) {
             TarjetaCrearPreguntaController controlador = listaControladoresPreguntas.get(i);
-            if(controlador.verificarCampos()){
+            if(!controlador.verificarCampos()){
                 return false;
             }
         }
@@ -290,7 +348,7 @@ public class CrearTareaController implements IFormulario{
     private boolean verificarSeleccionRespuestas(){
         for (int i = 0; i < listaControladoresPreguntas.size(); i++) {
             TarjetaCrearPreguntaController controlador = listaControladoresPreguntas.get(i);
-            if(controlador.verificarRespuestaSeleccionada()){
+            if(!controlador.verificarRespuestaSeleccionada()){
                 return false;
             }
         }

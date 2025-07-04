@@ -73,13 +73,13 @@ public class TarjetaCrearPreguntaController implements IFormulario{
     
     public void cargarPregunta(PreguntaDTO pregunta, CrearTareaController controladorPadre){
         this.controladorPadre = controladorPadre;
-        tfTextoPregunta.setText(pregunta.texto);
-        if(pregunta.tipo.equals("verdadero_falso")){
-            llenarPreguntaVerdaderoFalso(pregunta.opciones);
+        tfTextoPregunta.setText(pregunta.Texto);
+        if(pregunta.Tipo.equals("verdadero_falso")){
+            llenarPreguntaVerdaderoFalso(pregunta.Opciones);
             this.tipoPregunta = 2;
-        } else if(pregunta.tipo.equals("opcion_multiple")){
+        } else if(pregunta.Tipo.equals("opcion_multiple")){
             this.tipoPregunta = 1;
-            llenarPreguntaOpcionMultiple(pregunta.opciones);
+            llenarPreguntaOpcionMultiple(pregunta.Opciones);
         }
     }
     

@@ -4,26 +4,26 @@ package com.AssignU.models.Cuestionarios;
 import java.util.List;
 
 public class RespuestaDTO {
-    public int idAlumno;
+    public int IdAlumno;
     public int idTarea;
-    public String estado;
-    public float calificacion;
-    public List<PreguntaRespuestaDTO> preguntas;
+    public String Estado;
+    public float Calificacion;
+    public List<PreguntaRespuestaDTO> Preguntas;
 
     public RespuestaDTO(int idAlumno, int idTarea, String estado, float calificacion, List<PreguntaRespuestaDTO> preguntas) {
-        this.idAlumno = idAlumno;
+        this.IdAlumno = idAlumno;
         this.idTarea = idTarea;
-        this.estado = estado;
-        this.calificacion = calificacion;
-        this.preguntas = preguntas;
+        this.Estado = estado;
+        this.Calificacion = calificacion;
+        this.Preguntas = preguntas;
     }
 
     public int getIdAlumno() {
-        return idAlumno;
+        return IdAlumno;
     }
 
     public void setIdAlumno(int idAlumno) {
-        this.idAlumno = idAlumno;
+        this.IdAlumno = idAlumno;
     }
 
     public int getIdTarea() {
@@ -35,26 +35,26 @@ public class RespuestaDTO {
     }
 
     public String getEstado() {
-        return estado;
+        return Estado;
     }
 
     public void setEstado(String estado) {
-        this.estado = estado;
+        this.Estado = estado;
     }
 
     public float getCalificacion() {
-        return calificacion;
+        return Calificacion;
     }
 
     public void setCalificacion(float calificacion) {
-        this.calificacion = calificacion;
+        this.Calificacion = calificacion;
     }
 
     public List<PreguntaRespuestaDTO> getPreguntas() {
-        return preguntas;
+        return Preguntas;
     }
 
     public void setPreguntas(List<PreguntaRespuestaDTO> preguntas) {
-        this.preguntas = preguntas;
+        this.Preguntas = preguntas;
     }
 }

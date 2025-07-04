@@ -8,6 +8,7 @@ import com.AssignU.models.Cuestionarios.PreguntaRespuestaDTO;
 import com.AssignU.models.Cuestionarios.RespuestaDTO;
 import com.AssignU.models.Tareas.TareaDTO;
 import com.AssignU.models.Usuarios.Sesion;
+import com.AssignU.servicios.ServicioArchivos;
 import com.AssignU.servicios.ServicioClases;
 import com.AssignU.servicios.ServicioCuestionarios;
 import com.AssignU.utils.Constantes;
@@ -19,6 +20,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,15 +50,22 @@ public class TareaController{
     private Label lbTextoCalificacion;
     @FXML
     private Label lbCalificacion;
+
+    private RespuestaDTO respuestaAlumno;
+    private ServicioArchivos servicioArchivos = new ServicioArchivos();
     
     public void cargarValores(int idClase, TareaDTO tarea){
+        System.out.println("idClase: " + idClase);
         this.idClase = idClase;
         this.tareaDto = tarea;
         lbNombreTarea.setText(tarea.nombre);
         lbFechaLimite.setText(tarea.fechaLimite.toString());
         listaControladoresPreguntas  = new ArrayList<>();
-        //Obtener nombre archivo
-        //lbNombreArchivo.setText(nombre del archivo);
+        servicioArchivos.obtenerMetadatos(tarea.getIdTarea(), nombre -> {
+            Platform.runLater(() -> {
+                lbNombreArchivo.setText(nombre);
+            });
+        });
         cargarPreguntas(tarea);
     }
     
@@ -68,11 +78,11 @@ public class TareaController{
             return;
         }
         CuestionarioDTO cuestionario = (CuestionarioDTO) respuestaCuestionario.get(Constantes.KEY_RESPUESTA);
-        desplegarPreguntas(cuestionario.preguntas);
+        desplegarPreguntas(cuestionario.Preguntas);
         
         HashMap<String, Object> respuestaAlumnoRaw = ServicioCuestionarios.obtenerRespuestaAlumno(tarea.getIdTarea());
         if (!(boolean) respuestaAlumnoRaw.get(Constantes.KEY_ERROR)) {
-            RespuestaDTO respuestaAlumno = (RespuestaDTO) respuestaAlumnoRaw.get(Constantes.KEY_RESPUESTA);
+            this.respuestaAlumno = (RespuestaDTO) respuestaAlumnoRaw.get(Constantes.KEY_RESPUESTA);
             
             for (TarjetaPreguntaController controller : listaControladoresPreguntas) {
                 String textoPregunta = controller.lbTextoPregunta.getText();
@@ -144,7 +154,11 @@ public class TareaController{
 
     @FXML
     public void btnDescargar(ActionEvent actionEvent) {
-        //llamar descargar archivo
+        try {
+            servicioArchivos.descargarArchivo(tareaDto.idTarea, "downloads/" + lbNombreArchivo.getText());
+        } catch (IOException e) {
+            Utils.mostrarAlerta("Descarga fallida", "No se pudo descargar el archivo", Alert.AlertType.ERROR);
+        }
     }
 
     @FXML
@@ -152,7 +166,7 @@ public class TareaController{
         if(verificarCampos()){
             calificarCuestionario();
         } else {
-            Utils.mostrarAlerta("Respuesta Vacía", "Favor de responder todas las preguntas.", Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Respuesta Vacía", "Favor de responder todas las Preguntas.", Alert.AlertType.ERROR);
         }
     }
     
@@ -160,7 +174,7 @@ public class TareaController{
         HashMap<String, Object> respuesta = ServicioCuestionarios.calificarCuestionario(tareaDto.idTarea, obtenerRespuestaAlumno());
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
             Utils.mostrarAlerta("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
-            volverAClase();
+            cerrarVentana();
         } else {
             Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
@@ -188,32 +202,28 @@ public class TareaController{
 
     @FXML
     public void btnLbVolver(MouseEvent mouseEvent) {
-        if(Utils.mostrarAlertaConfirmacion("Volver", "¿Está seguro de que desea volver?\n Se guardará su progreso.")){
-            guardarProgresoCuestionario();
-            volverAClase();
-        }
-    }
-
-    private void volverAClase() {
-        HashMap<String, Object> respuesta = ServicioClases.obtenerClase(idClase);
-        if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
-            ClaseDTO claseDto = (ClaseDTO)respuesta.get(Constantes.KEY_RESPUESTA);
-            Navegador.cambiarVentana(
-                lbNombreArchivo.getScene(),
-                "/views/Clase/clase.fxml",
-                claseDto.nombreClase,
-                controller -> ((ClaseController) controller).cargarValores(claseDto)
-            );
+        if (respuestaAlumno != null){
+            if (respuestaAlumno.getEstado().equals("pendiente")) {
+                if(Utils.mostrarAlertaConfirmacion("Volver", "¿Está seguro de que desea volver?\n Se guardará su progreso.")){
+                    guardarProgresoCuestionario();
+                    cerrarVentana();
+                }
+            } else if(respuestaAlumno.getEstado().equals("resuelta") || tareaDto.getFechaLimite().isBefore(LocalDateTime.now())){
+                cerrarVentana();
+            }
         } else {
-            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            if(Utils.mostrarAlertaConfirmacion("Volver", "¿Está seguro de que desea volver?\n Se guardará su progreso.")){
+                guardarProgresoCuestionario();
+                cerrarVentana();
+            }
         }
+
     }
     
     private void guardarProgresoCuestionario(){
         HashMap<String, Object> respuesta = ServicioCuestionarios.guardarCuestionario(tareaDto.idTarea, obtenerRespuestaAlumno());
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
             Utils.mostrarAlerta("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
-            volverAClase();
         } else {
             Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
@@ -226,6 +236,21 @@ public class TareaController{
                 return false;
             }
         }
-        return false;
+        return true;
+    }
+
+    private void cerrarVentana() {
+        HashMap<String, Object> respuesta = ServicioClases.obtenerClase(idClase);
+        if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+            ClaseDTO claseDto = (ClaseDTO)respuesta.get(Constantes.KEY_RESPUESTA);
+            Navegador.cambiarVentana(
+                    lbNombreArchivo.getScene(),
+                    "/views/Clase/clase.fxml",
+                    claseDto.nombreClase,
+                    controller -> ((ClaseController) controller).cargarValores(claseDto)
+            );
+        } else {
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+        }
     }
 }

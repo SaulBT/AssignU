@@ -2,27 +2,27 @@
 package com.AssignU.models.Cuestionarios;
 
 public class OpcionDTO {
-    public String texto;
-    public boolean esCorrecta;
+    public String Texto;
+    public boolean EsCorrecta;
 
     public OpcionDTO(String texto, boolean esCorrecta) {
-        this.texto = texto;
-        this.esCorrecta = esCorrecta;
+        this.Texto = texto;
+        this.EsCorrecta = esCorrecta;
     }
 
     public String getTexto() {
-        return texto;
+        return Texto;
     }
 
     public void setTexto(String texto) {
-        this.texto = texto;
+        this.Texto = texto;
     }
 
     public boolean isEsCorrecta() {
-        return esCorrecta;
+        return EsCorrecta;
     }
 
     public void setEsCorrecta(boolean esCorrecta) {
-        this.esCorrecta = esCorrecta;
+        this.EsCorrecta = esCorrecta;
     }
 }

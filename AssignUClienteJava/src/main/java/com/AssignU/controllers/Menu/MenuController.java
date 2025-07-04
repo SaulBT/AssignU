@@ -62,18 +62,22 @@ public class MenuController {
                 if(sesion.esDocente()){
                     controller.cargarDatos(clase, "Código: " + clase.codigoClase);
                 } else {
-                    HashMap<String, Object> respuesta = ServicioDocentes.obtenerNombreDocente(clase.idDocente);
-                    if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
-                        String nombreDocente = (String) respuesta.get(Constantes.KEY_RESPUESTA);
-                        controller.cargarDatos(clase, nombreDocente);
-                    } else {
-                        Utils.mostrarAlerta("Error", 
-                                "Ocurrió un error obteniendo al docente: " + (String) respuesta.get(Constantes.KEY_MENSAJE), 
-                                Alert.AlertType.ERROR);
+                    if (clase.getIdDocente() != 0){
+                        HashMap<String, Object> respuesta = ServicioDocentes.obtenerNombreDocente(clase.idDocente);
+                        if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+                            String nombreDocente = (String) respuesta.get(Constantes.KEY_RESPUESTA);
+                            controller.cargarDatos(clase, nombreDocente);
+                        } else {
+                            Utils.mostrarAlerta("Error",
+                                    "Ocurrió un error obteniendo al docente: " + (String) respuesta.get(Constantes.KEY_MENSAJE),
+                                    Alert.AlertType.ERROR);
+                            respuesta.clear();
+                            break;
+                        }
                         respuesta.clear();
-                        break;
+                    } else {
+                        controller.cargarDatos(clase, "Clase terminada");
                     }
-                    respuesta.clear();
                 }
                 fpContenedorClases.getChildren().add(tarjeta);
             }

@@ -4,37 +4,37 @@ package com.AssignU.models.Cuestionarios;
 import java.util.List;
 
 public class PreguntaDTO {
-    public String texto;
-    public String tipo;
-    public List<OpcionDTO> opciones;
+    public String Texto;
+    public String Tipo;
+    public List<OpcionDTO> Opciones;
 
     public PreguntaDTO(String texto, String tipo, List<OpcionDTO> opciones) {
-        this.texto = texto;
-        this.tipo = tipo;
-        this.opciones = opciones;
+        this.Texto = texto;
+        this.Tipo = tipo;
+        this.Opciones = opciones;
     }
 
     public String getTexto() {
-        return texto;
+        return Texto;
     }
 
     public void setTexto(String texto) {
-        this.texto = texto;
+        this.Texto = texto;
     }
 
     public String getTipo() {
-        return tipo;
+        return Tipo;
     }
 
     public void setTipo(String tipo) {
-        this.tipo = tipo;
+        this.Tipo = tipo;
     }
 
     public List<OpcionDTO> getOpciones() {
-        return opciones;
+        return Opciones;
     }
 
     public void setOpciones(List<OpcionDTO> opciones) {
-        this.opciones = opciones;
+        this.Opciones = opciones;
     }
 }

@@ -45,11 +45,11 @@ public class TarjetaPreguntaController implements Initializable{
     }
     
     public void cargarPregunta(PreguntaDTO pregunta){
-        lbTextoPregunta.setText(pregunta.texto);
-        if(pregunta.tipo.equals("verdadero_falso")){
-            llenarPreguntaVerdaderoFalso(pregunta.opciones);
-        } else if(pregunta.tipo.equals("opcion_multiple")){
-            llenarPreguntaOpcionMultiple(pregunta.opciones);
+        lbTextoPregunta.setText(pregunta.Texto);
+        if(pregunta.Tipo.equals("verdadero_falso")){
+            llenarPreguntaVerdaderoFalso(pregunta.Opciones);
+        } else if(pregunta.Tipo.equals("opcion_multiple")){
+            llenarPreguntaOpcionMultiple(pregunta.Opciones);
         }
     }
     
@@ -119,7 +119,7 @@ public class TarjetaPreguntaController implements Initializable{
     }
     
     public void responderPregunta(PreguntaRespuestaDTO respuesta){
-        String textoRespuesta = respuesta.opcion.texto;
+        String textoRespuesta = respuesta.Opcion.Texto;
         for (RadioButton radioButton : mapaOpciones.keySet()) {
             if (radioButton.getText().equals(textoRespuesta)) {
                 radioButton.setSelected(true);
@@ -140,7 +140,7 @@ public class TarjetaPreguntaController implements Initializable{
         
         deshabilitarPregunta();
 
-        String textoRespuesta = respuesta.opcion.texto;
+        String textoRespuesta = respuesta.Opcion.Texto;
         for (RadioButton radioButton : mapaOpciones.keySet()) {
             if (radioButton.getText().equals(textoRespuesta)) {
                 if (respuesta.isCorrecta()) {

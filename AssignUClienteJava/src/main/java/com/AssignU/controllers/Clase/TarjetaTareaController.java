@@ -53,11 +53,11 @@ public class TarjetaTareaController {
     }
     
     public void cargarTareaAlumno(){
-        /*Navegador.cambiarVentana(
+        Navegador.cambiarVentana(
             lbNombreTarea.getScene(),
             "/views/Tarea/tarea.fxml",
             "Tarea: " + lbNombreTarea.getText(),
-            controller -> ((TareaController) controller).cargarValores(tarea, tarea.fechaLimite.isBefore(LocalDateTime.now()))
-        );*/
+            controller -> ((TareaController) controller).cargarValores(tarea.idClase, tarea)
+        );
     }
 }

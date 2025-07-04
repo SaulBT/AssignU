@@ -3,19 +3,18 @@ package com.AssignU.models.Tareas;
 
 import com.AssignU.models.Cuestionarios.CuestionarioDTO;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class CrearTareaDTO {
     public int idClase;
     public String nombre;
     public LocalDateTime fechaLimite;
-    public CuestionarioDTO cuestionarioDto;
+    public CuestionarioDTO Cuestionario;
 
     public CrearTareaDTO(int idClase, String nombre, LocalDateTime fechaLimite, CuestionarioDTO cuestionarioDto) {
         this.idClase = idClase;
         this.nombre = nombre;
         this.fechaLimite = fechaLimite;
-        this.cuestionarioDto = cuestionarioDto;
+        this.Cuestionario = cuestionarioDto;
     }
 
     public int getIdClase() {
@@ -42,11 +41,11 @@ public class CrearTareaDTO {
         this.fechaLimite = fechaLimite;
     }
 
-    public CuestionarioDTO getCuestionarioDto() {
-        return cuestionarioDto;
+    public CuestionarioDTO getCuestionario() {
+        return Cuestionario;
     }
 
-    public void setCuestionarioDto(CuestionarioDTO cuestionarioDto) {
-        this.cuestionarioDto = cuestionarioDto;
+    public void setCuestionario(CuestionarioDTO cuestionario) {
+        this.Cuestionario = cuestionario;
     }
 }

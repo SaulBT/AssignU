@@ -4,27 +4,27 @@ package com.AssignU.models.Cuestionarios;
 import java.util.List;
 
 public class CuestionarioDTO {
-    public int idTarea;
-    public List<PreguntaDTO> preguntas;
+    public int IdTarea;
+    public List<PreguntaDTO> Preguntas;
 
     public CuestionarioDTO(int idTarea, List<PreguntaDTO> preguntas) {
-        this.idTarea = idTarea;
-        this.preguntas = preguntas;
+        this.IdTarea = idTarea;
+        this.Preguntas = preguntas;
     }
 
     public int getIdTarea() {
-        return idTarea;
+        return IdTarea;
     }
 
     public void setIdTarea(int idTarea) {
-        this.idTarea = idTarea;
+        this.IdTarea = idTarea;
     }
 
     public List<PreguntaDTO> getPreguntas() {
-        return preguntas;
+        return Preguntas;
     }
 
     public void setPreguntas(List<PreguntaDTO> preguntas) {
-        this.preguntas = preguntas;
+        this.Preguntas = preguntas;
     }
 }

@@ -2,17 +2,17 @@
 package com.AssignU.models.Cuestionarios;
 
 public class OpcionRespuestaDTO {
-    public String texto;
+    public String Texto;
 
     public OpcionRespuestaDTO(String texto) {
-        this.texto = texto;
+        this.Texto = texto;
     }
 
     public String getTexto() {
-        return texto;
+        return Texto;
     }
 
     public void setTexto(String texto) {
-        this.texto = texto;
+        this.Texto = texto;
     }
 }

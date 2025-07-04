@@ -27,7 +27,35 @@ public class Navegador {
             return controller;
 
         } catch (IOException e) {
-            Utils.mostrarVentana("Error de Vista", "No se pudo cargar la vista:\n" + e.getMessage(), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error de Vista", "No se pudo cargar la vista:\n" + e.getMessage(), Alert.AlertType.ERROR);
+            return null;
+        }
+    }
+    
+    public static <T> T cambiarVentanaConEstilos(Scene escenaActual, String rutaFXML, String nuevoTitulo, Consumer<T> configurador, String rutaEstilos) {
+        try {
+            FXMLLoader loader = new FXMLLoader(Navegador.class.getResource(rutaFXML));
+            Parent vista = loader.load();
+
+            T controller = loader.getController();
+            if (configurador != null)
+                configurador.accept(controller);
+
+            Scene nuevaEscena = new Scene(vista);
+
+            if (rutaEstilos != null) {
+                String hojaEstilo = Navegador.class.getResource(rutaEstilos).toExternalForm();
+                nuevaEscena.getStylesheets().add(hojaEstilo);
+            }
+
+            Stage stage = (Stage) escenaActual.getWindow();
+            stage.setTitle("AssignU - " + nuevoTitulo);
+            stage.setScene(nuevaEscena);
+
+            return controller;
+
+        } catch (IOException e) {
+            Utils.mostrarAlerta("Error de Vista", "No se pudo cargar la vista:\n" + e.getMessage(), Alert.AlertType.ERROR);
             return null;
         }
     }
@@ -49,7 +77,7 @@ public class Navegador {
 
             return controller;
         } catch (IOException e) {
-            Utils.mostrarVentana("Error", "No se pudo abrir la ventana modal:\n" + e.getMessage(), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", "No se pudo abrir la ventana modal:\n" + e.getMessage(), Alert.AlertType.ERROR);
             return null;
         }
     }

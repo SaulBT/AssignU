@@ -1,16 +1,28 @@
 
 package com.AssignU.utils;
 
+import java.nio.file.Paths;
+import java.util.Optional;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 public class Utils {
     
-    public static void mostrarVentana(String tituloVentana, String cuerpo, Alert.AlertType tipo) {
+    public static void mostrarAlerta(String tituloVentana, String cuerpo, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle(tituloVentana);
         alerta.setHeaderText(null);
         alerta.setContentText(cuerpo);
         alerta.showAndWait();
+    }
+    
+    public static boolean mostrarAlertaConfirmacion(String titulo, String mensaje){
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+        Optional<ButtonType> botonSeleccionado = alerta.showAndWait();
+        return(botonSeleccionado.get() == ButtonType.OK);
     }
 
     public static String verificarCampoNormal(String campo, int tamanioMaximo) {
@@ -69,5 +81,17 @@ public class Utils {
     
     public static boolean contieneEspacios(String texto) {
         return texto.matches(".*\\s.*");
+    }
+    
+    public static String obtenerNombreArchivo(String texto) {
+        if ("Ningún archivo seleccionado".equals(texto)) {
+            return texto;
+        }
+        
+        if (texto == null || texto.trim().isEmpty()) {
+            return "";
+        }
+        
+        return Paths.get(texto).getFileName().toString();
     }
 }

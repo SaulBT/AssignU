@@ -28,7 +28,6 @@ public class MenuController {
     public FlowPane fpContenedorClases;
     public Button btnAccionClase;
     private Sesion sesion;
-    private Map<String, String> headers = new HashMap<String, String>();
 
     public void cargarValores() {
         this.sesion = Sesion.getSesion();
@@ -47,7 +46,7 @@ public class MenuController {
             }
             desplegarClases(listaClases);
         } else {
-            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
 
     }
@@ -66,7 +65,7 @@ public class MenuController {
                     if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
                         controller.cargarDatos(clase, (String) respuesta.get(Constantes.KEY_MENSAJE));
                     } else {
-                        Utils.mostrarVentana("Error", 
+                        Utils.mostrarAlerta("Error", 
                                 "Ocurrió un error obteniendo al docente: " + (String) respuesta.get(Constantes.KEY_MENSAJE), 
                                 Alert.AlertType.ERROR);
                         respuesta.clear();

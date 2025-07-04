@@ -1,0 +1,9 @@
+.date-picker .cell.celda-deshabilitada {
+    -fx-background-color: #B8B8B8;
+    -fx-text-fill: #888888;
+}
+
+.date-picker .cell.celda-seleccionada {
+    -fx-background-color: #09C915;
+    -fx-text-fill: #ffffff;
+}

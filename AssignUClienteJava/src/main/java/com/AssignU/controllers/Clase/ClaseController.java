@@ -40,7 +40,7 @@ public class ClaseController {
     public void cargarValoresDeMenu(ClaseDTO claseDto){
         HashMap<String, Object> respuesta = ServicioClases.actualizarUltimaConexion(claseDto.idClase, LocalDateTime.now());
         if ((boolean) respuesta.get(Constantes.KEY_ERROR)) {
-            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
         cargarValores(claseDto);
     }
@@ -50,7 +50,9 @@ public class ClaseController {
         this.claseDto = claseDto;
         lbNombreClase.setText(claseDto.nombreClase);
         lbCodigoClase.setText(claseDto.codigoClase);
-        if(!sesion.esDocente()){
+        if(sesion.esDocente()){
+            cargarVentanaDocente();
+        } else {
             cargarVentanaAlumno();
         }
         cargarTareas();
@@ -58,7 +60,7 @@ public class ClaseController {
     
     private void cargarVentanaAlumno(){
         btnCrearTarea.setVisible(false);
-        lbEliminarClase.setVisible(false);
+        lbEliminarClase.setText("Salir de Clase");
         lbCambiarNombre.setVisible(false);
         lbVerEstadisticas.setVisible(false);
     }
@@ -69,7 +71,7 @@ public class ClaseController {
             List<TareaDTO> listaTareas = (List<TareaDTO>) respuesta.get(Constantes.KEY_RESPUESTA);
             desplegarTareas(listaTareas);
         } else {
-            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
     
@@ -80,7 +82,7 @@ public class ClaseController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Clase/tarjetaTarea.fxml"));
                 StackPane tarjeta = loader.load();
                 TarjetaTareaController controller = loader.getController();
-                controller.cargarTarea(tarea.nombre, tarea.fechaLimite.toString(), sesion.esDocente(), tarea.idTarea);
+                controller.cargarTarea(sesion.esDocente(), tarea);
                 fpContenedorTareas.getChildren().add(tarjeta);
             }
         } catch (IOException ex) {
@@ -89,27 +91,46 @@ public class ClaseController {
     }
 
     // D O C E N T E
+    
+    private void cargarVentanaDocente(){
+        btnCrearTarea.setVisible(true);
+        lbEliminarClase.setText("Eliminar Clase");
+        lbCambiarNombre.setVisible(true);
+        lbVerEstadisticas.setVisible(true);
+    }
+    
     @FXML
     public void clicBtnCrearTarea(ActionEvent actionEvent) {
-        Navegador.cambiarVentana(
+        Navegador.cambiarVentanaConEstilos(
             lbCambiarNombre.getScene(),
             "/views/Tarea/crearTarea.fxml",
             "Crear Tarea",
-            controller -> ((CrearTareaController) controller).cargarValores(claseDto.idClase)
+            controller -> ((CrearTareaController) controller).cargarValores(claseDto.idClase),
+            "/views/stylesheets/estilos_date_picker.css"
         );
     }
 
     @FXML
     public void btnLbEliminarClase(MouseEvent mouseEvent) {
         if(sesion.esDocente()){
-            HashMap<String, Object> respuesta = ServicioClases.borrarClase(claseDto.idClase, claseDto.nombreClase);
-            if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
-                Utils.mostrarVentana("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
-            } else {
-                Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            if(Utils.mostrarAlertaConfirmacion("Borrar Clase", "¿Está seguro de que desea borrar " + claseDto.nombreClase + "?")){
+                HashMap<String, Object> respuesta = ServicioClases.borrarClase(claseDto.idClase, claseDto.nombreClase);
+                if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+                    Utils.mostrarAlerta("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+                } else {
+                    Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+                }
             }
         } else {
-            Utils.mostrarVentana("Advertencia", "No estás autorizado para borrar esta clase.", Alert.AlertType.WARNING);
+            if(Utils.mostrarAlertaConfirmacion("Salir de Clase", "¿Está seguro de que salir de la clase " 
+                    + claseDto.nombreClase + "?\nSus datos se borrarán permanentemente.")){
+                HashMap<String, Object> respuesta = ServicioClases.salirDeClase(claseDto.idClase, claseDto.nombreClase);
+                if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+                    Utils.mostrarAlerta("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+                } else {
+                    Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+                }
+            }
         }
     }
 
@@ -122,7 +143,7 @@ public class ClaseController {
                 controller -> ((CambiarNombreController) controller).cargarValores(this, claseDto.idClase, claseDto.nombreClase)
             );
         } else {
-            Utils.mostrarVentana("Advertencia", "No estás autorizado para cambiar el nombre de la clase.", Alert.AlertType.WARNING);
+            Utils.mostrarAlerta("Advertencia", "No estás autorizado para cambiar el nombre de la clase.", Alert.AlertType.WARNING);
         }
     }
 
@@ -136,7 +157,7 @@ public class ClaseController {
                 controller -> ((EstadisticasClaseController) controller).cargarValores()
             );
         } else {
-            Utils.mostrarVentana("Advertencia", "No estás autorizado para cambiar el nombre de la clase.", Alert.AlertType.WARNING);
+            Utils.mostrarAlerta("Advertencia", "No estás autorizado para cambiar el nombre de la clase.", Alert.AlertType.WARNING);
         }*/
     }
     

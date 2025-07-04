@@ -21,6 +21,7 @@ public class CambiarNombreController implements IFormulario{
         this.claseController = claseController;
         tfNombre.setText(nombreClase);
         this.idClase = idClase;
+        this.mensajeError = "";
     }
 
     public void btnAceptar(ActionEvent actionEvent) {
@@ -28,7 +29,7 @@ public class CambiarNombreController implements IFormulario{
             guardarCambios();
         } else {
             tfNombre.setStyle("-fx-border-color: red");
-            Utils.mostrarVentana("Campo inválido.", mensajeError, Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Campo inválido.", mensajeError, Alert.AlertType.ERROR);
         }
     }
 
@@ -42,7 +43,7 @@ public class CambiarNombreController implements IFormulario{
             error = false;
             tfNombre.setStyle("-fx-border-color: red");
         } else if (!Utils.verificarTamanioCampo(nombreClase, 44)){
-            mensajeError = "El nombre debe de ser menor a 45 caracteres.";
+            mensajeError += "El nombre debe de ser menor a 45 caracteres.\n";
             error = false;
             tfNombre.setStyle("-fx-border-color: red");
         }
@@ -58,11 +59,11 @@ public class CambiarNombreController implements IFormulario{
         String nombreClase = tfNombre.getText();
         HashMap<String, Object> respuesta = ServicioClases.actualizarClase(idClase, nombreClase);
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
-            Utils.mostrarVentana("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+            Utils.mostrarAlerta("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
             claseController.cargarValores((ClaseDTO)respuesta.get(Constantes.KEY_RESPUESTA));
             cerrarVentana();
         } else {
-            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
 

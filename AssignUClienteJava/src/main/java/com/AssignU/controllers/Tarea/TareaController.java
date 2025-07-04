@@ -1,6 +1,7 @@
 package com.AssignU.controllers.Tarea;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -10,19 +11,22 @@ public class TareaController {
     public Label lbFechaLimite;
     public Label lbNombreArchivo;
     public VBox vbCuestionario;
-    public Label lbEstadistica;
 
+    @FXML
     public void btnLbVolver(MouseEvent mouseEvent) {
         regresarAClase();
     }
 
+    @FXML
     public void btnDescargar(ActionEvent actionEvent) {
     }
 
+    @FXML
     public void btnResponder(ActionEvent actionEvent) {
         regresarAClase();
     }
 
+    @FXML
     public void btnLbEstadistica(MouseEvent mouseEvent) {
     }
 

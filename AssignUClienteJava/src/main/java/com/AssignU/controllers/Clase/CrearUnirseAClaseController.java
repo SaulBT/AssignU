@@ -35,6 +35,7 @@ public class CrearUnirseAClaseController implements IFormulario{
     public void cargarValores(MenuController menuController) {
         this.menuController = menuController;
         this.sesion = Sesion.getSesion();
+        this.mensajeError = "";
         if (sesion.esDocente()) {
             cargarVentanaAlumno();
         } else {
@@ -64,7 +65,7 @@ public class CrearUnirseAClaseController implements IFormulario{
             }
         } else {
             tfContenido.setStyle("-fx-border-color: red");
-            Utils.mostrarVentana("Campo inválido.", mensajeError, Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Campo inválido.", mensajeError, Alert.AlertType.ERROR);
         }
     }
 
@@ -76,13 +77,13 @@ public class CrearUnirseAClaseController implements IFormulario{
         
         if(nombreClase.isEmpty()){
             if(sesion.esDocente()){
-                mensajeError = "Escribe un nombre para la clase.";
+                mensajeError += "Escribe un nombre para la clase.\n";
             }else{
-                mensajeError = "Ingrese el código de la clase.";
+                mensajeError += "Ingrese el código de la clase.\n";
             }
             error = false;
         } else if (!Utils.verificarTamanioCampo(nombreClase, 44)){
-            mensajeError = "El nombre debe de ser menor a 45 caracteres.";
+            mensajeError += "El nombre debe de ser menor a 45 caracteres.\n";
             error = false;
         }
         return error;
@@ -96,22 +97,22 @@ public class CrearUnirseAClaseController implements IFormulario{
     private void crearClase(String nombreClase) {
         HashMap<String, Object> respuesta = ServicioClases.crearClase(nombreClase);
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
-            Utils.mostrarVentana("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+            Utils.mostrarAlerta("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
             menuController.enviarAClaseNueva((ClaseDTO)respuesta.get(Constantes.KEY_RESPUESTA));
             cerrarVentana();
         } else {
-            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
     
     public void unirseAClase(String codigo){
         HashMap<String, Object> respuesta = ServicioClases.unirseAClase(codigo);
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
-            Utils.mostrarVentana("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+            Utils.mostrarAlerta("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
             menuController.enviarAClaseNueva((ClaseDTO)respuesta.get(Constantes.KEY_RESPUESTA));
             cerrarVentana();
         } else {
-            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
 

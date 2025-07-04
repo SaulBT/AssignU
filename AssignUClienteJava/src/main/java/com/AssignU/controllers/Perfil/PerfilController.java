@@ -93,10 +93,10 @@ public class PerfilController{
                     setText(String.valueOf(calificacion));
                     if (calificacion >= 90) {
                         //setStyle("-fx-background-color: limegreen;");
-                        setStyle("-fx-fill: limegreen;");
+                        setStyle("-fx-text-fill: limegreen;");
                     } else if (calificacion < 60) {
                         //setStyle("-fx-background-color: crimson;");
-                        setStyle("-fx-fill: crimson;");
+                        setStyle("-fx-text-fill: crimson;");
                     } else {
                         setStyle("");
                     }
@@ -112,7 +112,7 @@ public class PerfilController{
             EstadisticasPerfilDTO estadisticasDto = (EstadisticasPerfilDTO) respuesta.get(Constantes.KEY_RESPUESTA);
             cargarVentanaAlumno(estadisticasDto);
         } else {
-            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
     
@@ -134,7 +134,7 @@ public class PerfilController{
             GradoEstudioDTO gradoEstudios = (GradoEstudioDTO) respuesta.get(Constantes.KEY_RESPUESTA);
             lbGrado.setText(gradoEstudios.getNombre());
         } else {
-            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
     
@@ -144,9 +144,9 @@ public class PerfilController{
         
         cbClase.valueProperty().addListener(new ChangeListener<ClaseEstadisticaPerfilDTO>(){
             @Override
-            public void changed(ObservableValue<? extends ClaseEstadisticaPerfilDTO> observable, ClaseEstadisticaPerfilDTO ov, ClaseEstadisticaPerfilDTO nv) {
-                if(nv != null){
-                    mostrarTareasDeClase(nv);
+            public void changed(ObservableValue<? extends ClaseEstadisticaPerfilDTO> observable, ClaseEstadisticaPerfilDTO oldValue, ClaseEstadisticaPerfilDTO newValue) {
+                if(newValue != null){
+                    mostrarTareasDeClase(newValue);
                 }
             }
         });
@@ -181,7 +181,7 @@ public class PerfilController{
             DocenteDTO docenteDto = (DocenteDTO) respuesta.get(Constantes.KEY_RESPUESTA);
             cargarVentanaDocente(docenteDto);
         } else {
-            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
     
@@ -204,7 +204,7 @@ public class PerfilController{
             GradoProfesionalDTO gradoProfesional = (GradoProfesionalDTO) respuesta.get(Constantes.KEY_RESPUESTA);
             lbGrado.setText(gradoProfesional.getNombre());
         } else {
-            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
     

@@ -64,6 +64,7 @@ public class RegistroUsuarioController implements Initializable, IFormulario {
     public void initialize(URL url, ResourceBundle resourceBundle){
         cargarCatalogos();
         configurarCbTipoUsuario();
+        this.mensajeError = "";
     }
 
     private void cargarCatalogos(){
@@ -75,13 +76,13 @@ public class RegistroUsuarioController implements Initializable, IFormulario {
         if (!(boolean) gradosEstudios.get(Constantes.KEY_ERROR)) {
             listaGradoEstudios = (List<GradoEstudioDTO>) gradosEstudios.get(Constantes.KEY_RESPUESTA);
         } else {
-            Utils.mostrarVentana("Error", (String) gradosEstudios.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) gradosEstudios.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
         
         if (!(boolean) gradosProfesionales.get(Constantes.KEY_ERROR)) {
             listaGradoProfesional = (List<GradoProfesionalDTO>) gradosProfesionales.get(Constantes.KEY_RESPUESTA);
         } else {
-            Utils.mostrarVentana("Error", (String) gradosProfesionales.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) gradosProfesionales.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
 
@@ -138,7 +139,7 @@ public class RegistroUsuarioController implements Initializable, IFormulario {
         if (verificarCampos()) {
             registrarUsuario();
         } else {
-            Utils.mostrarVentana("Campos inválidos", mensajeError, Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Campos inválidos", mensajeError, Alert.AlertType.ERROR);
         }
     }
 
@@ -156,49 +157,49 @@ public class RegistroUsuarioController implements Initializable, IFormulario {
         if (cbGrado.getValue() == null) {
             bandera = false;
             cbGrado.setStyle("-fx-border-color: red");
-            mensajeError = "Selecciona un Grado";
+            mensajeError += "Selecciona un Grado.\n";
         }
 
         mensaje = Utils.verificarCorreo(correo, 45);
         if (!mensaje.equals("ok")){
             bandera = false;
             tfCorreo.setStyle("-fx-border-color: red");
-            mensajeError = "El Correo Electrónico es inválido: " + mensaje;
+            mensajeError += "El Correo Electrónico es inválido: " + mensaje + "\n";
         }
 
         mensaje = Utils.verificarCampoNormal(confirmarContrasenia, 64);
         if (!mensaje.equals("ok")){
             bandera = false;
             pfConfirmarContrasenia.setStyle("-fx-border-color: red");
-            mensajeError = "La contraseña es inválida: " + mensaje;
+            mensajeError += "La contraseña es inválida: " + mensaje + "\n";
         }
 
         mensaje = Utils.verificarCampoNormal(contrasenia, 64);
         if (!mensaje.equals("ok")){
             bandera = false;
             pfContrasenia.setStyle("-fx-border-color: red");
-            mensajeError = "La contraseña es inválida: " + mensaje;
+            mensajeError += "La contraseña es inválida: " + mensaje + "\n";
         }
 
         if (!Utils.verificarContrasenia(contrasenia, confirmarContrasenia)) {
             bandera = false;
             pfContrasenia.setStyle("-fx-border-color: red");
             pfConfirmarContrasenia.setStyle("-fx-border-color: red");
-            mensajeError = "Las contraseñas no coinciden";
+            mensajeError += "Las contraseñas no coinciden.\n";
         }
 
         mensaje = Utils.verificarNombreUsuario(nombreUsuario, 45);
         if (!mensaje.equals("ok")){
             bandera = false;
             tfNombreUsuario.setStyle("-fx-border-color: red");
-            mensajeError = "El Nombre Usuario es inválido: " + mensaje;
+            mensajeError += "El Nombre Usuario es inválido: " + mensaje + "\n";
         }
 
         mensaje = Utils.verificarCampoNormal(nombreCompleto, 135);
         if (!mensaje.equals("ok")){
             bandera = false;
             tfNombreCompleto.setStyle("-fx-border-color: red");
-            mensajeError = "El Nombre Completo es inválido: " + mensaje;
+            mensajeError += "El Nombre Completo es inválido: " + mensaje + "\n";
         }
 
         return bandera;
@@ -234,10 +235,10 @@ public class RegistroUsuarioController implements Initializable, IFormulario {
         }
         
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
-            Utils.mostrarVentana("Registro exitoso", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+            Utils.mostrarAlerta("Registro exitoso", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
             volverALogin();
         } else {
-            Utils.mostrarVentana("Error al registrar", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error al registrar", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
 

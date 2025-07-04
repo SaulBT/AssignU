@@ -50,7 +50,7 @@ public class LoginController implements Initializable, IFormulario {
             enviarSolicitudLogin((cbTipousuarios.getValue().toString().toLowerCase()),
                 tfNombreUsuarioCorreo.getText(), pfContrasenia.getText());
         } else {
-            Utils.mostrarVentana("Campos Vacíos", "Favor de llenar todos los campos", Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Campos Vacíos", "Favor de llenar todos los campos", Alert.AlertType.ERROR);
         }
     }
 
@@ -103,7 +103,7 @@ public class LoginController implements Initializable, IFormulario {
                 controller -> ((MenuController) controller).cargarValores()
             );
         } else {
-            Utils.mostrarVentana("Error al iniciar sesión", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error al iniciar sesión", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
 

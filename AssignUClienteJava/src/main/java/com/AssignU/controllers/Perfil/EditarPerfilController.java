@@ -81,7 +81,7 @@ public class EditarPerfilController implements IFormulario{
             }
             
         } else {
-            Utils.mostrarVentana("Error", (String) gradosEstudios.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) gradosEstudios.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
     
@@ -115,7 +115,7 @@ public class EditarPerfilController implements IFormulario{
             }
             
         } else {
-            Utils.mostrarVentana("Error", (String) gradosProfesionales.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) gradosProfesionales.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
 
@@ -130,7 +130,7 @@ public class EditarPerfilController implements IFormulario{
                 guardarPerfilAlumno(nombreUsuario, nombreCompleto);
             }
         } else {
-            Utils.mostrarVentana("Campos inválidos", mensajeError, Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Campos inválidos", mensajeError, Alert.AlertType.ERROR);
         }
     }
     
@@ -181,9 +181,9 @@ public class EditarPerfilController implements IFormulario{
         HashMap<String, Object> respuesta = ServicioAlumnos.actualizarAlumno(nombreCompleto, nombreUsuario, seleccionado.idGradoEstudios);
 
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
-            Utils.mostrarVentana("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+            Utils.mostrarAlerta("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
         } else {
-            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
     
@@ -193,9 +193,9 @@ public class EditarPerfilController implements IFormulario{
         HashMap<String, Object> respuesta = ServicioDocentes.actualizarDocente(nombreCompleto, nombreUsuario,seleccionado.getIdGradoProfesional());
 
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
-            Utils.mostrarVentana("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+            Utils.mostrarAlerta("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
         } else {
-            Utils.mostrarVentana("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
         }
     }
 

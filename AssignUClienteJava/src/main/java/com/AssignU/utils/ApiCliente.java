@@ -2,19 +2,23 @@ package com.AssignU.utils;
 
 import com.AssignU.models.Usuarios.ErrorREST;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.http.*;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 public class ApiCliente {
     private static final String BASE_URL = "http://localhost:5010";
     private static final HttpClient cliente = HttpClient.newHttpClient();
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+            .create();
 
     public static <T> T enviarSolicitud(String endpoint, String metodo, Object cuerpo, Map<String, String> cabeceras, Class<T> tipoRespuesta) throws Exception {
 

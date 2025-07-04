@@ -62,7 +62,7 @@ public class ServicioCuestionarios {
                     Object.class);
             
             resultado.put(Constantes.KEY_ERROR, false);
-            resultado.put(Constantes.KEY_MENSAJE, "Cuestionario calificado exitosamente.");
+            resultado.put(Constantes.KEY_MENSAJE, "Cuestionario entregado y calificado exitosamente.");
             
         } catch (ExcepcionHTTP e) {
             switch (e.getCodigo()) {
@@ -121,15 +121,15 @@ public class ServicioCuestionarios {
         String endpoint = "/cuestionarios/cuestionarios/" + idTarea + "/" + sesion.getIdUsuario();
 
         try {
-            CuestionarioDTO cuestionario = ApiCliente.enviarSolicitud(endpoint, 
+            RespuestaDTO respuestaAlumno = ApiCliente.enviarSolicitud(endpoint, 
                     "GET", 
                     null, 
                     null, 
-                    CuestionarioDTO.class);
+                    RespuestaDTO.class);
 
             resultado.put(Constantes.KEY_ERROR, false);
-            resultado.put(Constantes.KEY_MENSAJE, "Cuestionario obtenido exitosamente.");
-            resultado.put(Constantes.KEY_RESPUESTA, cuestionario);
+            resultado.put(Constantes.KEY_MENSAJE, "Respuesta alumno obtenida exitosamente.");
+            resultado.put(Constantes.KEY_RESPUESTA, respuestaAlumno);
 
         } catch (ExcepcionHTTP e) {
             switch (e.getCodigo()) {

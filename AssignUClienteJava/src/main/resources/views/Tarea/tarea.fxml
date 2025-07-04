@@ -27,7 +27,7 @@
                   <Insets left="10.0" />
                </GridPane.margin>
                <padding>
-                  <Insets top="10.0" />
+                  <Insets top="20.0" />
                </padding>
             </Label>
          </children>
@@ -109,14 +109,34 @@
             <VBox fx:id="vbCuestionario" prefHeight="412.0" prefWidth="1237.0" />
          </content>
       </ScrollPane>
-      <HBox alignment="CENTER" prefHeight="75.0" prefWidth="1280.0">
+      <GridPane alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="92.0" prefWidth="1284.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="524.0" minWidth="10.0" prefWidth="458.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="442.0" minWidth="10.0" prefWidth="333.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="343.0" minWidth="10.0" prefWidth="145.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="240.0" minWidth="10.0" prefWidth="240.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" onAction="#btnResponder" prefHeight="52.0" prefWidth="159.0" stylesheets="@../stylesheets/button_ok.css" text="Responder">
+            <Button fx:id="btnResponder" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#clicResponder" prefHeight="52.0" prefWidth="159.0" stylesheets="@../stylesheets/button_ok.css" text="Responder" textAlignment="CENTER" GridPane.columnIndex="2">
                <font>
                   <Font name="System Bold" size="23.0" />
                </font>
             </Button>
+            <Label fx:id="lbTextoCalificacion" text="Calificación:" textFill="WHITE" GridPane.columnIndex="3">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Label fx:id="lbCalificacion" prefHeight="36.0" prefWidth="225.0" text="9.0" textFill="WHITE" GridPane.columnIndex="4">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
          </children>
-      </HBox>
+      </GridPane>
    </children>
 </VBox>

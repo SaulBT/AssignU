@@ -5,8 +5,10 @@ import com.AssignU.models.Clases.ClaseDTO;
 import com.AssignU.models.Cuestionarios.CuestionarioDTO;
 import com.AssignU.models.Cuestionarios.PreguntaDTO;
 import com.AssignU.models.Tareas.CrearTareaDTO;
+import com.AssignU.models.Tareas.EditarTareaDTO;
 import com.AssignU.models.Tareas.TareaDTO;
 import com.AssignU.servicios.ServicioClases;
+import com.AssignU.servicios.ServicioCuestionarios;
 import com.AssignU.servicios.ServicioTareas;
 import com.AssignU.utils.Constantes;
 import com.AssignU.utils.IFormulario;
@@ -37,8 +39,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class CrearTareaController implements IFormulario{
+    @FXML
     public TextField tfNombreTarea;
+    @FXML
     public DatePicker dpFechaLimite;
+    @FXML
     public Label lbNombreArchivo;
     @FXML
     private Button btnCancelar;
@@ -90,7 +95,6 @@ public class CrearTareaController implements IFormulario{
         if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
             TareaDTO tarea = (TareaDTO) respuesta.get(Constantes.KEY_RESPUESTA);
             Utils.mostrarAlerta("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
-            limpiarCampos();
             volverAClase();
         } else {
             Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
@@ -103,20 +107,80 @@ public class CrearTareaController implements IFormulario{
         this.idClase = tarea.idClase;
         this.esEdicion = true;
         listaControladoresPreguntas  = new ArrayList<>();
-        configurarTipoPregunta();
         configurarDatePicker();
-        //set fecha en datePicker
-        //lbNombreArchivo.setText() obtener nombre archivo
-        //get cuestionario
+        LocalDateTime fechaLimite = tarea.fechaLimite;
+        LocalDate fechaDatePicker = fechaLimite.toLocalDate();
+        dpFechaLimite.setValue(fechaDatePicker);
+        //this.nombreArchivoPath = obtenerNombreArchivo; SERVICIO ARCHIVOS
+        //lbNombreArchivo.setText(nombreArchivoPath)
+        HashMap<String, Object> respuesta = ServicioCuestionarios.obtenerCuestionario(tarea.idTarea);
+        if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+            CuestionarioDTO cuestionario = (CuestionarioDTO) respuesta.get(Constantes.KEY_RESPUESTA);
+            desplegarPreguntas(cuestionario.preguntas);
+        } else {
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+        }
+        configurarTipoPregunta();
+    }
+    
+    public void desplegarPreguntas(List<PreguntaDTO> preguntas){
+        try {
+            vbPreguntas.getChildren().clear();
+            for (PreguntaDTO pregunta : preguntas){
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Tarea/tarjetaCrearPregunta.fxml"));
+                VBox tarjeta = loader.load();
+
+                TarjetaCrearPreguntaController controller = loader.getController();
+                listaControladoresPreguntas.add(controller);
+
+                vbPreguntas.getChildren().add(tarjeta);
+
+                actualizarNumeracionPreguntas();
+
+                controller.cargarPregunta(pregunta, this);
+            }
+        } catch (IOException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+    }
+    
+    public EditarTareaDTO obtenerTareaEdicion(){
+        LocalDate fechaDatePicker = dpFechaLimite.getValue();
+        LocalDateTime fecha = fechaDatePicker.plusDays(1).atStartOfDay().minusNanos(1);
+        List<PreguntaDTO> preguntas = new ArrayList<>();
+        for (int i = 0; i < listaControladoresPreguntas.size(); i++) {
+            TarjetaCrearPreguntaController controlador = listaControladoresPreguntas.get(i);
+            PreguntaDTO pregunta = controlador.obtenerInformacionPregunta();
+            preguntas.add(pregunta);
+        }
+        CuestionarioDTO cuestionario = new CuestionarioDTO(1, preguntas);
+        EditarTareaDTO tareaEdicion = new EditarTareaDTO(idClase, tfNombreTarea.getText(), fecha,cuestionario);
+        return tareaEdicion;
+    }
+    
+    public void guardarTarea(){
+        HashMap<String, Object> respuesta = ServicioTareas.editarTarea(obtenerTareaEdicion(), tareaDto.idTarea);
+        //Si nombreArchivoPath cambió...
+        //llamar a servicio archivos? enviar nombreArchivoPath
+        if (!(boolean) respuesta.get(Constantes.KEY_ERROR)) {
+            TareaDTO tarea = (TareaDTO) respuesta.get(Constantes.KEY_RESPUESTA);
+            Utils.mostrarAlerta("Éxito", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.INFORMATION);
+            volverAClase();
+        } else {
+            Utils.mostrarAlerta("Error", (String) respuesta.get(Constantes.KEY_MENSAJE), Alert.AlertType.ERROR);
+        }
     }
     
     // G E N E R A L
-    
     @FXML
     private void clicAceptar(ActionEvent event) {
         if(verificarCampos()){
             if(verificarSeleccionRespuestas()){
-                
+                if(esEdicion){
+                    guardarTarea();
+                } else {
+                    crearTarea();
+                }
             } else {
                 Utils.mostrarAlerta("Selección Vacía", "Seleccione al menos una respuesta correcta por pregunta.", Alert.AlertType.ERROR);
             }
@@ -142,7 +206,6 @@ public class CrearTareaController implements IFormulario{
             cerrarVentana = Utils.mostrarAlertaConfirmacion("Cancelar Tarea", "¿Está seguro de que desea cancelar?\n Se borrarán todos los campos.");
         }
         if(cerrarVentana){
-            limpiarCampos();
             volverAClase();
         }
     }
@@ -167,7 +230,6 @@ public class CrearTareaController implements IFormulario{
     @FXML
     public void btnLbVolver(MouseEvent mouseEvent) {
         if(Utils.mostrarAlertaConfirmacion("Volver", "¿Está seguro de que desea volver?\n Se borrarán todos los campos.")){
-            limpiarCampos();
             volverAClase();
         }
     }
@@ -256,10 +318,14 @@ public class CrearTareaController implements IFormulario{
             public void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
                 getStyleClass().removeAll("celda-deshabilitada", "celda-seleccionada");
-                if (empty || item.isBefore(hoy)) {
+                if (empty) {
+                    setDisable(true);
+                }
+                if (item.isBefore(hoy)) {
                     setDisable(true);
                     getStyleClass().add("celda-deshabilitada");
-                } else if (item.equals(dpFechaLimite.getValue())) {
+                }
+                if (item.equals(dpFechaLimite.getValue())) {
                     getStyleClass().add("celda-seleccionada");
                 }
             }
@@ -294,7 +360,7 @@ public class CrearTareaController implements IFormulario{
     private void agregarPregunta(String tipoPregunta){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Tarea/tarjetaCrearPregunta.fxml"));
-            StackPane tarjeta = loader.load();
+            VBox tarjeta = loader.load();
             
             TarjetaCrearPreguntaController controller = loader.getController();
             listaControladoresPreguntas.add(controller);
